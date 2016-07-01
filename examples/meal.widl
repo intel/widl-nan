@@ -1,0 +1,26 @@
+enum MealType { "tartan-steak", "spaghetti", "pasta", "lasagna", "ramen", "sushi" };
+
+interface Meal {
+  attribute String type;
+  attribute double size; // in grams
+  readonly attribute boolean isRawMeal;
+
+  void prepare(String type, double size);
+
+  Promise<String> cook(String chefName);
+};
+
+interface Tester {
+  void foo(String arg, int times);	
+
+  readonly attribute double PI;
+  attribute int bar;
+};
+
+exception ChokingHazard {
+  const short MEDIUM = 0;
+  const short SEVERE = 1;
+  const short DEAD_HORSE = 2;
+
+  short errorCode;
+};

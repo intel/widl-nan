@@ -1,0 +1,5 @@
+  static NAN_METHOD(New);
+{{~ it.members :p:i }}
+{{? p.type === 'operation' }}  static NAN_METHOD({{=p.name}});
+{{?}}
+{{~}}

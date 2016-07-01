@@ -1,0 +1,24 @@
+{{ var guardName = it.name.toUpperCase(); }}
+{{ var headerFileName = it.name.toLowerCase(); }}
+#ifndef _NAN{{=guardName}}_H_
+#define _NAN{{=guardName}}_H_
+#include "{{=headerFileName}}.h"
+
+class Nan{{=it.name}} : public Nan::ObjectWrap {
+ public:
+  static void Init(v8::Local<v8::Object> exports);
+
+ private:
+  explicit Nan{{=it.name}}();
+  ~Nan{{=it.name}}();
+
+{{#def.nanCxxHeaderProperty}}
+{{#def.nanCxxHeaderMethod}}
+
+  static Nan::Persistent<v8::Function> constructor;
+
+ private:
+  {{=it.name}}* impl_;
+};
+
+#endif // _NAN{{=guardName}}_H_

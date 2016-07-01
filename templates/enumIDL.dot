@@ -1,0 +1,4 @@
+interface {{=it.option.name}} {
+{{~ it.values :p:i }}  const long {{=p.name}} = {{=p.value}};
+{{~}}
+};

@@ -1,0 +1,4 @@
+{{~ it.members :p:i }}
+{{? p.type === 'attribute' }}
+  Nan::SetAccessor(tpl->InstanceTemplate(), Nan::New("{{=p.name}}").ToLocalChecked(), {{=p.name}}Getter{{? ! p.readonly }}, {{=p.name}}Setter{{?}});
+{{?}}{{~}}

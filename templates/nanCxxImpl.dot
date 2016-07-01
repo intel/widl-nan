@@ -1,0 +1,49 @@
+{{ var attrCounter = 0; it.members.forEach(function(e){if (e.type==='attribute') ++attrCounter;}); }}
+{{ var headerFileName = it.name.toLowerCase(); }}
+#include "nan{{=headerFileName}}.h"
+#include "generator_helper.h"
+
+Nan::Persistent<v8::Function> Nan{{=it.name}}::constructor;
+
+Nan{{=it.name}}::Nan{{=it.name}}()
+    : impl_(new {{=it.name}}()) {
+}
+
+Nan{{=it.name}}::~Nan{{=it.name}}() {
+  delete impl_;
+}
+
+void Nan{{=it.name}}::Init(v8::Local<v8::Object> exports) {
+  Nan::HandleScope scope;
+
+  // Prepare constructor template
+  v8::Local<v8::FunctionTemplate> tpl = Nan::New<v8::FunctionTemplate>(New);
+  tpl->SetClassName(Nan::New("{{=it.name}}").ToLocalChecked());
+  tpl->InstanceTemplate()->SetInternalFieldCount({{=attrCounter}});
+
+{{#def.nanCxxImplMethodInitList}}
+
+{{#def.nanCxxImplPropertyInitList}}
+
+  constructor.Reset(tpl->GetFunction());
+  exports->Set(Nan::New("{{=it.name}}").ToLocalChecked(), tpl->GetFunction());
+}
+
+NAN_METHOD(Nan{{=it.name}}::New) {
+  if (info.IsConstructCall()) {
+    // Invoked as constructor: `new Nan{{=it.name}}()`
+    Nan{{=it.name}}* obj = new Nan{{=it.name}}();
+    obj->Wrap(info.This());
+    info.GetReturnValue().Set(info.This());
+  } else {
+    // Invoked as plain function `Nan{{=it.name}}()`, turn into construct call.
+    const int argc = 1;
+    v8::Local<v8::Value> argv[argc] = { info[0] };
+    v8::Local<v8::Function> cons = Nan::New<v8::Function>(constructor);
+    info.GetReturnValue().Set(cons->NewInstance(argc, argv));
+  }
+}
+
+{{#def.nanCxxImplProperty}}
+
+{{#def.nanCxxImplMethod}}

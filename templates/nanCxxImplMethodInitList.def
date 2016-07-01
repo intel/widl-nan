@@ -1,0 +1,4 @@
+{{~ it.members :p:i }}
+{{? p.type === 'operation' }}
+  Nan::SetPrototypeMethod(tpl, "{{=p.name}}", {{=p.name}});
+{{?}}{{~}}

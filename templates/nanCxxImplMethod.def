@@ -1,0 +1,34 @@
+{{ var className = "Nan" + it.name; }}
+
+{{~ it.members :p:i }}
+{{? p.type === 'operation' }}
+NAN_METHOD({{=className}}::{{=p.name}}) {
+  //Nan::HandleScope scope;
+  auto myself = ObjectWrap::Unwrap<{{=className}}>(info.Holder());
+
+{{ var argStr = ""; }}
+{{~ p.arguments :q:j}}
+{{ argStr += "arg" + j; if(j<p.arguments.length-1) argStr += ', '; }}
+  auto arg{{=j}} = EXTRACT_v8_{{=q.idlType.idlType}}(info[{{=j}}]);
+{{~}}
+
+{{? p.idlType.generic === 'Promise' }}
+  // Return promise
+  auto promise = myself->impl_->{{=p.name}}({{=argStr}}, info.GetIsolate());
+  info.GetReturnValue().Set(promise);
+{{?? p.idlType.idlType === 'void' }}
+  // Return type is void
+  myself->impl_->{{=p.name}}({{=argStr}});
+  info.GetReturnValue().Set(Nan::Undefined());
+{{?? p.idlType.idlType === 'String' }}
+  // Return type is string
+  auto value = myself->impl_->{{=p.name}}({{=argStr}});
+  info.GetReturnValue().Set(Nan::New(value).ToLocalChecked());
+{{?? true }}
+  // Primitive types (int, double ...)
+  auto value = myself->impl_->{{=p.name}}({{=argStr}});
+  info.GetReturnValue().Set(Nan::New(value));
+{{?}}
+}
+{{?}}
+{{~}}

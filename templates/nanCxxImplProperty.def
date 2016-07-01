@@ -1,0 +1,26 @@
+{{ var className = "Nan" + it.name; }}
+
+{{~ it.members :p:i }}
+{{? p.type === 'attribute' }}
+
+{{
+  var str = '';
+  if (p.idlType.idlType === "String") {
+    str = ".ToLocalChecked()";
+  }
+}}
+
+NAN_GETTER({{=className}}::{{=p.name}}Getter) {
+  auto myself = ObjectWrap::Unwrap<{{=className}}>(info.Holder());
+  info.GetReturnValue().Set(Nan::New(myself->impl_->get_{{=p.name}}()){{=str}});
+}
+
+{{? ! p.readonly }}
+NAN_SETTER({{=className}}::{{=p.name}}Setter) {
+  auto myself = ObjectWrap::Unwrap<{{=className}}>(info.Holder());
+  myself->impl_->set_{{=p.name}}(EXTRACT_v8_{{=p.idlType.idlType}}(value));
+}
+{{?}}
+
+{{?}}
+{{~}}
