@@ -1,0 +1,28 @@
+{
+  "name": "widl-nan",
+  "version": "0.0.1",
+  "description": "Generate C++ NAN node-addon by Web IDL",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [
+    "TBD"
+  ],
+  "homepage": "https://github.com/otcshare/widl-nan",
+  "repository": {
+    "type": "https",
+    "url": "https://github.com/otcshare/widl-nan"
+  },
+  "author": "Kenny",
+  "license": "SEE LICENSE IN LICENSE",
+  "dependencies": {
+    "assert": "^1.4.1",
+    "chai": "^3.5.0",
+    "dot": "^1.0.3",
+    "fs.promised": "^3.0.0",
+    "mocha": "^2.5.3",
+    "nan": "^2.3.5",
+    "webidl2": "^2.0.11"
+  }
+}
