@@ -7,7 +7,7 @@ const glob = require("glob");
 const webIDL2 = require("webidl2");
 const dot = require("dot");
 dot.templateSettings.strip = false; // Do not remove spaces & linebreaks
-var dots = dot.process({path: "./templates"});
+var dots = dot.process({path: path.join(__dirname, "templates")});
 
 
 function helloWorld() {
