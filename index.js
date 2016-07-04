@@ -105,7 +105,7 @@ const WIDL2NanGenerator = function () {
   };
 
   generator.writeToDir = function (dirName) {
-    this.targetDir = dirName;
+    this.option.targetDir = dirName;
     mkdirp.sync(this.option.targetDir);
 
     this.idlStore.forEach(idl => {
