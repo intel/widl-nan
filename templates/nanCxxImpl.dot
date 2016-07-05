@@ -1,4 +1,3 @@
-{{ var attrCounter = 0; it.members.forEach(function(e){if (e.type==='attribute') ++attrCounter;}); }}
 {{ var headerFileName = it.name.toLowerCase(); }}
 #include "nan{{=headerFileName}}.h"
 #include "generator_helper.h"
@@ -19,7 +18,7 @@ void Nan{{=it.name}}::Init(v8::Local<v8::Object> exports) {
   // Prepare constructor template
   v8::Local<v8::FunctionTemplate> tpl = Nan::New<v8::FunctionTemplate>(New);
   tpl->SetClassName(Nan::New("{{=it.name}}").ToLocalChecked());
-  tpl->InstanceTemplate()->SetInternalFieldCount({{=attrCounter}});
+  tpl->InstanceTemplate()->SetInternalFieldCount(1);
 
 {{#def.nanCxxImplMethodInitList}}
 
