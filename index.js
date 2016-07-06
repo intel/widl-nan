@@ -19,7 +19,7 @@ const _writeFile = function(name, text) {
 };
 
 const _packEmptyLines = function(str) {
-  return str.replace(/\n{3,}/gm, '\n\n');
+  return str.replace(/\n{3,}/gm, '\n\n').replace(/(\r\n){3,}/gm, '\r\n\r\n');
 };
 
 const _parseIDL = function(idlText) {
