@@ -96,8 +96,8 @@ const WIDL2NanGenerator = function () {
 
           var cppText = _packEmptyLines(dots.nanCxxImpl(def));
           idl.cpp.push({name: _genCppName(def), text: cppText});
-        } else if (def.type === '') {
-
+        } else if (def.type === 'exception') {
+          console.log(def);
         }
       });
     });
@@ -116,6 +116,8 @@ const WIDL2NanGenerator = function () {
         _writeFile(path.join(this.option.targetDir, cpp.name), cpp.text);
       });
     });
+
+    _writeFile(path.join(this.option.targetDir, 'generator_helper.h'), dots.helperHeader({}));
 
   };
 
