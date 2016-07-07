@@ -14,6 +14,8 @@
 {{? useImpl}}
 #include "{{=headerFileName}}.h"
 {{?}}
+#include <node.h>
+#include <nan.h>
 
 class Nan{{=it.name}} : public Nan::ObjectWrap {
  public:
