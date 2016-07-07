@@ -11,7 +11,9 @@
 }}
 #ifndef _NAN{{=guardName}}_H_
 #define _NAN{{=guardName}}_H_
+{{? useImpl}}
 #include "{{=headerFileName}}.h"
+{{?}}
 
 class Nan{{=it.name}} : public Nan::ObjectWrap {
  public:
