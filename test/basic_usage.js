@@ -18,7 +18,7 @@ describe('widl-nan basics', function() {
       // widlNan.hello();
     });
 
-    it('Case#2 Should no crash', function () {
+    it('Case#2 Should not crash', function () {
       var g = widlNan.generator;
       // g.scanDir('examples');
 
