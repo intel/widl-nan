@@ -1,9 +1,20 @@
 {{ var headerFileName = it.name.toLowerCase(); }}
-#include "nan{{=headerFileName}}.h"
+{{
+  var constCounter = 0;
+  it.members.forEach(mem => {
+    if (mem.type == 'const') {
+      constCounter ++;
+    }
+  });
+  var useImpl = (constCounter < it.members.length);
+}}
+
+#include "nan__{{=headerFileName}}.h"
 #include "generator_helper.h"
 
 Nan::Persistent<v8::Function> Nan{{=it.name}}::constructor;
 
+{{? useImpl}}
 Nan{{=it.name}}::Nan{{=it.name}}()
     : impl_(new {{=it.name}}()) {
 }
@@ -11,6 +22,13 @@ Nan{{=it.name}}::Nan{{=it.name}}()
 Nan{{=it.name}}::~Nan{{=it.name}}() {
   delete impl_;
 }
+{{?? true}}
+Nan{{=it.name}}::Nan{{=it.name}}() {
+}
+
+Nan{{=it.name}}::~Nan{{=it.name}}() {
+}
+{{?}}
 
 void Nan{{=it.name}}::Init(v8::Local<v8::Object> exports) {
   Nan::HandleScope scope;
@@ -18,7 +36,7 @@ void Nan{{=it.name}}::Init(v8::Local<v8::Object> exports) {
   // Prepare constructor template
   v8::Local<v8::FunctionTemplate> tpl = Nan::New<v8::FunctionTemplate>(New);
   tpl->SetClassName(Nan::New("{{=it.name}}").ToLocalChecked());
-  tpl->InstanceTemplate()->SetInternalFieldCount(1);
+  tpl->InstanceTemplate()->SetInternalFieldCount({{?useImpl}}1{{??true}}0{{?}});
 
 {{#def.nanCxxImplMethodInitList}}
 

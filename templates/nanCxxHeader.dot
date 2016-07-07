@@ -1,5 +1,14 @@
 {{ var guardName = it.name.toUpperCase(); }}
 {{ var headerFileName = it.name.toLowerCase(); }}
+{{
+  var constCounter = 0;
+  it.members.forEach(mem => {
+    if (mem.type == 'const') {
+      constCounter ++;
+    }
+  });
+  var useImpl = (constCounter < it.members.length);
+}}
 #ifndef _NAN{{=guardName}}_H_
 #define _NAN{{=guardName}}_H_
 #include "{{=headerFileName}}.h"
@@ -17,8 +26,11 @@ class Nan{{=it.name}} : public Nan::ObjectWrap {
 
   static Nan::Persistent<v8::Function> constructor;
 
+{{? useImpl}}
  private:
   {{=it.name}}* impl_;
+{{?}}
+
 };
 
 #endif // _NAN{{=guardName}}_H_
