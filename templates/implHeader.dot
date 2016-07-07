@@ -1,0 +1,16 @@
+{{ var guardName = it.name.toUpperCase(); }}
+
+#ifndef _{{=guardName}}_H_
+#define _{{=guardName}}_H_
+
+class {{=it.name}} {
+ public:
+  explicit {{=it.name}} ();
+  ~ {{=it.name}} ();
+
+ public:
+
+ private:
+};
+
+#endif // _{{=guardName}}_H_

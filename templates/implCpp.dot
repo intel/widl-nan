@@ -1,0 +1,10 @@
+{{ var headerFileName = it.name.toLowerCase(); }}
+#include "{{=headerFileName}}.h"
+
+{{=it.name}}::{{=it.name}}() {
+
+}
+
+{{=it.name}}::~{{=it.name}}() {
+
+}

@@ -26,12 +26,33 @@ const _parseIDL = function(idlText) {
   return webIDL2.parse(idlText);
 };
 
-const _genHeaderName = function(def) {
+const _genWrapperHeaderName = function(def) {
   return 'nan__' + def.name.toLowerCase() + '.h';
 };
 
-const _genCppName = function(def) {
+const _genWrapperCppName = function(def) {
   return 'nan__' + def.name.toLowerCase() + '.cpp';
+};
+
+const _genImplHeaderName = function(def) {
+  return def.name.toLowerCase() + '.h';
+};
+
+const _genImplCppName = function(def) {
+  return def.name.toLowerCase() + '.cpp';
+};
+
+const _useImpl = function(def) {
+  var constantCounter = 0;
+  for (var i = 0 ; i < def.members.length ; ++ i) {
+    const member = def.members[i];
+    if (member.type === 'operation' || member.type === 'attribute') {
+      return true;
+    } else if (member.type === 'const') {
+      ++ constantCounter;
+    }
+  };
+  return constantCounter < def.members.length;
 };
 
 const WIDL2NanGenerator = function () {
@@ -92,8 +113,10 @@ const WIDL2NanGenerator = function () {
       name: name,
       text: str,
       tree: {},
-      headers: [],
-      cpp: []
+      wrapperH: [],
+      wrapperCpp: [],
+      implH: [],
+      implCpp: []
     });
   };
 
@@ -125,15 +148,28 @@ const WIDL2NanGenerator = function () {
     this.idlStore.forEach(idl => {
       idl.tree.forEach(def => {
         if (def.type === 'interface') {
-          var headerText = _packEmptyLines(dots.nanCxxHeader(def));
-          idl.headers.push({name: _genHeaderName(def), text: headerText});
+          idl.wrapperH.push({
+            name: _genWrapperHeaderName(def),
+            text: _packEmptyLines(dots.nanCxxHeader(def))
+          });
 
-          var cppText = _packEmptyLines(dots.nanCxxImpl(def));
-          idl.cpp.push({name: _genCppName(def), text: cppText});
+          idl.wrapperCpp.push({
+            name: _genWrapperCppName(def),
+            text: _packEmptyLines(dots.nanCxxImpl(def))
+          });
 
+          if (_useImpl(def)) {
+            idl.implH.push({
+              name: _genImplHeaderName(def),
+              text: _packEmptyLines(dots.implHeader(def))
+            });
+            idl.implCpp.push({
+              name: _genImplCppName(def),
+              text: _packEmptyLines(dots.implCpp(def))
+            });
+          }
           // console.log(def);
-          // var v = def.members[0];
-          // console.log(v.value);
+
         } else if (def.type === 'exception') {
           // console.log(def);
         }
@@ -144,19 +180,23 @@ const WIDL2NanGenerator = function () {
 
   generator.writeToDir = function (dirName) {
     this.option.targetDir = dirName;
-    mkdirp.sync(this.option.targetDir);
+    mkdirp.sync(dirName);
 
     var all = [];
+    const write = function (array) {
+      array.forEach(item => {
+        all.push(_writeFile(path.join(dirName, item.name), item.text));
+      });
+    }
+
     this.idlStore.forEach(idl => {
-      idl.headers.forEach(header => {
-        all.push(_writeFile(path.join(this.option.targetDir, header.name), header.text));
-      });
-      idl.cpp.forEach(cpp => {
-        all.push(_writeFile(path.join(this.option.targetDir, cpp.name), cpp.text));
-      });
+      write(idl.wrapperH);
+      write(idl.wrapperCpp);
+      write(idl.implH);
+      write(idl.implCpp);
     });
 
-    all.push(_writeFile(path.join(this.option.targetDir, 'generator_helper.h'), dots.helperHeader({})));
+    all.push(_writeFile(path.join(dirName, 'generator_helper.h'), dots.helperHeader({})));
 
     return new Promise(function (resolve, reject) {
       Promise.all(all).then(() => {resolve('done');});
