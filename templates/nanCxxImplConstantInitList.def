@@ -1,0 +1,4 @@
+{{~ it.members :p:i }}
+{{? p.type === 'const' }}
+  _FORCE_SET_ENUM(function, {{=p.name}}, {{=p.value.value}}, {{=p.idlType}});
+{{?}}{{~}}

@@ -24,7 +24,11 @@ void Nan{{=it.name}}::Init(v8::Local<v8::Object> exports) {
 
 {{#def.nanCxxImplPropertyInitList}}
 
-  constructor.Reset(tpl->GetFunction());
+  auto function = tpl->GetFunction();
+
+{{#def.nanCxxImplConstantInitList}}
+
+  constructor.Reset(function);
   exports->Set(Nan::New("{{=it.name}}").ToLocalChecked(), tpl->GetFunction());
 }
 

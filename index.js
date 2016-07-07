@@ -7,8 +7,8 @@ const glob = require("glob");
 const webIDL2 = require("webidl2");
 const dot = require("dot");
 dot.templateSettings.strip = false; // Do not remove spaces & linebreaks
-var dots = dot.process({path: path.join(__dirname, "templates")});
-
+const dots = dot.process({path: path.join(__dirname, "templates")});
+const enumGenerator = require('./cpp-enum.js');
 
 function helloWorld() {
   console.log("Hello World!");
@@ -27,11 +27,11 @@ const _parseIDL = function(idlText) {
 };
 
 const _genHeaderName = function(def) {
-  return 'nan' + def.name.toLowerCase() + '.h';
+  return 'nan__' + def.name.toLowerCase() + '.h';
 };
 
 const _genCppName = function(def) {
-  return 'nan' + def.name.toLowerCase() + '.cpp';
+  return 'nan__' + def.name.toLowerCase() + '.cpp';
 };
 
 const WIDL2NanGenerator = function () {
@@ -39,15 +39,18 @@ const WIDL2NanGenerator = function () {
     return fs.readFile(path);
   };
 
+  var defaultOption = {
+    targetDir: 'gen'
+  };
+
   var generator = {
-    option: {
-      targetDir: 'gen'
-    },
+    option: defaultOption,
     idlStore: []
   };
 
   generator.reset = function () {
-
+    this.option = defaultOption;
+    this.idlStore = [];
   };
 
   generator.setOption = function (option) {
@@ -57,18 +60,29 @@ const WIDL2NanGenerator = function () {
   generator.addFile = function (fileName) {
     return _readFile(fileName)
       .then(data => {
-        return this.addText(data.toString(), fileName);
+        this.addText(data.toString(), fileName);
       });
   };
 
   generator.scanDir = function (dirName) {
-    // options is optional
-    glob(path.join(dirName, '*.widl'), /*options, */function (er, files) {
-      console.log(files);
-      // files is an array of filenames.
-      // If the `nonull` option is set, and nothing
-      // was found, then files is ["**/*.js"]
-      // er is an error object or null.
+    return new Promise(function (resolve, reject) {
+      // options is optional
+      glob(path.join(dirName, '*.widl'), /*options, */function (er, files) {
+        console.log(files);
+        // TODO: deal with files
+
+        // files is an array of filenames.
+        // If the `nonull` option is set, and nothing
+        // was found, then files is ["**/*.js"]
+        // er is an error object or null.
+
+        resolve('');
+      });
+
+      // glob(path.join(dirName, '*.h'), /*options, */function (er, files) {
+      //   // TODO: use enumGenerator to deal with files
+      // });
+
     });
 
   };
@@ -81,6 +95,26 @@ const WIDL2NanGenerator = function () {
       headers: [],
       cpp: []
     });
+  };
+
+  generator.addCppEnum = function (path) {
+    const that = this;
+    const callback = function (fileName, idlText) {
+      that.addText(idlText, fileName);
+    };
+
+    return new Promise(function (resolve, reject) {
+      enumGenerator.addFile(path)
+        .then(function () {
+          enumGenerator.compile();
+          enumGenerator.writeTo(callback);
+          resolve(that.idlStore);
+        })
+        .catch(e => {
+          reject(e);
+        });
+    });
+
   };
 
   generator.compile = function () {
@@ -96,8 +130,12 @@ const WIDL2NanGenerator = function () {
 
           var cppText = _packEmptyLines(dots.nanCxxImpl(def));
           idl.cpp.push({name: _genCppName(def), text: cppText});
+
+          // console.log(def);
+          // var v = def.members[0];
+          // console.log(v.value);
         } else if (def.type === 'exception') {
-          console.log(def);
+          // console.log(def);
         }
       });
     });
@@ -108,17 +146,21 @@ const WIDL2NanGenerator = function () {
     this.option.targetDir = dirName;
     mkdirp.sync(this.option.targetDir);
 
+    var all = [];
     this.idlStore.forEach(idl => {
       idl.headers.forEach(header => {
-        _writeFile(path.join(this.option.targetDir, header.name), header.text);
+        all.push(_writeFile(path.join(this.option.targetDir, header.name), header.text));
       });
       idl.cpp.forEach(cpp => {
-        _writeFile(path.join(this.option.targetDir, cpp.name), cpp.text);
+        all.push(_writeFile(path.join(this.option.targetDir, cpp.name), cpp.text));
       });
     });
 
-    _writeFile(path.join(this.option.targetDir, 'generator_helper.h'), dots.helperHeader({}));
+    all.push(_writeFile(path.join(this.option.targetDir, 'generator_helper.h'), dots.helperHeader({})));
 
+    return new Promise(function (resolve, reject) {
+      Promise.all(all).then(() => {resolve('done');});
+    });
   };
 
   generator.writeTo = function (stream) {
