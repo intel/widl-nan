@@ -1,0 +1,20 @@
+{{
+
+function isFirstMethodInOverloadList(def, member, index) {
+
+  /*
+   Purpose: To deterimne whether this is a overload method.
+            If it is, check whether it is the first one in array ==> generate method declaration
+            Otherwise ==> Don't generate method declaration
+  */
+  var isOverload = false;
+  var generateMethod = true;
+  var overloadList = def.operationMap[member.name];
+  if (overloadList.length > 1) {
+    generateMethod = (overloadList[0].index == index);
+  }
+
+  return generateMethod;
+}
+
+}}

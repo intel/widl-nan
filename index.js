@@ -26,6 +26,29 @@ const _parseIDL = function(idlText) {
   return webIDL2.parse(idlText);
 };
 
+const _preprocessOverload = function(def) {
+  var map = {};
+  def.members.forEach((member, idx) => {
+    if (member.type === 'operation') {
+      var existing = map[member.name];
+      if (existing) {
+        existing.push({name: member.name, index: idx});
+      } else {
+        map[member.name] = [{name: member.name, index: idx}];
+      }
+    }
+  });
+  def.operationMap = map;
+};
+
+const _preprocess = function(tree) {
+  tree.forEach(def => {
+    if (def.type == 'interface') {
+      _preprocessOverload(def);
+    }
+  });
+};
+
 const _genWrapperHeaderName = function(def) {
   return 'nan__' + def.name.toLowerCase() + '.h';
 };
@@ -143,6 +166,7 @@ const WIDL2NanGenerator = function () {
   generator.compile = function () {
     this.idlStore.forEach(idl => {
       idl.tree = _parseIDL(idl.text);
+      _preprocess(idl.tree);
       console.log(idl.tree);
     });
 

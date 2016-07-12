@@ -1,4 +1,14 @@
 {{~ it.members :p:i }}
 {{? p.type === 'operation' }}
+
+{{#def.methodOverload}}
+
+{{
+  var generateMethod = isFirstMethodInOverloadList(it, p, i);
+}}
+
+{{? generateMethod}}
   Nan::SetPrototypeMethod(tpl, "{{=p.name}}", {{=p.name}});
+{{?}}
+
 {{?}}{{~}}
