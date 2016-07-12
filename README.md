@@ -13,3 +13,16 @@ We're developing a node module for node-addon developers, providing the followin
 # Getting Started #
 
 An example is always a good way to get started, please find it at [https://github.com/kenny-y/wn-example](https://github.com/kenny-y/wn-example)
+
+
+# List of Supported Features #
+
+ - `interface`
+   - `attributes` -- mapping to `NAN` `Getter` and/or `Setter` (depend on whether it's `readonly`), and also relevant C++ member variables + getter/setter
+   - method -- mapping to `NAN_METHOD` and C++ member functions.
+     (Note: Web IDL method overload is now supported)
+   - `partial interface`: no plan yet
+   - `[constructor]`: TODO
+   - Complete support of all data types: TODO
+ - `exception` -- TODO
+ - `enum` -- TODO
