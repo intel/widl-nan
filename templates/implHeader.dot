@@ -2,6 +2,7 @@
 
 #ifndef _{{=guardName}}_H_
 #define _{{=guardName}}_H_
+#include <string>
 
 class {{=it.name}} {
  public:
@@ -9,8 +10,10 @@ class {{=it.name}} {
   ~ {{=it.name}} ();
 
  public:
+{{#def.implHeaderProperty}}
 
  private:
+{{#def.implHeaderPropertyVars}}
 };
 
 #endif // _{{=guardName}}_H_

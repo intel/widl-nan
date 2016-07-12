@@ -1,0 +1,9 @@
+{{~ it.members :p:i }}
+
+{{var PARAM_IDLType = p.idlType;}}
+{{#def.idlType2CxxConversion}}
+
+{{? p.type === 'attribute' }}
+  {{=RETURN_Type}} {{=p.name}}_;
+{{?}}
+{{~}}

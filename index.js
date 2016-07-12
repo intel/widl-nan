@@ -143,6 +143,7 @@ const WIDL2NanGenerator = function () {
   generator.compile = function () {
     this.idlStore.forEach(idl => {
       idl.tree = _parseIDL(idl.text);
+      console.log(idl.tree);
     });
 
     this.idlStore.forEach(idl => {

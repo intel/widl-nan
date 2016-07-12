@@ -1,0 +1,20 @@
+{{~ it.members :p:i }}
+{{? p.type === 'attribute' }}
+
+{{var PARAM_IDLType = p.idlType;}}
+{{#def.idlType2CxxConversion}}
+
+  const {{=RETURN_Type}} get_{{=p.name}}() const {
+    return this->{{=p.name}}_;
+  }
+
+{{? ! p.readonly }}
+
+  void set_{{=p.name}}(const {{=RETURN_Type}}& new_value) {
+    this->{{=p.name}}_ = new_value;
+  }
+
+{{?}}
+
+{{?}}
+{{~}}

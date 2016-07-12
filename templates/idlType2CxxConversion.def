@@ -1,0 +1,15 @@
+{{
+
+  /*
+   This is used to convert types in *.widl into C++ types
+   INPUT: PARAM_IDLType - the xxx.idlType defined in IDL tree
+   OUTPUT: RETURN_Type - the C++ types that can be referenced later in doT template
+  */
+
+  var RETURN_Type = PARAM_IDLType.idlType;
+  if (RETURN_Type === 'String' || RETURN_Type === 'DOMString') {
+    RETURN_Type = 'std::string';
+  } else if (RETURN_Type === 'boolean') {
+    RETURN_Type = 'bool';
+  }
+}}
