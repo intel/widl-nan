@@ -3,6 +3,8 @@
 #ifndef _{{=guardName}}_H_
 #define _{{=guardName}}_H_
 #include <string>
+#include <node.h>
+#include <v8.h>
 
 class {{=it.name}} {
  public:
