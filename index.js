@@ -181,7 +181,9 @@ const WIDL2NanGenerator = function () {
 
   generator.writeToDir = function (dirName) {
     this.option.targetDir = dirName;
+    var dirNameSkeleton = dirName + '/dont-build';
     mkdirp.sync(dirName);
+    mkdirp.sync(dirNameSkeleton);
 
     var all = [];
     const write = function (array) {
@@ -190,11 +192,17 @@ const WIDL2NanGenerator = function () {
       });
     }
 
+    const writeImpl = function (array) {
+      array.forEach(item => {
+        all.push(_writeFile(path.join(dirNameSkeleton, item.name), item.text));
+      });
+    }
+
     this.idlStore.forEach(idl => {
       write(idl.wrapperH);
       write(idl.wrapperCpp);
-      write(idl.implH);
-      write(idl.implCpp);
+      writeImpl(idl.implH);
+      writeImpl(idl.implCpp);
     });
 
     all.push(_writeFile(path.join(dirName, 'generator_helper.h'), dots.helperHeader({})));
