@@ -1,0 +1,19 @@
+{{#def.idlType2CxxConversion}}
+
+{{
+
+var generateParameterList = function (method){
+  var returnList = '';
+  method.arguments.forEach((arg, idx) => {
+    returnList += 'const ';
+    returnList += ConvertIDLType2Cxx(arg.idlType);
+    returnList += '& ';
+    returnList += arg.name;
+    if (idx < method.arguments.length-1) {
+      returnList += ', ';
+    }
+  });
+  return returnList;
+};
+
+}}

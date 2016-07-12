@@ -11,6 +11,7 @@ class {{=it.name}} {
 
  public:
 {{#def.implHeaderProperty}}
+{{#def.implHeaderMethodDecl}}
 
  private:
 {{#def.implHeaderPropertyVars}}

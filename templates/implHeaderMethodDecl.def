@@ -1,0 +1,9 @@
+{{~ it.members :p:i }}
+{{? p.type === 'operation' }}
+
+{{#def.idlType2CxxConversion}}
+{{#def.methodArgument}}
+
+  {{=ConvertIDLType2Cxx(p.idlType)}} {{=p.name}}({{=generateParameterList(p)}});
+{{?}}
+{{~}}

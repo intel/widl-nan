@@ -1,16 +1,16 @@
 {{~ it.members :p:i }}
 {{? p.type === 'attribute' }}
 
-{{var PARAM_IDLType = p.idlType;}}
 {{#def.idlType2CxxConversion}}
+{{var propertyType = ConvertIDLType2Cxx(p.idlType);}}
 
-  const {{=RETURN_Type}} get_{{=p.name}}() const {
+  const {{=propertyType}} get_{{=p.name}}() const {
     return this->{{=p.name}}_;
   }
 
 {{? ! p.readonly }}
 
-  void set_{{=p.name}}(const {{=RETURN_Type}}& new_value) {
+  void set_{{=p.name}}(const {{=propertyType}}& new_value) {
     this->{{=p.name}}_ = new_value;
   }
 

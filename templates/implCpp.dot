@@ -2,9 +2,12 @@
 #include "{{=headerFileName}}.h"
 
 {{=it.name}}::{{=it.name}}() {
-
+  // TODO: init your members
 }
 
 {{=it.name}}::~{{=it.name}}() {
+  // TODO: do cleanup if necessary
 
 }
+
+{{#def.implCppMethod}}
