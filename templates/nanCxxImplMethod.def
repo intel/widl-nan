@@ -70,6 +70,9 @@ NAN_METHOD({{=className}}::{{=methodName}}) {
 
 {{~}}
 
+  else {
+    // TODO: handle no-match by modifying template nanCxxImplMethod.def
+  }
 }
 
 {{?}}
