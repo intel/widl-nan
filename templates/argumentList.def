@@ -1,0 +1,4 @@
+{{#def.idlType2CxxConversion}}
+{{~ p.arguments :q:j }}
+      auto {{=q.name}} = {{=extractArgument(q.idlType)}}(info[{{=j}}]);
+{{~}}

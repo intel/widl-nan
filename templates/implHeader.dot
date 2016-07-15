@@ -8,8 +8,23 @@
 
 class {{=it.name}} {
  public:
-  explicit {{=it.name}} ();
-  ~ {{=it.name}} ();
+
+{{#def.extractConstructors}}
+{{#def.methodArgument}}
+
+{{ var constructors = extractConstructors(it); }}
+
+{{? constructors.length }}
+
+{{~ constructors :p:i }}
+  explicit {{=it.name}}({{=generateParameterList(p)}});
+{{~}}
+
+{{?? true}}
+  {{=it.name}} ();
+{{?}}
+
+  ~{{=it.name}} ();
 
  public:
 {{#def.implHeaderProperty}}

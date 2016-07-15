@@ -16,7 +16,7 @@ Nan::Persistent<v8::Function> Nan{{=it.name}}::constructor;
 
 {{? useImpl}}
 Nan{{=it.name}}::Nan{{=it.name}}()
-    : impl_(new {{=it.name}}()) {
+    : impl_(nullptr}()) {
 }
 
 Nan{{=it.name}}::~Nan{{=it.name}}() {
@@ -52,14 +52,40 @@ void Nan{{=it.name}}::Init(v8::Local<v8::Object> exports) {
 
 NAN_METHOD(Nan{{=it.name}}::New) {
   if (info.IsConstructCall()) {
-    // Invoked as constructor: `new Nan{{=it.name}}()`
+
+{{#def.extractConstructors}}
+{{#def.methodArgument}}
+
+{{ var constructors = extractConstructors(it); }}
+
+{{? constructors.length }}
+
     Nan{{=it.name}}* obj = new Nan{{=it.name}}();
+
+{{~ constructors :p:i }}
+    {{?i>0}}else {{?}}if (info.Length() == {{=i}}) {
+{{#def.argumentList}}
+      obj.impl_ = new {{=it.name}}({{=generateArgumentList(p)}});
+    }
+{{~}}
+    else {
+      Nan::ThrowTypeError("Illegal constructor");
+    }
+
+    // TODO: modify nanCxxImpl.dot and generate each constructor defined in IDL
+    //   The following is just a sample for 0-arg constructor
+    //   Nan{{=it.name}}* obj = new Nan{{=it.name}}();
     obj->Wrap(info.This());
     info.GetReturnValue().Set(info.This());
+
+{{?? true}}
+    Nan::ThrowTypeError("Illegal constructor");
+{{?}}
+
   } else {
     // Invoked as plain function `Nan{{=it.name}}()`, turn into construct call.
-    const int argc = 1;
-    v8::Local<v8::Value> argv[argc] = { info[0] };
+    const int argc = 0;
+    v8::Local<v8::Value> argv[argc] = {};
     v8::Local<v8::Function> cons = Nan::New<v8::Function>(constructor);
     info.GetReturnValue().Set(cons->NewInstance(argc, argv));
   }

@@ -1,9 +1,26 @@
 {{ var headerFileName = it.name.toLowerCase(); }}
 #include "{{=headerFileName}}.h"
 
+
+{{#def.extractConstructors}}
+{{#def.methodArgument}}
+
+{{ var constructors = extractConstructors(it); }}
+
+{{? constructors.length }}
+
+{{~ constructors :p:i }}
+{{=it.name}}::{{=it.name}}({{=generateParameterList(p)}}) {
+  // TODO: init your members
+}
+{{~}}
+
+{{?? true}}
 {{=it.name}}::{{=it.name}}() {
   // TODO: init your members
 }
+{{?}}
+
 
 {{=it.name}}::~{{=it.name}}() {
   // TODO: do cleanup if necessary

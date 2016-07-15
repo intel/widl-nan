@@ -4,15 +4,47 @@
 
 var generateParameterList = function (method){
   var returnList = '';
-  method.arguments.forEach((arg, idx) => {
-    returnList += 'const ';
-    returnList += ConvertIDLType2Cxx(arg.idlType);
-    returnList += '& ';
-    returnList += arg.name;
-    if (idx < method.arguments.length-1) {
-      returnList += ', ';
-    }
-  });
+  if ( method.arguments ) {
+    method.arguments.forEach((arg, idx) => {
+      returnList += 'const ';
+      returnList += ConvertIDLType2Cxx(arg.idlType);
+      returnList += '& ';
+      returnList += arg.name;
+      if (idx < method.arguments.length-1) {
+        returnList += ', ';
+      }
+    });
+  }
+  return returnList;
+};
+
+var generateArgumentList = function (method){
+  var returnList = '';
+  if ( method.arguments ) {
+    method.arguments.forEach((arg, idx) => {
+      returnList += arg.name;
+      if (idx < method.arguments.length-1) {
+        returnList += ', ';
+      }
+    });
+  }
+  return returnList;
+};
+
+var generateInitList = function (method){
+  var returnList = '';
+  if ( method.arguments ) {
+    returnList = ': ';
+    method.arguments.forEach((arg, idx) => {
+      returnList += arg.name;
+      returnList += '_(';
+      returnList += arg.name;
+      returnList += ')';
+      if (idx < method.arguments.length-1) {
+        returnList += ', ';
+      }
+    });
+  }
   return returnList;
 };
 

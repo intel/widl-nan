@@ -12,4 +12,14 @@ var ConvertIDLType2Cxx = function (idlType) {
   return type;
 };
 
+var extractArgument = function(idlType) {
+  var type = idlType.idlType;
+  if (type === 'String' || type === 'DOMString') {
+    type = 'string';
+  } else if (type === 'boolean') {
+    type = 'bool';
+  }
+  return "EXTRACT_v8_" + type;
+};
+
 }}

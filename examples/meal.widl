@@ -1,11 +1,17 @@
 enum MealType { "tartan-steak", "spaghetti", "pasta", "lasagna", "ramen", "sushi" };
 
+[
+Constructor,
+Constructor(String type),
+Constructor(String type, double size)
+]
 interface Meal {
   attribute String type;
   attribute double size; // in grams
   readonly attribute boolean isRawMeal;
 
   void prepare(String type, double size);
+  void setLocalizationMechanism(LocalizationMechanism obj);
 
   Promise<String> cook(String chefName);
 };
