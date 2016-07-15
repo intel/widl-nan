@@ -16,7 +16,7 @@ Nan::Persistent<v8::Function> Nan{{=it.name}}::constructor;
 
 {{? useImpl}}
 Nan{{=it.name}}::Nan{{=it.name}}()
-    : impl_(nullptr}()) {
+    : impl_(nullptr) {
 }
 
 Nan{{=it.name}}::~Nan{{=it.name}}() {
