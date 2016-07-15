@@ -65,7 +65,7 @@ NAN_METHOD(Nan{{=it.name}}::New) {
 {{~ constructors :p:i }}
     {{?i>0}}else {{?}}if (info.Length() == {{=i}}) {
 {{#def.argumentList}}
-      obj.impl_ = new {{=it.name}}({{=generateArgumentList(p)}});
+      obj->impl_ = new {{=it.name}}({{=generateArgumentList(p)}});
     }
 {{~}}
     else {
