@@ -1,0 +1,30 @@
+// Copyright (c) 2016 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a MIT-style license that can be
+// found in the LICENSE file.
+//
+// Extracted from https://www.w3.org/TR/WebIDL/#idl-attributes
+// W3C Candidate Recommendation 19 April 2012
+
+[
+Constructor,
+Constructor(String name),
+Constructor(String name, short age)
+]
+interface Animal {
+
+  // A simple attribute that can be set to any string value.
+  // TODO: Add DOMString support
+  readonly attribute String name;
+
+  // An attribute whose value can be assigned to.
+  // TODO: change short to unsigned short
+  attribute short age;
+};
+
+// TODO: Attribute inheritance support
+// interface Person : Animal {
+//
+//  // An attribute whose getter behavior is inherited from Animal, and need not be
+//  // specified in the description of Person.
+//  inherit attribute DOMString name;
+// };
