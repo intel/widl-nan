@@ -26,6 +26,8 @@ describe('widl-nan Unit Test - IDL enum', function () {
   });
 
   it('Building addon', function (done) {
+    // building addon maybe slow
+    this.timeout(100000);
     var cmd = 'cd test/enum; node-gyp rebuild';
     exec(cmd, function(error, stdout, stderr) {
       // TODO: Detect errors

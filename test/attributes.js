@@ -26,6 +26,8 @@ describe('widl-nan Unit Test:', function () {
     });
 
     it('Building addon', function (done) {
+      // building addon maybe slow
+      this.timeout(10000);
       var cmd = 'cd test/attributes; node-gyp rebuild';
       exec(cmd, function(error, stdout, stderr) {
         // TODO: Detect errors
