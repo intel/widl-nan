@@ -18,6 +18,7 @@
   "license": "SEE LICENSE IN LICENSE",
   "dependencies": {
     "assert": "^1.4.1",
+    "bindings": "^1.2.1",
     "chai": "^3.5.0",
     "dot": "^1.0.3",
     "fs.promised": "^3.0.0",
