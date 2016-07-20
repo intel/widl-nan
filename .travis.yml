@@ -1,0 +1,16 @@
+language: node_js
+
+sudo: required
+
+node_js:
+  - "6"
+
+before_install:
+  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+  - sudo apt-get update -q
+  - sudo apt-get install gcc-4.8 g++-4.8 -y
+  - npm install -g node-gyp
+
+env:
+  global:
+    - CXX=g++-4.8
