@@ -41,11 +41,36 @@ const _preprocessOverload = function(def) {
   def.operationMap = map;
 };
 
-const _preprocess = function(tree) {
-  tree.forEach(def => {
-    if (def.type == 'interface') {
-      _preprocessOverload(def);
-    }
+const _preprocess = function(that) {
+  var typeMap = that.typeMap;
+  that.idlStore.forEach(idl => {
+    idl.tree = _parseIDL(idl.text);
+    idl.tree.forEach(def => {
+      if (def.type == 'interface') {
+        _preprocessOverload(def);
+      } else if (def.type === 'enum') {
+        var key = def.name;
+        var data = def;
+
+        if (typeMap[key]) {
+          var current = typeMap[key];
+          if (Array.isArray(current)) {
+            current.push(data);
+          } else {
+            typeMap[key] = [current, data];
+          }
+        } else {
+          typeMap[key] = data;
+        }
+      }
+    });
+  });
+
+  that.idlStore.forEach(idl => {
+    idl.tree.forEach(def => {
+      def.refTypeMap = typeMap;
+    });
+    // console.log(idl.tree);
   });
 };
 
@@ -83,13 +108,14 @@ const WIDL2NanGenerator = function () {
     return fs.readFile(path);
   };
 
-  var defaultOption = {
+  const defaultOption = {
     targetDir: 'gen'
   };
 
   var generator = {
     option: defaultOption,
-    idlStore: []
+    idlStore: [],
+    typeMap: {}
   };
 
   generator.reset = function () {
@@ -166,9 +192,9 @@ const WIDL2NanGenerator = function () {
   generator.compile = function () {
     this.idlStore.forEach(idl => {
       idl.tree = _parseIDL(idl.text);
-      _preprocess(idl.tree);
-      console.log(idl.tree);
     });
+
+    _preprocess(this);
 
     this.idlStore.forEach(idl => {
       idl.tree.forEach(def => {
@@ -193,14 +219,14 @@ const WIDL2NanGenerator = function () {
               text: _packEmptyLines(dots.implCpp(def))
             });
           }
-          // console.log(def);
 
         } else if (def.type === 'exception') {
-          // console.log(def);
+
+        } else if (def.type === 'enum') {
+
         }
       });
     });
-
   };
 
   generator.writeToDir = function (dirName) {

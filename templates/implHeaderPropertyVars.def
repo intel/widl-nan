@@ -3,6 +3,6 @@
 {{#def.idlType2CxxConversion}}
 
 {{? p.type === 'attribute' }}
-  {{=ConvertIDLType2Cxx(p.idlType)}} {{=p.name}}_;
+  {{=ConvertIDLType2Cxx(p.idlType, it.refTypeMap)}} {{=p.name}}_;
 {{?}}
 {{~}}

@@ -1,0 +1,18 @@
+// Copyright (c) 2016 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a MIT-style license that can be
+// found in the LICENSE file.
+//
+// Extracted from https://www.w3.org/TR/WebIDL/#idl-enums
+// W3C Candidate Recommendation 19 April 2012
+
+enum MealType { "rice", "noodles", "other" };
+
+[
+Constructor
+]
+interface Meal {
+  attribute MealType type;
+  attribute float size;     // in grams
+
+  void initialize(MealType type, float size);
+};

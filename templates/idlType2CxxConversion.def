@@ -1,6 +1,6 @@
 {{
 
-var ConvertIDLType2Cxx = function (idlType) {
+var ConvertIDLType2Cxx = function (idlType, refTypeMap) {
   var type = idlType.idlType;
   if (type === 'String' || type === 'DOMString') {
     type = 'std::string';
@@ -8,18 +8,24 @@ var ConvertIDLType2Cxx = function (idlType) {
     type = 'bool';
   } else if (typeof type === 'object' && idlType.generic === 'Promise') {
     type = 'v8::Handle<v8::Promise>';
+  } else {
+    /* If it's a referenced enum type, then use std::string */
+    if (refTypeMap && refTypeMap[type]) {
+      var refType = refTypeMap[type];
+      if (refType.type === 'enum') {
+        type = 'std::string';
+      }
+    }
   }
   return type;
 };
 
-var extractArgument = function(idlType) {
-  var type = idlType.idlType;
-  if (type === 'String' || type === 'DOMString') {
-    type = 'string';
-  } else if (type === 'boolean') {
-    type = 'bool';
-  }
-  return "EXTRACT_v8_" + type;
+var ConvertIDLType2ExtractMacro = function (idlType, refTypeMap) {
+  return ConvertIDLType2Cxx(idlType, refTypeMap).replace('std::', '');
+};
+
+var extractArgument = function(idlType, refTypeMap) {
+  return "EXTRACT_v8_" + ConvertIDLType2ExtractMacro(idlType, refTypeMap);
 };
 
 }}

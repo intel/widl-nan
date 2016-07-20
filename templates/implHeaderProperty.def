@@ -2,7 +2,7 @@
 {{? p.type === 'attribute' }}
 
 {{#def.idlType2CxxConversion}}
-{{var propertyType = ConvertIDLType2Cxx(p.idlType);}}
+{{var propertyType = ConvertIDLType2Cxx(p.idlType, it.refTypeMap);}}
 
   const {{=propertyType}} get_{{=p.name}}() const {
     return this->{{=p.name}}_;

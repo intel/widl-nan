@@ -1,0 +1,21 @@
+{{
+
+var isEnumType = function (idlType, refTypeMap) {
+  var retValue = false;
+  var typeName = idlType.idlType;
+  if (refTypeMap && refTypeMap[typeName] && refTypeMap[typeName].type === 'enum') {
+    retValue = true;
+  }
+  return retValue;
+};
+
+var getEnumDef = function (idlType, refTypeMap) {
+  var enumDef = {};
+  var typeName = idlType.idlType;
+  if (isEnumType(idlType, refTypeMap)) {
+    enumDef = refTypeMap[typeName];
+  }
+  return enumDef;
+};
+
+}}

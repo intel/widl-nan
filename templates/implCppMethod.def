@@ -4,7 +4,7 @@
 {{#def.idlType2CxxConversion}}
 {{#def.methodArgument}}
 
-{{=ConvertIDLType2Cxx(p.idlType)}} {{=it.name}}::{{=p.name}}({{=generateParameterList(p)}}) {
+{{=ConvertIDLType2Cxx(p.idlType)}} {{=it.name}}::{{=p.name}}({{=generateParameterList(p, it.refTypeMap)}}) {
   // TODO: fill your code here
   
 }

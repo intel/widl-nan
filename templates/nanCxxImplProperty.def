@@ -1,24 +1,64 @@
 {{ var className = "Nan" + it.name; }}
 
+{{#def.idlType2CxxConversion}}
+{{#def.enum}}
+{{#def.returnType}}
+{{#def.buildValidEnumValuesList}}
+
 {{~ it.members :p:i }}
 {{? p.type === 'attribute' }}
 
 {{
-  var str = '';
-  if (p.idlType.idlType === "String") {
-    str = ".ToLocalChecked()";
-  }
+  var str = getToLocalCheckedString(p.idlType, it.refTypeMap);
 }}
 
 NAN_GETTER({{=className}}::{{=p.name}}Getter) {
   auto myself = ObjectWrap::Unwrap<{{=className}}>(info.Holder());
-  info.GetReturnValue().Set(Nan::New(myself->impl_->get_{{=p.name}}()){{=str}});
+  auto impl_val = myself->impl_->get_{{=p.name}}();
+
+{{
+  var enumCheck = isEnumType(p.idlType, it.refTypeMap);
+  var enumDef = getEnumDef(p.idlType, it.refTypeMap);
+  var enumName = enumDef.name;
+}}
+
+{{? enumCheck }}
+  // Valid enum values for parameter info{{=j}}, original IDL type: {{=enumName}}
+  const char* VALID_ENUM_{{=(enumName.toUpperCase())}}_INFO[] = { {{=buildValidEnumValuesList(enumDef)}} };
+  if (IsEnumValueValid(impl_val, VALID_ENUM_{{=(enumName.toUpperCase())}}_INFO)) {
+    info.GetReturnValue().Set(Nan::New(impl_val){{=str}});
+  } else {
+    // TODO: modify nanCxxImplProperty.def to handle this case
+  }
+{{?? true}}
+  info.GetReturnValue().Set(Nan::New(impl_val){{=str}});
+{{?}}
+
 }
 
 {{? ! p.readonly }}
 NAN_SETTER({{=className}}::{{=p.name}}Setter) {
   auto myself = ObjectWrap::Unwrap<{{=className}}>(info.Holder());
-  myself->impl_->set_{{=p.name}}(EXTRACT_v8_{{=p.idlType.idlType}}(value));
+  auto v8_value = EXTRACT_v8_{{=ConvertIDLType2ExtractMacro(p.idlType, it.refTypeMap)}}(value);
+
+{{
+  var enumCheck = isEnumType(p.idlType, it.refTypeMap);
+  var enumDef = getEnumDef(p.idlType, it.refTypeMap);
+  var enumName = enumDef.name;
+}}
+
+{{? enumCheck }}
+  // Valid enum values for parameter info{{=j}}, original IDL type: {{=enumName}}
+  const char* VALID_ENUM_{{=(enumName.toUpperCase())}}_INFO[] = { {{=buildValidEnumValuesList(enumDef)}} };
+  if (IsEnumValueValid(v8_value, VALID_ENUM_{{=(enumName.toUpperCase())}}_INFO)) {
+    myself->impl_->set_{{=p.name}}(v8_value);
+  } else {
+    // TODO: modify nanCxxImplProperty.def to handle this case
+  }
+{{?? true}}
+  myself->impl_->set_{{=p.name}}(v8_value);
+{{?}}
+
 }
 {{?}}
 

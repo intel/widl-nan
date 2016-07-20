@@ -1,5 +1,9 @@
 {{ var className = "Nan" + it.name; }}
 
+{{#def.idlType2CxxConversion}}
+{{#def.buildValidEnumValuesList}}
+{{#def.enum}}
+
 {{~ it.members :p:i }}
 {{? p.type === 'operation' }}
 
@@ -45,8 +49,24 @@ NAN_METHOD({{=className}}::{{=methodName}}) {
     argStr += ', ';
   }
 }}
-    auto arg{{=j}} = EXTRACT_v8_{{=q.idlType.idlType}}(info[{{=j}}]);
+    auto arg{{=j}} = EXTRACT_v8_{{=ConvertIDLType2ExtractMacro(q.idlType, it.refTypeMap)}}(info[{{=j}}]);
+
+{{
+  var enumCheck = isEnumType(q.idlType, it.refTypeMap);
+  var enumDef = getEnumDef(q.idlType, it.refTypeMap);
+  var enumName = enumDef.name;
+}}
+
+{{? enumCheck }}
+    // Valid enum values for parameter info{{=j}}, original IDL type: {{=enumName}}
+    const char* VALID_ENUM_{{=(enumName.toUpperCase())}}_INFO{{=j}}[] = { {{=buildValidEnumValuesList(enumDef)}} };
+    ThrowIfEnumValueNotValid(arg{{=j}}, VALID_ENUM_{{=(enumName.toUpperCase())}}_INFO{{=j}}, {{=q.name}}, {{=enumName}});
+{{?}}
+
 {{~}}
+
+
+
 
 {{? method.idlType.generic === 'Promise' }}
     // Return promise

@@ -2,12 +2,12 @@
 
 {{
 
-var generateParameterList = function (method){
+var generateParameterList = function (method, refTypeMap){
   var returnList = '';
   if ( method.arguments ) {
     method.arguments.forEach((arg, idx) => {
       returnList += 'const ';
-      returnList += ConvertIDLType2Cxx(arg.idlType);
+      returnList += ConvertIDLType2Cxx(arg.idlType, refTypeMap);
       returnList += '& ';
       returnList += arg.name;
       if (idx < method.arguments.length-1) {

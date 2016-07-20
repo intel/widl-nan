@@ -1,0 +1,21 @@
+{{
+
+var getToLocalCheckedString = function (idlType, refTypeMap) {
+  var isString = false;
+  var type = idlType.idlType;
+  if (type === "String" || type === "DOMString") {
+    isString = true;
+  } else {
+    /* If it's a referenced enum type, then use std::string */
+    if (refTypeMap && refTypeMap[type]) {
+      var refType = refTypeMap[type];
+      if (refType.type === 'enum') {
+        isString = true;
+      }
+    }
+  }
+
+  return isString ? '.ToLocalChecked()' : '';
+};
+
+}}

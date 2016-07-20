@@ -17,7 +17,7 @@ class {{=it.name}} {
 {{? constructors.length }}
 
 {{~ constructors :p:i }}
-  explicit {{=it.name}}({{=generateParameterList(p)}});
+  explicit {{=it.name}}({{=generateParameterList(p, it.refTypeMap)}});
 {{~}}
 
 {{?? true}}

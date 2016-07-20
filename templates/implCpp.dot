@@ -10,7 +10,7 @@
 {{? constructors.length }}
 
 {{~ constructors :p:i }}
-{{=it.name}}::{{=it.name}}({{=generateParameterList(p)}}) {
+{{=it.name}}::{{=it.name}}({{=generateParameterList(p, it.refTypeMap)}}) {
   // TODO: init your members
 }
 {{~}}
