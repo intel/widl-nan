@@ -5,9 +5,9 @@
 "use strict"
 
 var assert = require("assert"),
-    exec = require('child_process').exec,
     gen = require("..").generator,
-    path = require("path");
+    path = require("path"),
+    spawn = require('child_process').spawn;
 
 var Animal = null;
 
@@ -26,11 +26,23 @@ describe('widl-nan Unit Test:', function () {
     });
 
     it('Building addon', function (done) {
-      var cmd = 'cd test/attributes; node-gyp rebuild';
-      exec(cmd, function(error, stdout, stderr) {
-        // TODO: Detect errors
+      // building addon maybe slow
+      this.timeout(10000);
+
+      var buildProc  = spawn('node-gyp', ['rebuild'], {cwd: 'test/attributes'});
+
+      buildProc.stdout.on('data', function (data) {
+        console.log(data.toString());
+      });
+
+      buildProc.stderr.on('data', function (data) {
+        console.log(data.toString());
+      });
+
+      buildProc.on('exit', function (code) {
+        console.log('node-gyp process exited with code ' + code);
         done();
-      })
+      });
     });
 
     it('Loading addon', function () {
