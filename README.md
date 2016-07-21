@@ -25,4 +25,5 @@ An example is always a good way to get started, please find it at [https://githu
    - `[Constructor]`: supports `Constructor` and `Constructor(param)` syntax, multiple constructors can be declared
    - Complete support of all data types: TODO
  - `exception` -- TODO
- - `enum` -- TODO
+ - `enum` -- supported
+ - `callback` -- supported
