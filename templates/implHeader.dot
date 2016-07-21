@@ -1,10 +1,57 @@
 {{ var guardName = it.name.toUpperCase(); }}
+{{#def.callback}}
+{{#def.methodArgument}}
+{{#def.className}}
+{{#def.idlType2CxxConversion}}
 
 #ifndef _{{=guardName}}_H_
 #define _{{=guardName}}_H_
 #include <string>
 #include <node.h>
 #include <v8.h>
+#include "generator_helper.h"
+
+{{
+var callback = extractAllCallbackMethod(it);
+var hasCallback = callback.methods.length > 0;
+}}
+
+{{? hasCallback}}
+{{~ callback.callbacksArray :p:i}}
+{{var className = getCallbackHelperClassName(p.name);}}
+class {{=className}}
+    : public CallbackHelperBase {
+ public:
+  {{=className}}() {
+  }
+
+  virtual ~ {{=className}}() {
+  }
+
+{{
+  var numArgs = p.arguments.length;
+  var paramStr = generateParameterList(p, it.refTypeMap);
+}}
+
+  void CallJavaScriptFunction({{=paramStr}}) {
+    Nan::HandleScope scope;
+    auto js_func = Nan::New<v8::Function>(v8_function_);
+    auto js_this = Nan::New<v8::Object>(v8_this_);
+    const int argc = {{=numArgs}};
+    v8::Local<v8::Value> argv[argc] = {
+      {{=generateArgvList(p, '      ')}}
+    };
+    auto ret_value = js_func->Call(js_this, argc, argv);
+    if (ret_value->IsString()) {
+      v8::String::Utf8Value value(ret_value);
+      std::string str(*value);
+      printf("String came from JavaScript: %s\n", str.c_str());
+    }
+  }
+};
+{{~}}
+{{?}}
+
 
 class {{=it.name}} {
  public:
@@ -32,6 +79,23 @@ class {{=it.name}} {
 
  private:
 {{#def.implHeaderPropertyVars}}
+
+{{? hasCallback}}
+{{~ callback.callbacksArray :p:i}}
+{{var className = getCallbackHelperClassName(p.name);}}
+  // TODO: use a collection if you want to hold multiple callbacks at the same time
+  std::unique_ptr<{{=className}}> {{=classNameToMemberName(className)}};
+{{
+ var paramStr = generateParameterList(p, it.refTypeMap);
+ var argStr = generateArgumentList(p);
+}}
+  void Call{{=className}}({{=paramStr}}) {
+    // TODO: use a collection if you want to hold multiple callbacks at the same time
+    {{=classNameToMemberName(className)}}->CallJavaScriptFunction({{=argStr}});
+  }
+{{~}}
+{{?}}
+
 };
 
 #endif // _{{=guardName}}_H_

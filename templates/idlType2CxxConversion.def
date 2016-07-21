@@ -1,5 +1,24 @@
 {{
 
+var isPrimitiveType = function (idlType) {
+  var type = idlType.idlType;
+  return type === 'boolean'
+      || type === 'byte'
+      || type === 'octet'
+      || type === 'short'
+      || type === 'unsigned short'
+      || type === 'long'
+      || type === 'unsigned long'
+      || type === 'long long'
+      || type === 'unsigned long long'
+      || type === 'float'
+      || type === 'unrestricted float'
+      || type === 'double'
+      || type === 'unrestricted double'
+      || type === 'DOMString'
+      || type === 'String';
+};
+
 var ConvertIDLType2Cxx = function (idlType, refTypeMap) {
   var type = idlType.idlType;
   if (type === 'String' || type === 'DOMString') {
@@ -20,12 +39,9 @@ var ConvertIDLType2Cxx = function (idlType, refTypeMap) {
   return type;
 };
 
-var ConvertIDLType2ExtractMacro = function (idlType, refTypeMap) {
-  return ConvertIDLType2Cxx(idlType, refTypeMap).replace('std::', '');
+var isString = function (idlType, refTypeMap) {
+  return ConvertIDLType2Cxx(idlType, refTypeMap) === 'std::string';
 };
 
-var extractArgument = function(idlType, refTypeMap) {
-  return "EXTRACT_v8_" + ConvertIDLType2ExtractMacro(idlType, refTypeMap);
-};
 
 }}

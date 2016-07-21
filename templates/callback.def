@@ -1,0 +1,73 @@
+{{#def.idlType2CxxConversion}}
+
+{{
+
+var getCallbackHelperClassName = function (className) {
+  return className + 'Helper';
+};
+
+var extractAllCallbackMethod = function (def) {
+  var result = {
+    callbacks: {},
+    callbacksArray: [],
+    methods: []
+  };
+  def.members.forEach(method => {
+    if (method.type === 'operation') {
+      method.arguments.forEach(arg => {
+        if (! isPrimitiveType(arg.idlType)) {
+          var type = arg.idlType.idlType;
+          if (def.refTypeMap[type]) {
+            var callback = def.refTypeMap[type];
+            if (callback.type === 'callback') {
+              result.methods.push(method);
+              result.callbacks[callback.name] = callback;
+              result.callbacksArray.push(callback);
+            }
+          }
+        }
+      });
+    }
+  });
+  return result;
+};
+
+var isCallback = function (idlType, callback) {
+  var retValue = false;
+  var typeName = idlType.idlType;
+  if (callback && callback.callbacks && callback.callbacks[typeName] && callback.callbacks[typeName].type === 'callback') {
+    retValue = true;
+  }
+  return retValue;
+};
+
+var getCallbackHelperAssignmentString = function(method, padding) {
+  padding = padding || '';
+  var callback = extractAllCallbackMethod(it);
+
+  var returnList = [];
+  if ( method.arguments ) {
+    method.arguments.forEach((arg, idx) => {
+      if (isCallback(arg.idlType, callback)) {
+        var helperClassName = getCallbackHelperClassName(arg.idlType.idlType);
+        var str = 'this->';
+        str += classNameToMemberName(helperClassName);
+        str += '.reset(';
+        str += arg.name;
+        str += ');';
+        returnList.push(str);
+
+        str = '// TODO: use this->';
+        str += 'Call' + helperClassName + '()';
+        returnList.push(str);
+
+        str = '//       to call JavaScript callback function in the future (Do NOT do it a thread)';
+        returnList.push(str);
+
+      }
+    });
+  }
+  return returnList.join('\n' + padding);
+};
+
+}}

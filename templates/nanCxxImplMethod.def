@@ -3,6 +3,15 @@
 {{#def.idlType2CxxConversion}}
 {{#def.buildValidEnumValuesList}}
 {{#def.enum}}
+{{#def.extractV8Value}}
+{{#def.callback}}
+
+{{
+var callback = extractAllCallbackMethod(it);
+var hasCallback = callback.methods.length > 0;
+}}
+
+
 
 {{~ it.members :p:i }}
 {{? p.type === 'operation' }}
@@ -49,7 +58,16 @@ NAN_METHOD({{=className}}::{{=methodName}}) {
     argStr += ', ';
   }
 }}
+
+{{? isCallback(q.idlType, callback) }}
+{{var callbackHelperClassName = getCallbackHelperClassName(q.idlType.idlType);}}
+    auto function{{=j}} = EXTRACT_v8_{{=ConvertIDLType2ExtractMacro(q.idlType, it.refTypeMap, callback)}}(info[{{=j}}]);
+    {{=callbackHelperClassName}}* arg{{=j}} = new {{=callbackHelperClassName}}();
+    arg{{=j}}->Reset(function{{=j}}, info.This());
+{{?? true}}
     auto arg{{=j}} = EXTRACT_v8_{{=ConvertIDLType2ExtractMacro(q.idlType, it.refTypeMap)}}(info[{{=j}}]);
+{{?}}
+
 
 {{
   var enumCheck = isEnumType(q.idlType, it.refTypeMap);

@@ -45,6 +45,20 @@ const _preprocessOverload = function(def) {
   def.operationMap = map;
 };
 
+const _addOrAppend = function(param) {
+  var map = param.map, key = param.key, value = param.value;
+  if (map[key]) {
+    var valueOrArray = map[key];
+    if (Array.isArray(valueOrArray)) {
+      valueOrArray.push(value);
+    } else {
+      map[key] = [valueOrArray, value];
+    }
+  } else {
+    map[key] = value;
+  }
+};
+
 const _preprocess = function(that) {
   var typeMap = that.typeMap;
   that.idlStore.forEach(idl => {
@@ -53,19 +67,9 @@ const _preprocess = function(that) {
       if (def.type == 'interface') {
         _preprocessOverload(def);
       } else if (def.type === 'enum') {
-        var key = def.name;
-        var data = def;
-
-        if (typeMap[key]) {
-          var current = typeMap[key];
-          if (Array.isArray(current)) {
-            current.push(data);
-          } else {
-            typeMap[key] = [current, data];
-          }
-        } else {
-          typeMap[key] = data;
-        }
+        _addOrAppend({map: typeMap, key: def.name, value: def});
+      } else if (def.type === 'callback') {
+        _addOrAppend({map: typeMap, key: def.name, value: def});
       }
     });
   });
@@ -74,7 +78,7 @@ const _preprocess = function(that) {
     idl.tree.forEach(def => {
       def.refTypeMap = typeMap;
     });
-    // console.log(idl.tree);
+    console.log(idl.tree);
   });
 };
 
@@ -227,6 +231,8 @@ const WIDL2NanGenerator = function () {
         } else if (def.type === 'exception') {
 
         } else if (def.type === 'enum') {
+
+        } else if (def.type === 'callback') {
 
         }
       });

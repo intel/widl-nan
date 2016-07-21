@@ -1,6 +1,7 @@
 {{#def.idlType2CxxConversion}}
 {{#def.enum}}
 {{#def.buildValidEnumValuesList}}
+{{#def.extractV8Value}}
 
 {{~ p.arguments :q:j }}
       auto {{=q.name}} = {{=extractArgument(q.idlType, it.refTypeMap)}}(info[{{=j}}]);

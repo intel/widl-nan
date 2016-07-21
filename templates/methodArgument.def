@@ -1,14 +1,23 @@
 {{#def.idlType2CxxConversion}}
+{{#def.callback}}
 
 {{
 
 var generateParameterList = function (method, refTypeMap){
+  var callback = extractAllCallbackMethod(it);
+
   var returnList = '';
   if ( method.arguments ) {
     method.arguments.forEach((arg, idx) => {
-      returnList += 'const ';
-      returnList += ConvertIDLType2Cxx(arg.idlType, refTypeMap);
-      returnList += '& ';
+      if (isCallback(arg.idlType, callback)) {
+        var helperClassName = getCallbackHelperClassName(arg.idlType.idlType);
+        returnList += helperClassName;
+        returnList += '* ';
+      } else {
+        returnList += 'const ';
+        returnList += ConvertIDLType2Cxx(arg.idlType, refTypeMap);
+        returnList += '& ';
+      }
       returnList += arg.name;
       if (idx < method.arguments.length-1) {
         returnList += ', ';
@@ -16,6 +25,23 @@ var generateParameterList = function (method, refTypeMap){
     });
   }
   return returnList;
+};
+
+var generateArgvList = function(method, padding) {
+  padding = padding || '';
+  var returnList = [];
+  if (method.arguments) {
+    method.arguments.forEach((arg, idx) => {
+      var str = 'Nan::New(';
+      str += arg.name;
+      str += ')';
+      if (isString(arg.idlType, it.refTypeMap)) {
+        str += '.ToLocalChecked()';
+      }
+      returnList.push(str);
+    });
+  }
+  return returnList.join(',\n' + padding);
 };
 
 var generateArgumentList = function (method){

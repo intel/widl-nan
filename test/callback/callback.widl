@@ -1,0 +1,17 @@
+// Copyright (c) 2016 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a MIT-style license that can be
+// found in the LICENSE file.
+//
+// Extracted from https://www.w3.org/TR/WebIDL/#idl-callback-functions
+// W3C Candidate Recommendation 19 April 2012
+
+callback AsyncOperationCallback = void (DOMString status);
+callback AnotherOperationCallback = void (DOMString type, double value);
+
+[
+Constructor
+]
+interface AsyncOperations {
+  void performOperation(AsyncOperationCallback whenFinished);
+  void performAnotherOperation(AnotherOperationCallback whenStarted);
+};

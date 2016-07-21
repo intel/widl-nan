@@ -1,6 +1,13 @@
-{{ var headerFileName = it.name.toLowerCase(); }}
-#include "{{=headerFileName}}.h"
+{{#def.callback}}
+{{#def.methodArgument}}
+{{#def.className}}
 
+{{
+var className = it.name;
+}}
+
+{{ var headerFileName = className.toLowerCase(); }}
+#include "{{=headerFileName}}.h"
 
 {{#def.extractConstructors}}
 {{#def.methodArgument}}
@@ -10,19 +17,20 @@
 {{? constructors.length }}
 
 {{~ constructors :p:i }}
-{{=it.name}}::{{=it.name}}({{=generateParameterList(p, it.refTypeMap)}}) {
+{{=className}}::{{=className}}({{=generateParameterList(p, it.refTypeMap)}}) {
   // TODO: init your members
 }
 {{~}}
 
 {{?? true}}
-{{=it.name}}::{{=it.name}}() {
+{{=className}}::{{=className}}() {
   // TODO: init your members
+
 }
 {{?}}
 
 
-{{=it.name}}::~{{=it.name}}() {
+{{=className}}::~{{=className}}() {
   // TODO: do cleanup if necessary
 
 }

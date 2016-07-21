@@ -4,6 +4,7 @@
 {{#def.enum}}
 {{#def.returnType}}
 {{#def.buildValidEnumValuesList}}
+{{#def.extractV8Value}}
 
 {{~ it.members :p:i }}
 {{? p.type === 'attribute' }}
