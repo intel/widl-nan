@@ -7,6 +7,7 @@
 var assert = require("assert"),
     gen = require("..").generator,
     path = require("path"),
+    buildAddon = require("./addon-builder.js").buildAddon,
     spawn = require('child_process').spawn;
 
 var Meal = null;
@@ -25,24 +26,11 @@ describe('widl-nan Unit Test - IDL enum', function () {
       });
   });
 
-  it('Building addon', function (done) {
+  it('Building addon', function () {
     // building addon maybe slow
     this.timeout(100000);
 
-    var buildProc  = spawn('node-gyp', ['rebuild'], {cwd: 'test/enum'});
-
-    buildProc.stdout.on('data', function (data) {
-      console.log(data.toString());
-    });
-
-    buildProc.stderr.on('data', function (data) {
-      console.log(data.toString());
-    });
-
-    buildProc.on('exit', function (code) {
-      console.log('node-gyp process exited with code ' + code);
-      done();
-    });
+    return buildAddon('test/enum');
   });
 
   it('Loading addon', function () {
