@@ -1,8 +1,8 @@
 {{~ it.members :p:i }}
 
-{{#def.idlType2CxxConversion}}
+{{#def.idlType}}
 
 {{? p.type === 'attribute' }}
-  {{=ConvertIDLType2Cxx(p.idlType, it.refTypeMap)}} {{=p.name}}_;
+  {{=idlType2CxxType(p.idlType, it.refTypeMap)}} {{=p.name}}_;
 {{?}}
 {{~}}

@@ -1,5 +1,5 @@
-{{#def.idlType2CxxConversion}}
-{{#def.methodArgument}}
+{{#def.idlType}}
+{{#def.argument}}
 {{#def.callback}}
 
 {{
@@ -11,7 +11,7 @@
 {{? p.type === 'operation' }}
 
 
-{{=ConvertIDLType2Cxx(p.idlType)}} {{=it.name}}::{{=p.name}}({{=generateParameterList(p, it.refTypeMap)}}) {
+{{=idlType2CxxType(p.idlType)}} {{=it.name}}::{{=p.name}}({{=generateParameterList(p, it.refTypeMap)}}) {
   // TODO: use a collection if you want to hold multiple callbacks at the same time
   {{=getCallbackHelperAssignmentString(p, '  ')}}
 

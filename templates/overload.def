@@ -1,6 +1,6 @@
 {{
 
-function isFirstMethodInOverloadList(def, member, index) {
+var isFirstMethodInOverloadList = function (def, member, index) {
 
   /*
    Purpose: To deterimne whether this is a overload method.
@@ -15,6 +15,6 @@ function isFirstMethodInOverloadList(def, member, index) {
   }
 
   return generateMethod;
-}
+};
 
 }}

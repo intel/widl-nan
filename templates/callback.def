@@ -1,4 +1,4 @@
-{{#def.idlType2CxxConversion}}
+{{#def.idlType}}
 
 {{
 
@@ -47,7 +47,7 @@ var getCallbackHelperAssignmentString = function(method, padding) {
 
   var returnList = [];
   if ( method.arguments ) {
-    method.arguments.forEach((arg, idx) => {
+    method.arguments.forEach(arg => {
       if (isCallback(arg.idlType, callback)) {
         var helperClassName = getCallbackHelperClassName(arg.idlType.idlType);
         var str = 'this->';

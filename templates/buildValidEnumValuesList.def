@@ -1,14 +1,11 @@
 {{
   var buildValidEnumValuesList = function (enumDef) {
-    var str = '';
+    var returnList = [];
     if (enumDef.values) {
-      enumDef.values.forEach((value, i) => {
-        str += '"' + value + '"';
-        if (i < enumDef.values.length-1) {
-          str += ', ';
-        }
+      enumDef.values.forEach(value => {
+        returnList.push('"' + value + '"');
       });
     }
-    return str;
+    return returnList.join(', ');
   };
 }}

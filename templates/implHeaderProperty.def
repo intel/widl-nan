@@ -1,8 +1,8 @@
 {{~ it.members :p:i }}
 {{? p.type === 'attribute' }}
 
-{{#def.idlType2CxxConversion}}
-{{var propertyType = ConvertIDLType2Cxx(p.idlType, it.refTypeMap);}}
+{{#def.idlType}}
+{{var propertyType = idlType2CxxType(p.idlType, it.refTypeMap);}}
 
   const {{=propertyType}} get_{{=p.name}}() const {
     return this->{{=p.name}}_;

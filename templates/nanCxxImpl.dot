@@ -54,7 +54,7 @@ NAN_METHOD(Nan{{=it.name}}::New) {
   if (info.IsConstructCall()) {
 
 {{#def.extractConstructors}}
-{{#def.methodArgument}}
+{{#def.argument}}
 
 {{ var constructors = extractConstructors(it); }}
 

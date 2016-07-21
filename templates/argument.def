@@ -1,4 +1,69 @@
+{{#def.idlType}}
+{{#def.callback}}
+
 {{
 
+var generateParameterList = function (method, refTypeMap){
+  var callback = extractAllCallbackMethod(it);
+
+  var returnList = [];
+  if ( method.arguments ) {
+    method.arguments.forEach((arg, idx) => {
+      var str = '';
+      if (isCallback(arg.idlType, callback)) {
+        var helperClassName = getCallbackHelperClassName(arg.idlType.idlType);
+        str += helperClassName;
+        str += '* ';
+      } else {
+        str += 'const ';
+        str += idlType2CxxType(arg.idlType, refTypeMap);
+        str += '& ';
+      }
+      str += arg.name;
+      returnList.push(str);
+    });
+  }
+  return returnList.join(', ');
+};
+
+var generateArgvList = function(method, padding) {
+  padding = padding || '';
+  var returnList = [];
+  if (method.arguments) {
+    method.arguments.forEach(arg => {
+      var str = 'Nan::New(';
+      str += arg.name;
+      str += ')';
+      if (isString(arg.idlType, it.refTypeMap)) {
+        str += '.ToLocalChecked()';
+      }
+      returnList.push(str);
+    });
+  }
+  return returnList.join(',\n' + padding);
+};
+
+var generateArgumentList = function (method){
+  var returnList = [];
+  if ( method.arguments ) {
+    method.arguments.forEach(arg => {
+      returnList.push(arg.name);
+    });
+  }
+  return returnList.join(', ');
+};
+
+var generateInitList = function (method, padding){
+  padding = padding || '';
+  var returnList = [];
+  if ( method.arguments ) {
+    returnList.push(': ');
+    method.arguments.forEach(arg => {
+      var str = '';
+      str += arg.name + '_(' + arg.name + ')';
+    });
+  }
+  return returnList.join(',\n' + padding);
+};
 
 }}

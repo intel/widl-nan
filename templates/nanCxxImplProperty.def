@@ -1,6 +1,6 @@
 {{ var className = "Nan" + it.name; }}
 
-{{#def.idlType2CxxConversion}}
+{{#def.idlType}}
 {{#def.enum}}
 {{#def.returnType}}
 {{#def.buildValidEnumValuesList}}
@@ -40,7 +40,7 @@ NAN_GETTER({{=className}}::{{=p.name}}Getter) {
 {{? ! p.readonly }}
 NAN_SETTER({{=className}}::{{=p.name}}Setter) {
   auto myself = ObjectWrap::Unwrap<{{=className}}>(info.Holder());
-  auto v8_value = EXTRACT_v8_{{=ConvertIDLType2ExtractMacro(p.idlType, it.refTypeMap)}}(value);
+  auto v8_value = {{=extractArgument(p.idlType, it.refTypeMap)}}(value);
 
 {{
   var enumCheck = isEnumType(p.idlType, it.refTypeMap);

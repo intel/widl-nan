@@ -1,9 +1,9 @@
 {{~ it.members :p:i }}
 {{? p.type === 'operation' }}
 
-{{#def.idlType2CxxConversion}}
-{{#def.methodArgument}}
+{{#def.idlType}}
+{{#def.argument}}
 
-  {{=ConvertIDLType2Cxx(p.idlType, it.refTypeMap)}} {{=p.name}}({{=generateParameterList(p, it.refTypeMap)}});
+  {{=idlType2CxxType(p.idlType, it.refTypeMap)}} {{=p.name}}({{=generateParameterList(p, it.refTypeMap)}});
 {{?}}
 {{~}}

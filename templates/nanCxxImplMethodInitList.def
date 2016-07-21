@@ -1,7 +1,7 @@
 {{~ it.members :p:i }}
 {{? p.type === 'operation' }}
 
-{{#def.methodOverload}}
+{{#def.overload}}
 
 {{
   var generateMethod = isFirstMethodInOverloadList(it, p, i);

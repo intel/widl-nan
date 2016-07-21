@@ -1,6 +1,6 @@
 {{
 
-const extractConstructors = function(it) {
+var extractConstructors = function(it) {
   var constructors = [];
   it.extAttrs.forEach(attr => {
     if (attr.name === 'Constructor') {

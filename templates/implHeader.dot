@@ -1,8 +1,8 @@
 {{ var guardName = it.name.toUpperCase(); }}
 {{#def.callback}}
-{{#def.methodArgument}}
+{{#def.argument}}
 {{#def.className}}
-{{#def.idlType2CxxConversion}}
+{{#def.idlType}}
 
 #ifndef _{{=guardName}}_H_
 #define _{{=guardName}}_H_
@@ -57,7 +57,6 @@ class {{=it.name}} {
  public:
 
 {{#def.extractConstructors}}
-{{#def.methodArgument}}
 
 {{ var constructors = extractConstructors(it); }}
 

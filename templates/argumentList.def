@@ -1,4 +1,4 @@
-{{#def.idlType2CxxConversion}}
+{{#def.idlType}}
 {{#def.enum}}
 {{#def.buildValidEnumValuesList}}
 {{#def.extractV8Value}}

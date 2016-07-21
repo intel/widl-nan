@@ -19,7 +19,7 @@ var isPrimitiveType = function (idlType) {
       || type === 'String';
 };
 
-var ConvertIDLType2Cxx = function (idlType, refTypeMap) {
+var idlType2CxxType = function (idlType, refTypeMap) {
   var type = idlType.idlType;
   if (type === 'String' || type === 'DOMString') {
     type = 'std::string';
@@ -40,7 +40,7 @@ var ConvertIDLType2Cxx = function (idlType, refTypeMap) {
 };
 
 var isString = function (idlType, refTypeMap) {
-  return ConvertIDLType2Cxx(idlType, refTypeMap) === 'std::string';
+  return idlType2CxxType(idlType, refTypeMap) === 'std::string';
 };
 
 

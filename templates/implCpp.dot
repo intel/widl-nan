@@ -1,6 +1,7 @@
 {{#def.callback}}
-{{#def.methodArgument}}
+{{#def.argument}}
 {{#def.className}}
+{{#def.extractConstructors}}
 
 {{
 var className = it.name;
@@ -9,8 +10,7 @@ var className = it.name;
 {{ var headerFileName = className.toLowerCase(); }}
 #include "{{=headerFileName}}.h"
 
-{{#def.extractConstructors}}
-{{#def.methodArgument}}
+
 
 {{ var constructors = extractConstructors(it); }}
 

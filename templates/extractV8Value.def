@@ -1,10 +1,10 @@
-{{#def.idlType2CxxConversion}}
+{{#def.idlType}}
 {{#def.callback}}
 
 {{
   
-var ConvertIDLType2ExtractMacro = function (idlType, refTypeMap, callback) {
-  var type = ConvertIDLType2Cxx(idlType, refTypeMap);
+var convertIDLType2ExtractMacro = function (idlType, refTypeMap, callback) {
+  var type = idlType2CxxType(idlType, refTypeMap);
   type = type.replace('std::', '');
   if (isCallback(idlType, callback)) {
     type = 'function';
@@ -12,8 +12,9 @@ var ConvertIDLType2ExtractMacro = function (idlType, refTypeMap, callback) {
   return type;
 };
 
-var extractArgument = function(idlType, refTypeMap) {
-  return "EXTRACT_v8_" + ConvertIDLType2ExtractMacro(idlType, refTypeMap);
+var extractArgument = function(idlType, refTypeMap, callback) {
+
+  return "EXTRACT_v8_" + convertIDLType2ExtractMacro(idlType, refTypeMap, callback);
 };
 
 }}
