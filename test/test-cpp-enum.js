@@ -5,7 +5,7 @@
 "use strict"
 
 var assert = require("assert"),
-    gen = require("..").generator,
+    compile = require("./compile.js").compile,
     path = require("path"),
     buildAddon = require("./addon-builder.js").buildAddon,
     testNoConstructor = require("./constructor.js").testNoConstructor,
@@ -16,16 +16,7 @@ var ordinal, number, another_number, yet_another_number;
 
 describe('widl-nan Unit Test - C++ header enum', function () {
   it('Generating binding C++ code', function () {
-    gen.reset();
-    return Promise.all([
-      gen.addCppEnum('test/cpp_header_enum/cpp_header.h')
-      ]).then(function () {
-        gen.compile();
-        gen.writeToDir('test/cpp_header_enum/gen');
-      }).catch(e => {
-        console.log(e);
-        throw e;
-      });
+    return compile('test/cpp_header_enum/cpp_header.h', 'test/cpp_header_enum/gen');
   });
 
   it('Building addon', function () {

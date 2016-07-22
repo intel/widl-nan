@@ -5,7 +5,7 @@
 "use strict"
 
 var assert = require("assert"),
-    gen = require("..").generator,
+    compile = require("./compile.js").compile,
     path = require("path"),
     buildAddon = require("./addon-builder.js").buildAddon,
     spawn = require('child_process').spawn;
@@ -15,15 +15,7 @@ var Animal = null;
 describe('widl-nan Unit Test:', function () {
   describe('Attributes', function () {
     it('Generating binding C++ code', function () {
-      return Promise.all([
-        gen.addFile('test/attributes/attributes.widl')
-        ]).then(function () {
-          gen.compile();
-          gen.writeToDir('test/attributes/gen');
-        }).catch(e => {
-          console.log(e);
-          throw e;
-        });
+      return compile('test/attributes/attributes.widl', 'test/attributes/gen');
     });
 
     it('Building addon', function () {

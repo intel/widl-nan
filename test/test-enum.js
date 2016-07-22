@@ -5,7 +5,7 @@
 "use strict"
 
 var assert = require("assert"),
-    gen = require("..").generator,
+    compile = require("./compile.js").compile,
     path = require("path"),
     buildAddon = require("./addon-builder.js").buildAddon,
     spawn = require('child_process').spawn;
@@ -14,16 +14,7 @@ var Meal = null;
 
 describe('widl-nan Unit Test - IDL enum', function () {
   it('Generating binding C++ code', function () {
-    gen.reset();
-    return Promise.all([
-      gen.addFile('test/enum/enum.widl')
-      ]).then(function () {
-        gen.compile();
-        gen.writeToDir('test/enum/gen');
-      }).catch(e => {
-        console.log(e);
-        throw e;
-      });
+    return compile('test/enum/enum.widl', 'test/enum/gen');
   });
 
   it('Building addon', function () {

@@ -5,7 +5,7 @@
 "use strict"
 
 var assert = require("assert"),
-    gen = require("..").generator,
+    compile = require("./compile.js").compile,
     path = require("path"),
     buildAddon = require("./addon-builder.js").buildAddon,
     testNoConstructor = require("./constructor.js").testNoConstructor,
@@ -16,16 +16,7 @@ var B;
 
 describe('widl-nan Unit Test - Method Overloading', function () {
   it('Generating binding C++ code', function () {
-    gen.reset();
-    return Promise.all([
-      gen.addFile('test/method_overload/method_overload.widl')
-      ]).then(function () {
-        gen.compile();
-        gen.writeToDir('test/method_overload/gen');
-      }).catch(e => {
-        console.log(e);
-        throw e;
-      });
+    return compile('test/method_overload/method_overload.widl', 'test/method_overload/gen');
   });
 
   it('Building addon', function () {

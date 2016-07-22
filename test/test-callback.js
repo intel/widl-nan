@@ -6,7 +6,7 @@
 
 var assert = require("assert"),
     exec = require('child_process').exec,
-    gen = require("..").generator,
+    compile = require("./compile.js").compile,
     path = require("path"),
     buildAddon = require("./addon-builder.js").buildAddon;
 
@@ -14,16 +14,7 @@ var AsyncOperations = null;
 
 describe('widl-nan Unit Test - IDL callback', function () {
   it('Generating binding C++ code', function () {
-    gen.reset();
-    return Promise.all([
-      gen.addFile('test/callback/callback.widl')
-      ]).then(function () {
-        gen.compile();
-        gen.writeToDir('test/callback/gen');
-      }).catch(e => {
-        console.log(e);
-        throw e;
-      });
+    return compile('test/callback/callback.widl', 'test/callback/gen');
   });
 
   it('Building addon', function () {
