@@ -75,7 +75,7 @@ const _parseHeaderEnum = function (fileText) {
       // enum class
       enumName = match[matchEnumRegex.enumClassNameGroup];
       underlyingTypeName = match[matchEnumRegex.underlyingTypeGroup];
-    } else if (match[matchEnumRegex.typdefKeywordGroup] == ''
+    } else if ((!match[matchEnumRegex.typdefKeywordGroup])
         && match[matchEnumRegex.curlyBracketGroup] == '{') {
       // enum
       enumName = match[matchEnumRegex.enumNameGroup];
@@ -180,6 +180,7 @@ const getCppEnumGenerator = function () {
   g.writeTo = function (callback) {
     this.headerStore.forEach(header => {
       header.definitions.forEach(def => {
+        console.log(dots.enumIDL(def));
         callback(header.name, dots.enumIDL(def));
       });
     });

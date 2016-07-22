@@ -44,17 +44,9 @@ describe('widl-nan Unit Test - IDL callback', function () {
     var x = new AsyncOperations();
     return new Promise(function (resolve, reject) {
       x.performOperation(status => {
-        // Note: the following line will core dump mocha
-        // assert.equal(status === 'pending');
+        assert.equal(status, 'pending');
         resolve(status);
       });
-    }).then(value => {
-      if (value !== 'pending') {
-        // Have to use this way to test
-        throw "Status value from C++ should be 'pending'";
-      }
-      // Note: the following line will fail as "AssertionError: true == undefined"
-      // assert.equal(value === 'pending');
     });
   });
 
