@@ -1,0 +1,21 @@
+// Copyright (c) 2016 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a MIT-style license that can be
+// found in the LICENSE file.
+//
+// Extracted from https://www.w3.org/TR/WebIDL/#idl-constants
+// W3C Candidate Recommendation 19 April 2012
+
+interface Util {
+  const boolean DEBUG = false;
+  const octet LF = 10;
+  const unsigned long BIT_MASK = 0x0000fc00;
+  const float AVOGADRO = 6.875e1; // Note I chose this number because it can be exactly expressed in binary
+};
+
+// TODO: test this when `exception` is supported
+// exception Problem {
+//   const short ERR_UNKNOWN = 0;
+//   const short ERR_OUT_OF_MEMORY = 1;
+// 
+//   short errorCode;
+// };
