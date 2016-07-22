@@ -31,6 +31,14 @@ inline short EXTRACT_v8_short(v8::Local<v8::Value> value) {
   return value->NumberValue();
 }
 
+inline long EXTRACT_v8_long(v8::Local<v8::Value> value) {
+  if (value->IsNumber()) {
+  } else {
+    // throw ...
+  }
+  return value->NumberValue();
+}
+
 inline v8::Local<v8::Function> EXTRACT_v8_function(v8::Local<v8::Value> value) {
   if (value->IsFunction()) {
   } else {

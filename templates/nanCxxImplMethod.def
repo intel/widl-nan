@@ -5,6 +5,8 @@
 {{#def.enum}}
 {{#def.extractV8Value}}
 {{#def.callback}}
+{{#def.overload}}
+
 
 {{
 var callback = extractAllCallbackMethod(it);
@@ -15,8 +17,6 @@ var hasCallback = callback.methods.length > 0;
 
 {{~ it.members :p:i }}
 {{? p.type === 'operation' }}
-
-{{#def.overload}}
 
 {{
   var generateMethod = isFirstMethodInOverloadList(it, p, i);
@@ -46,7 +46,7 @@ NAN_METHOD({{=className}}::{{=methodName}}) {
   }
 }}
 
-  {{=elseIf}}if (info.Length() == {{=numArgs}}) {
+  {{=elseIf}}if (info.Length() == {{=numArgs}} && ({{=generateArgsIfConditionStr(method, it.refTypeMap, callback)}})) {
     // Method: name = {{=method.name}}, taking {{=numArgs}} argument(s)
 
 {{ var argStr = ""; }}
@@ -94,7 +94,7 @@ NAN_METHOD({{=className}}::{{=methodName}}) {
     // Return type is void
     myself->impl_->{{=methodName}}({{=argStr}});
     info.GetReturnValue().Set(Nan::Undefined());
-{{?? method.idlType.idlType === 'String' }}
+{{?? method.idlType.idlType === 'String' || method.idlType.idlType === 'DOMString' }}
     // Return type is string
     auto value = myself->impl_->{{=methodName}}({{=argStr}});
     info.GetReturnValue().Set(Nan::New(value).ToLocalChecked());

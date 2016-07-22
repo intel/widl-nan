@@ -49,6 +49,10 @@ var getCallbackHelperAssignmentString = function(method, padding) {
   if ( method.arguments ) {
     method.arguments.forEach(arg => {
       if (isCallback(arg.idlType, callback)) {
+        if (returnList.length == 0) {
+          returnList.push('// TODO: use a collection if you want to hold multiple callbacks at the same time');
+        }
+
         var helperClassName = getCallbackHelperClassName(arg.idlType.idlType);
         var str = 'this->';
         str += classNameToMemberName(helperClassName);

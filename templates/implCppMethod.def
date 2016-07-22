@@ -12,7 +12,6 @@
 
 
 {{=idlType2CxxType(p.idlType)}} {{=it.name}}::{{=p.name}}({{=generateParameterList(p, it.refTypeMap)}}) {
-  // TODO: use a collection if you want to hold multiple callbacks at the same time
   {{=getCallbackHelperAssignmentString(p, '  ')}}
 
   // TODO: fill your code here

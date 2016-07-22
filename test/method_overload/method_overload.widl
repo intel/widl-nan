@@ -1,0 +1,23 @@
+// Copyright (c) 2016 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a MIT-style license that can be
+// found in the LICENSE file.
+//
+// Extracted from https://www.w3.org/TR/WebIDL/#idl-overloading
+// W3C Candidate Recommendation 19 April 2012
+
+
+// interface B {
+//   /* f1 */ void f(DOMString w);
+//   /* f2 */ void f(long w, float x, Node y, Node z);
+//   /* f3 */ void f(float w, float x, DOMString y, Node z);
+// };
+
+// Node params were removed because there is no `Node` type in Node.js :)
+[
+Constructor
+]
+interface B {
+  /* f1 */ DOMString f(DOMString w);
+  /* f2 */ DOMString f(long w, float x);
+  /* f3 */ DOMString f(float w, DOMString y);
+};

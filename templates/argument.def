@@ -66,4 +66,19 @@ var generateInitList = function (method, padding){
   return returnList.join(',\n' + padding);
 };
 
+var generateArgsIfConditionStr = function (method, refTypeMap, callback) {
+  var list = [];
+  if (method.arguments) {
+    method.arguments.forEach((arg, idx) => {
+      var condition = '';
+      condition += 'info[' + idx + ']->';
+      condition += idlType2V8TypeCheck(arg.idlType, refTypeMap, callback);
+      condition += '()';
+      list.push(condition);
+    });
+  }
+  return list.join(' && ');
+};
+
+
 }}

@@ -43,5 +43,42 @@ var isString = function (idlType, refTypeMap) {
   return idlType2CxxType(idlType, refTypeMap) === 'std::string';
 };
 
+var idlType2V8Type = function (idlType, refTypeMap, callback) {
+  var type = idlType.idlType;
+  if (type === 'String' || type === 'DOMString') {
+    type = 'String';
+  } else if (type === 'boolean') {
+    type = 'Boolean';
+  } else if (type === 'byte' || type === 'short' || type === 'long' || type === 'long long') {
+    type = 'Number';
+  } else if (type === 'octet' || type === 'unsigned short' || type === 'unsigned long' || type === 'unsigned long long') {
+    type = 'Number';
+  } else if (type === 'double' || type === 'float') {
+    type = 'Number';
+  } else if (type === 'unrestricted double' || type === 'unrestricted float') {
+    type = 'Number';
+  } else if (typeof type === 'object' && idlType.generic === 'Promise') {
+    type = 'Promise';
+  } else if (isCallback(idlType, callback)) {
+    type = 'Function';
+  } else {
+    /* If it's a referenced enum type, then use std::string */
+    if (refTypeMap && refTypeMap[type]) {
+      var refType = refTypeMap[type];
+      if (refType.type === 'enum') {
+        type = 'String';
+      }
+    } else {
+      return 'Object';
+    }
+
+  }
+
+  return type;
+};
+
+var idlType2V8TypeCheck = function (idlType, refTypeMap, callback) {
+  return 'Is' + idlType2V8Type(idlType, refTypeMap, callback);
+};
 
 }}
