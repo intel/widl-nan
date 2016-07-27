@@ -3,6 +3,7 @@
 {{#def.argument}}
 {{#def.className}}
 {{#def.idlType}}
+{{#def.interface}}
 
 #ifndef _{{=guardName}}_H_
 #define _{{=guardName}}_H_
@@ -14,18 +15,26 @@
 {{
 var callback = extractAllCallbackMethod(it);
 var hasCallback = callback.methods.length > 0;
+
+var foreignInterfaces = extractAllReferenceInterfaceType(it, it.refTypeMap);
 }}
+
+{{~foreignInterfaces.interfaceArray :interface}}
+{{? interface.name != it.name}}
+#include "{{=(interface.name.toLowerCase())}}.h"
+{{?}}
+{{~}}
 
 {{? hasCallback}}
 {{~ callback.callbacksArray :p:i}}
-{{var className = getCallbackHelperClassName(p.name);}}
-class {{=className}}
+{{var helperClassName = getCallbackHelperClassName(p.name);}}
+class {{=helperClassName}}
     : public CallbackHelperBase {
  public:
-  {{=className}}() {
+  {{=helperClassName}}() {
   }
 
-  virtual ~ {{=className}}() {
+  virtual ~ {{=helperClassName}}() {
   }
 
 {{
@@ -72,6 +81,8 @@ class {{=it.name}} {
 
   ~{{=it.name}} ();
 
+  {{=it.name}}& operator = (const {{=it.name}}& rhs);
+
  public:
 {{#def.implHeaderProperty}}
 {{#def.implHeaderMethodDecl}}
@@ -81,16 +92,16 @@ class {{=it.name}} {
 
 {{? hasCallback}}
 {{~ callback.callbacksArray :p:i}}
-{{var className = getCallbackHelperClassName(p.name);}}
+{{var helperClassName = getCallbackHelperClassName(p.name);}}
   // TODO: use a collection if you want to hold multiple callbacks at the same time
-  std::unique_ptr<{{=className}}> {{=classNameToMemberName(className)}};
+  std::shared_ptr<{{=helperClassName}}> {{=classNameToMemberName(helperClassName)}};
 {{
  var paramStr = generateParameterList(p, it.refTypeMap);
  var argStr = generateArgumentList(p);
 }}
-  void Call{{=className}}({{=paramStr}}) {
+  void Call{{=helperClassName}}({{=paramStr}}) {
     // TODO: use a collection if you want to hold multiple callbacks at the same time
-    {{=classNameToMemberName(className)}}->CallJavaScriptFunction({{=argStr}});
+    {{=classNameToMemberName(helperClassName)}}->CallJavaScriptFunction({{=argStr}});
   }
 {{~}}
 {{?}}

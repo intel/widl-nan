@@ -1,0 +1,41 @@
+{{
+
+var isInterface = function(idlType, refTypeMap) {
+  var retValue = false;
+  var typeName = idlType.idlType;
+  if (refTypeMap && refTypeMap[typeName] && refTypeMap[typeName].type == 'interface') {
+    retValue = true;
+  }
+  return retValue;
+};
+
+var extractAllReferenceInterfaceType = function(def, refTypeMap) {
+  var result = {
+    interfaces: {},
+    interfaceArray: []
+  };
+
+  function processType(entity) {
+    if (isInterface(entity.idlType, refTypeMap)) {
+      var typeName = entity.idlType.idlType;
+      var interfaceDef = refTypeMap[typeName];
+      if (! result.interfaces[typeName]) {
+        result.interfaceArray.push(interfaceDef);
+        result.interfaces[typeName] = interfaceDef;
+      }
+    }
+  }
+
+  def.members.forEach(member => {
+    processType(member);
+    if (member.type === 'operation') {
+      member.arguments.forEach(arg => {
+        processType(arg);
+      });
+    }
+  });
+
+  return result;
+};
+
+}}

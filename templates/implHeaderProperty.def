@@ -4,7 +4,7 @@
 {{#def.idlType}}
 {{var propertyType = idlType2CxxType(p.idlType, it.refTypeMap);}}
 
-  const {{=propertyType}} get_{{=p.name}}() const {
+  {{=propertyType}} get_{{=p.name}}() const {
     return this->{{=p.name}}_;
   }
 

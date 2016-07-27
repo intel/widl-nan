@@ -1,5 +1,6 @@
 {{#def.idlType}}
 {{#def.callback}}
+{{#def.interface}}
 
 {{
   
@@ -8,6 +9,8 @@ var convertIDLType2ExtractMacro = function (idlType, refTypeMap, callback) {
   type = type.replace('std::', '');
   if (isCallback(idlType, callback)) {
     type = 'function';
+  } else if (isInterface(idlType, refTypeMap)) {
+    type = 'object';
   }
   return type;
 };

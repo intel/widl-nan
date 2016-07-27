@@ -2,6 +2,8 @@
 
 {{#def.idlType}}
 {{#def.enum}}
+{{#def.impl}}
+{{#def.interface}}
 {{#def.returnType}}
 {{#def.buildValidEnumValuesList}}
 {{#def.extractV8Value}}
@@ -31,6 +33,12 @@ NAN_GETTER({{=className}}::{{=p.name}}Getter) {
   } else {
     // TODO: modify nanCxxImplProperty.def to handle this case
   }
+{{?? isInterface(p.idlType, it.refTypeMap)}}
+  // Returns an object to JavaScript
+{{ var retType = p.idlType.idlType; }}
+    auto value = Nan{{=retType}}::NewInstance();
+    ObjectWrap::Unwrap<Nan{{=retType}}>(value)->Copy{{=retType}}Impl(impl_val);
+  info.GetReturnValue().Set(value);
 {{?? true}}
   info.GetReturnValue().Set(Nan::New(impl_val){{=str}});
 {{?}}
@@ -56,6 +64,11 @@ NAN_SETTER({{=className}}::{{=p.name}}Setter) {
   } else {
     // TODO: modify nanCxxImplProperty.def to handle this case
   }
+{{?? isInterface(p.idlType, it.refTypeMap)}}
+  // Extract data from the JavaScript object
+  // First, convert to impl {{=p.idlType.idlType}} pointer
+  auto impl_value = *(ObjectWrap::Unwrap<Nan{{=p.idlType.idlType}}>(v8_value)->{{=generateGetImplMethodName(p.idlType.idlType)}}());
+  myself->impl_->set_{{=p.name}}(impl_value);
 {{?? true}}
   myself->impl_->set_{{=p.name}}(v8_value);
 {{?}}

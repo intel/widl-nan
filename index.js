@@ -66,6 +66,7 @@ const _preprocess = function(that) {
     idl.tree.forEach(def => {
       if (def.type == 'interface') {
         _preprocessOverload(def);
+        _addOrAppend({map: typeMap, key: def.name, value: def});
       } else if (def.type === 'enum') {
         _addOrAppend({map: typeMap, key: def.name, value: def});
       } else if (def.type === 'callback') {
