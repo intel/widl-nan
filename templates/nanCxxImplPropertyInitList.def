@@ -1,4 +1,12 @@
 {{~ it.members :p:i }}
 {{? p.type === 'attribute' }}
-  Nan::SetAccessor(tpl->InstanceTemplate(), Nan::New("{{=p.name}}").ToLocalChecked(), {{=p.name}}Getter{{? ! p.readonly }}, {{=p.name}}Setter{{?}});
+{{
+var readAccessStr = p.readonly ? 'v8::ReadOnly' : 'v8::None';
+}}
+  Nan::SetAccessor(tpl->InstanceTemplate(), Nan::New("{{=p.name}}").ToLocalChecked(),
+      {{=p.name}}Getter,
+      {{? !p.readonly }}{{=p.name}}Setter{{?? true}}nullptr{{?}},
+      v8::Local<v8::Value>(),
+      v8::DEFAULT,
+      static_cast<v8::PropertyAttribute>({{=readAccessStr}}));
 {{?}}{{~}}

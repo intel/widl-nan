@@ -62,10 +62,15 @@ describe('widl-nan Unit Test:', function () {
 
     it('Readonly attribute', function () {
       var x = new Animal('StaticName');
-      x.name = 'iWantToChange';
+      assert.equal(Object.getOwnPropertyDescriptor(x, 'name').writable, false);
 
-      assert.equal(x.name, 'StaticName');
-      assert.equal(x.age, 0);
+      return assert.throws(function () {
+        x.name = 'iWantToChange'; // Throws TypeError
+      }, function (e) {
+        if (e instanceof TypeError && /name/.test(e)) {
+          return true;
+        }
+      }, "Unexpected error");
     });
 
     it('Writable attribute', function () {
