@@ -76,7 +76,7 @@ class AsyncOperations {
  private:
 
   // TODO: use a collection if you want to hold multiple callbacks at the same time
-  std::unique_ptr<AsyncOperationCallbackHelper> asyncoperationcallbackhelper_;
+  std::shared_ptr<AsyncOperationCallbackHelper> asyncoperationcallbackhelper_;
 
   void CallAsyncOperationCallbackHelper(const std::string& status) {
     // TODO: use a collection if you want to hold multiple callbacks at the same time
@@ -84,7 +84,7 @@ class AsyncOperations {
   }
 
   // TODO: use a collection if you want to hold multiple callbacks at the same time
-  std::unique_ptr<AnotherOperationCallbackHelper> anotheroperationcallbackhelper_;
+  std::shared_ptr<AnotherOperationCallbackHelper> anotheroperationcallbackhelper_;
 
   void CallAnotherOperationCallbackHelper(const std::string& type, const double& value) {
     // TODO: use a collection if you want to hold multiple callbacks at the same time

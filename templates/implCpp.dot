@@ -35,4 +35,11 @@ var className = it.name;
 
 }
 
+{{=className}}& {{=className}}::operator = (const {{=className}}& rhs) {
+  if (&rhs != this) {
+    // TODO: copy members from rhs
+  }
+  return *this;
+}
+
 {{#def.implCppMethod}}

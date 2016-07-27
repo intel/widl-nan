@@ -2,6 +2,7 @@
 
 {{#def.idlType}}
 {{#def.buildValidEnumValuesList}}
+{{#def.impl}}
 {{#def.enum}}
 {{#def.extractV8Value}}
 {{#def.callback}}
@@ -64,6 +65,10 @@ NAN_METHOD({{=className}}::{{=methodName}}) {
     auto function{{=j}} = {{=extractArgument(q.idlType, it.refTypeMap, callback)}}(info[{{=j}}]);
     {{=callbackHelperClassName}}* arg{{=j}} = new {{=callbackHelperClassName}}();
     arg{{=j}}->Reset(function{{=j}}, info.This());
+{{?? isInterface(q.idlType, it.refTypeMap) }}
+    // Convert to impl {{=q.idlType.idlType}} pointer
+    auto nanArg{{=j}} = {{=extractArgument(q.idlType, it.refTypeMap)}}(info[{{=j}}]);
+    auto arg{{=j}} = *(ObjectWrap::Unwrap<Nan{{=q.idlType.idlType}}>(nanArg{{=j}})->{{=generateGetImplMethodName(q.idlType.idlType)}}());
 {{?? true}}
     auto arg{{=j}} = {{=extractArgument(q.idlType, it.refTypeMap)}}(info[{{=j}}]);
 {{?}}
@@ -98,6 +103,13 @@ NAN_METHOD({{=className}}::{{=methodName}}) {
     // Return type is string
     auto value = myself->impl_->{{=methodName}}({{=argStr}});
     info.GetReturnValue().Set(Nan::New(value).ToLocalChecked());
+{{?? isInterface(method.idlType, it.refTypeMap)}}
+    // Return type is an interface object
+    auto implObj = myself->impl_->{{=methodName}}({{=argStr}});
+{{ var retType = method.idlType.idlType; }}
+    auto value = Nan{{=retType}}::NewInstance();
+    ObjectWrap::Unwrap<Nan{{=retType}}>(value)->Set{{=retType}}Impl(implObj);
+    info.GetReturnValue().Set(value);
 {{?? true }}
     // Primitive types (int, double ...)
     auto value = myself->impl_->{{=methodName}}({{=argStr}});

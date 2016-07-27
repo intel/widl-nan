@@ -1,3 +1,6 @@
+{{#def.idlType}}
+{{#def.interface}}
+
 {{
 
 var getToLocalCheckedString = function (idlType, refTypeMap) {
@@ -16,6 +19,14 @@ var getToLocalCheckedString = function (idlType, refTypeMap) {
   }
 
   return isString ? '.ToLocalChecked()' : '';
+};
+
+var idlType2CxxReturnType = function (idlType, refTypeMap) {
+  var type = idlType2CxxType(idlType, refTypeMap);
+  if (isInterface(idlType, refTypeMap)) {
+    type += '*';
+  }
+  return type;
 };
 
 }}

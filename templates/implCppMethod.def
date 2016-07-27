@@ -1,4 +1,4 @@
-{{#def.idlType}}
+{{#def.returnType}}
 {{#def.argument}}
 {{#def.callback}}
 
@@ -11,7 +11,7 @@
 {{? p.type === 'operation' }}
 
 
-{{=idlType2CxxType(p.idlType)}} {{=it.name}}::{{=p.name}}({{=generateParameterList(p, it.refTypeMap)}}) {
+{{=idlType2CxxReturnType(p.idlType, it.refTypeMap)}} {{=it.name}}::{{=p.name}}({{=generateParameterList(p, it.refTypeMap)}}) {
   {{=getCallbackHelperAssignmentString(p, '  ')}}
 
   // TODO: fill your code here

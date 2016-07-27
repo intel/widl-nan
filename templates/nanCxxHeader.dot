@@ -1,3 +1,5 @@
+{{#def.impl}}
+
 {{ var guardName = it.name.toUpperCase(); }}
 {{ var headerFileName = it.name.toLowerCase(); }}
 {{
@@ -8,6 +10,8 @@
     }
   });
   var useImpl = (constCounter < it.members.length);
+  var implClassName = it.name;
+  var nanClassName = generateNanClassName(it);
 }}
 #ifndef _NAN{{=guardName}}_H_
 #define _NAN{{=guardName}}_H_
@@ -17,13 +21,21 @@
 #include <node.h>
 #include <nan.h>
 
-class Nan{{=it.name}} : public Nan::ObjectWrap {
+class {{=nanClassName}} : public Nan::ObjectWrap {
  public:
   static void Init(v8::Local<v8::Object> exports);
+  static v8::Local<v8::Object> NewInstance(int argc = 0, v8::Local<v8::Value> argv[] = nullptr);
+
+{{? useImpl}}
+  {{=implClassName}}* {{=generateGetImplMethodName(implClassName)}}() { return impl_; }
+  const {{=implClassName}}* {{=generateGetImplMethodName(implClassName)}}() const { return impl_; }
+  void {{=generateSetImplMethodName(implClassName)}}({{=implClassName}}* newObj) { impl_ = newObj; }
+  void {{=generateCopyImplMethodName(implClassName)}}(const {{=implClassName}}& obj) { *impl_ = obj; }
+{{?}}
 
  private:
-  explicit Nan{{=it.name}}();
-  ~Nan{{=it.name}}();
+  explicit {{=nanClassName}}();
+  ~{{=nanClassName}}();
 
 {{#def.nanCxxHeaderProperty}}
 {{#def.nanCxxHeaderMethod}}
@@ -32,7 +44,7 @@ class Nan{{=it.name}} : public Nan::ObjectWrap {
 
 {{? useImpl}}
  private:
-  {{=it.name}}* impl_;
+  {{=implClassName}}* impl_;
 {{?}}
 
 };

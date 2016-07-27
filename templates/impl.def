@@ -1,0 +1,19 @@
+{{
+
+var generateNanClassName = function (def) {
+  return 'Nan' + def.name;
+};
+
+var generateGetImplMethodName = function (implClassName) {
+  return 'Get' + implClassName + 'Impl';
+};
+
+var generateSetImplMethodName = function (implClassName) {
+  return 'Set' + implClassName + 'Impl';
+};
+
+var generateCopyImplMethodName = function (implClassName) {
+  return 'Copy' + implClassName + 'Impl';
+};
+
+}}

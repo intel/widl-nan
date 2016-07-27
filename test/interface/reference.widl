@@ -1,0 +1,11 @@
+// Copyright (c) 2016 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a MIT-style license that can be
+// found in the LICENSE file.
+//
+// W3C Candidate Recommendation 19 April 2012
+
+[Constructor]
+interface Painter {
+  void drawText(float x, float y, DOMString text);
+  void drawText(Point point, DOMString text);
+};

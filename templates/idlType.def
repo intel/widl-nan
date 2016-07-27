@@ -1,3 +1,5 @@
+{{#def.interface}}
+
 {{
 
 var isPrimitiveType = function (idlType) {
@@ -67,6 +69,8 @@ var idlType2V8Type = function (idlType, refTypeMap, callback) {
     type = 'Promise';
   } else if (isCallback(idlType, callback)) {
     type = 'Function';
+  } else if (isInterface(idlType, refTypeMap)) {
+    type = 'Object';
   } else {
     /* If it's a referenced enum type, then use std::string */
     if (refTypeMap && refTypeMap[type]) {

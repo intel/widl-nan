@@ -1,0 +1,21 @@
+// Copyright (c) 2016 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a MIT-style license that can be
+// found in the LICENSE file.
+//
+// Extracted from https://www.w3.org/TR/WebIDL/#idl-interfaces
+// W3C Candidate Recommendation 19 April 2012
+
+[Constructor]
+interface Point {
+  attribute float x;
+  attribute float y;
+};
+
+[Constructor]
+interface Circle {
+  attribute float cx;
+  attribute float cy;
+  attribute float radius;
+
+  static Point triangulate(Circle c1, Circle c2, Circle c3);
+};

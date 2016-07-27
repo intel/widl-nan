@@ -1,5 +1,8 @@
-{{ var headerFileName = it.name.toLowerCase(); }}
+{{#def.interface}}
+
 {{
+  var headerFileName = it.name.toLowerCase();
+
   var constCounter = 0;
   it.members.forEach(mem => {
     if (mem.type == 'const') {
@@ -7,10 +10,18 @@
     }
   });
   var useImpl = (constCounter < it.members.length);
+
+  var foreignInterfaces = extractAllReferenceInterfaceType(it, it.refTypeMap);
 }}
 
 #include "nan__{{=headerFileName}}.h"
 #include "generator_helper.h"
+
+{{~foreignInterfaces.interfaceArray :interface}}
+{{? interface.name != it.name}}
+#include "nan__{{=(interface.name.toLowerCase())}}.h"
+{{?}}
+{{~}}
 
 Nan::Persistent<v8::Function> Nan{{=it.name}}::constructor;
 
@@ -50,6 +61,18 @@ void Nan{{=it.name}}::Init(v8::Local<v8::Object> exports) {
   exports->Set(Nan::New("{{=it.name}}").ToLocalChecked(), tpl->GetFunction());
 }
 
+v8::Local<v8::Object> Nan{{=it.name}}::NewInstance(int argc, v8::Local<v8::Value> argv[])
+{
+  static v8::Local<v8::Value> emptyArgv[0] = {};
+
+  if (argc == 0) {
+    argv = emptyArgv;
+  }
+
+  v8::Local<v8::Function> cons = Nan::New<v8::Function>(Nan{{=it.name}}::constructor);
+  return cons->NewInstance(argc, argv);
+}
+
 NAN_METHOD(Nan{{=it.name}}::New) {
   if (info.IsConstructCall()) {
 
@@ -74,9 +97,6 @@ NAN_METHOD(Nan{{=it.name}}::New) {
       Nan::ThrowTypeError("Illegal constructor");
     }
 
-    // TODO: modify nanCxxImpl.dot and generate each constructor defined in IDL
-    //   The following is just a sample for 0-arg constructor
-    //   Nan{{=it.name}}* obj = new Nan{{=it.name}}();
     obj->Wrap(info.This());
     info.GetReturnValue().Set(info.This());
 
