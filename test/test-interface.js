@@ -2,39 +2,41 @@
 // Use of this source code is governed by a MIT-style license that can be
 // found in the LICENSE file.
 
-"use strict"
+'use strict';
 
-var assert = require("assert"),
-    compile = require("./compile.js").compile,
-    path = require("path"),
-    buildAddon = require("./addon-builder.js").buildAddon,
-    testNoConstructor = require("./constructor.js").testNoConstructor,
-    testConstAttribute = require("./property.js").testConstAttribute,
-    spawn = require('child_process').spawn;
+/* global describe, it */
+var assert = require('assert');
+var buildAddon = require('./addon-builder.js').buildAddon;
+var compile = require('./compile.js').compile;
+var path = require('path');
 
-var Dimensions, Button, Painter, Circle, Point;
+var Button;
+var Circle;
+var Dimensions;
+var Painter;
+var Point;
 
-describe('widl-nan Unit Test - const attributes', function () {
-  it('Generating binding C++ code', function () {
+describe('widl-nan Unit Test - const attributes', function() {
+  it('Generating binding C++ code', function() {
     return compile([
       'test/interface/param.widl',
       'test/interface/return.widl',
-      'test/interface/reference.widl',
-      ], 'test/interface/gen');
+      'test/interface/reference.widl'
+    ], 'test/interface/gen');
   });
 
-  it('Building addon', function () {
+  it('Building addon', function() {
     // building addon maybe slow
     this.timeout(100000);
 
     return buildAddon('test/interface');
   });
 
-  it('Loading addon', function () {
+  it('Loading addon', function() {
     var addonDir = path.join(path.dirname(__filename), 'interface');
     var addon = require('bindings')(
-        {'bindings': 'testerAddon', 'module_root': addonDir});
-    // TODO: Detect errors
+        // eslint-disable-next-line camelcase
+        {bindings: 'testerAddon', module_root: addonDir});
 
     Dimensions = addon.Dimensions;
     assert.equal(typeof Dimensions, 'function');
@@ -60,7 +62,7 @@ describe('widl-nan Unit Test - const attributes', function () {
     assert.equal(b.dimensions.width, 1127);
     assert.equal(b.dimensions.height, 3365);
 
-    var d = new Dimensions;
+    var d = new Dimensions();
     d.width = 89;
     d.height = 64;
     b.setDimensions(d);
@@ -78,5 +80,4 @@ describe('widl-nan Unit Test - const attributes', function () {
     assert.equal(point.y, 18.75);   // Mock value, see circle.cpp
     done();
   });
-
 });

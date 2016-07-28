@@ -2,33 +2,33 @@
 // Use of this source code is governed by a MIT-style license that can be
 // found in the LICENSE file.
 
-"use strict"
+'use strict';
 
-var assert = require("assert"),
-    compile = require("./compile.js").compile,
-    path = require("path"),
-    buildAddon = require("./addon-builder.js").buildAddon,
-    spawn = require('child_process').spawn;
+/* global describe, it */
+var assert = require('assert');
+var buildAddon = require('./addon-builder.js').buildAddon;
+var compile = require('./compile.js').compile;
+var path = require('path');
 
 var Meal = null;
 
-describe('widl-nan Unit Test - IDL enum', function () {
-  it('Generating binding C++ code', function () {
+describe('widl-nan Unit Test - IDL enum', function() {
+  it('Generating binding C++ code', function() {
     return compile('test/enum/enum.widl', 'test/enum/gen');
   });
 
-  it('Building addon', function () {
+  it('Building addon', function() {
     // building addon maybe slow
     this.timeout(100000);
 
     return buildAddon('test/enum');
   });
 
-  it('Loading addon', function () {
+  it('Loading addon', function() {
     var addonDir = path.join(path.dirname(__filename), 'enum');
     var addon = require('bindings')(
-        {'bindings': 'testerAddon', 'module_root': addonDir});
-    // TODO: Detect errors
+        // eslint-disable-next-line camelcase
+        {bindings: 'testerAddon', module_root: addonDir});
     Meal = addon.Meal;
     assert.equal(typeof Meal, 'function');
   });
@@ -54,18 +54,17 @@ describe('widl-nan Unit Test - IDL enum', function () {
   });
 
   it('Calling operation with an invalid enum value (throw exception)', () => {
-    return assert.throws(function () {
+    return assert.throws(function() {
       var x = new Meal();
       x.initialize('lasagna', 50); // Throws TypeError()
-    }, function (e) {
+    }, function(e) {
       if (e instanceof TypeError && /type/.test(e)) {
         return true;
       }
-    }, "Unexpected error");
+    }, 'Unexpected error');
   });
 
   it('NOP test', done => {
     done();
   });
-
 });

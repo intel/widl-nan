@@ -1,15 +1,20 @@
-"use strict";
+// Copyright (c) 2016 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a MIT-style license that can be
+// found in the LICENSE file.
 
-var assert = require("assert");
+'use strict';
+
+var assert = require('assert');
 
 function testNoConstructor(templ) {
-  return assert.throws(function () {
+  return assert.throws(function() {
+    // eslint-disable-next-line
     var foo = new templ();
-  }, function (e) {
+  }, function(e) {
     if (e instanceof TypeError && /constructor/.test(e)) {
       return true;
     }
-  }, "Unexpected error");
+  }, 'Unexpected error');
 }
 
 module.exports = {

@@ -235,7 +235,7 @@ def do_py_lint(changeset):
   return error_count
 
 
-def do_js_lint(changeset):
+def do_js_lint(changeset, options):
   print '\n_____ do JavaScript lint'
   if sys.platform.startswith('win'):
     jslint_cmd = ['gjslint.exe']
@@ -305,7 +305,7 @@ def do_lint(base, ignore_file, options, args):
   total_erros = 0
   total_erros += do_cpp_lint(changes_others, options, args)
   total_erros += do_py_lint(changes_py)
-  total_erros += do_js_lint(changes_js)
+  total_erros += do_js_lint(changes_js, options)
   print "The total errors found: %d\n" % total_erros
   return total_erros
 
