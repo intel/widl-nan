@@ -1,19 +1,24 @@
-
+// Copyright (c) 2016 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a MIT-style license that can be
+// found in the LICENSE file.
 
 #ifndef _ASYNCOPERATIONS_H_
 #define _ASYNCOPERATIONS_H_
-#include <string>
+
 #include <node.h>
 #include <v8.h>
-#include "generator_helper.h"
 
-class AsyncOperationCallbackHelper
-    : public CallbackHelperBase {
+#include <memory>
+#include <string>
+
+#include "gen/generator_helper.h"
+
+class AsyncOperationCallbackHelper : public CallbackHelperBase {
  public:
   AsyncOperationCallbackHelper() {
   }
 
-  virtual ~ AsyncOperationCallbackHelper() {
+  virtual ~AsyncOperationCallbackHelper() {
   }
 
   void CallJavaScriptFunction(const std::string& status) {
@@ -33,13 +38,12 @@ class AsyncOperationCallbackHelper
   }
 };
 
-class AnotherOperationCallbackHelper
-    : public CallbackHelperBase {
+class AnotherOperationCallbackHelper : public CallbackHelperBase {
  public:
   AnotherOperationCallbackHelper() {
   }
 
-  virtual ~ AnotherOperationCallbackHelper() {
+  virtual ~AnotherOperationCallbackHelper() {
   }
 
   void CallJavaScriptFunction(const std::string& type, const double& value) {
@@ -62,35 +66,36 @@ class AnotherOperationCallbackHelper
 
 class AsyncOperations {
  public:
-
-  explicit AsyncOperations();
-
-  ~AsyncOperations ();
+  AsyncOperations();
+  ~AsyncOperations();
 
  public:
-
   void performOperation(AsyncOperationCallbackHelper* whenFinished);
-
   void performAnotherOperation(AnotherOperationCallbackHelper* whenStarted);
 
  private:
-
-  // TODO: use a collection if you want to hold multiple callbacks at the same time
-  std::shared_ptr<AsyncOperationCallbackHelper> asyncoperationcallbackhelper_;
+  typedef std::shared_ptr<AsyncOperationCallbackHelper> AsyncHelperPtr;
+  typedef std::shared_ptr<AnotherOperationCallbackHelper> AnotherHelperPtr;
+  // TODO(Kenny): use a collection if you want to hold multiple callbacks
+  // at the same time
+  AsyncHelperPtr async_operation_callback_helper_;
 
   void CallAsyncOperationCallbackHelper(const std::string& status) {
-    // TODO: use a collection if you want to hold multiple callbacks at the same time
-    asyncoperationcallbackhelper_->CallJavaScriptFunction(status);
+    // TODO(Kenny): use a collection if you want to hold multiple callbacks
+    // at the same time
+    async_operation_callback_helper_->CallJavaScriptFunction(status);
   }
 
-  // TODO: use a collection if you want to hold multiple callbacks at the same time
-  std::shared_ptr<AnotherOperationCallbackHelper> anotheroperationcallbackhelper_;
+  // TODO(Kenny): use a collection if you want to hold multiple callbacks
+  // at the same time
+  AnotherHelperPtr another_operation_callback_helper_;
 
-  void CallAnotherOperationCallbackHelper(const std::string& type, const double& value) {
-    // TODO: use a collection if you want to hold multiple callbacks at the same time
-    anotheroperationcallbackhelper_->CallJavaScriptFunction(type, value);
+  void CallAnotherOperationCallbackHelper(
+      const std::string& type, const double& value) {
+    // TODO(Kenny): use a collection if you want to hold multiple callbacks
+    // at the same time
+    another_operation_callback_helper_->CallJavaScriptFunction(type, value);
   }
-
 };
 
-#endif // _ASYNCOPERATIONS_H_
+#endif  // _ASYNCOPERATIONS_H_

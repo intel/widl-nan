@@ -2,9 +2,9 @@
 // Use of this source code is governed by a MIT-style license that can be
 // found in the LICENSE file.
 //
-// TODO: This file can be generated automatically.
+// This file can be generated automatically.
 
-#include "nan__b.h"
+#include "gen/nan__b.h"
 
 void initModule(v8::Local<v8::Object> exports) {
   NanB::Init(exports);

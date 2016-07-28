@@ -1,23 +1,23 @@
-
+// Copyright (c) 2016 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a MIT-style license that can be
+// found in the LICENSE file.
 
 #ifndef _DIMENSIONS_H_
 #define _DIMENSIONS_H_
-#include <string>
+
 #include <node.h>
 #include <v8.h>
-#include "generator_helper.h"
+
+#include <string>
 
 class Dimensions {
  public:
-
-  explicit Dimensions();
-
-  ~Dimensions ();
+  Dimensions();
+  ~Dimensions();
 
   Dimensions& operator = (const Dimensions& rhs);
 
  public:
-
   uint32_t get_width() const {
     return this->width_;
   }
@@ -35,11 +35,8 @@ class Dimensions {
   }
 
  private:
-
   uint32_t width_;
-
   uint32_t height_;
-
 };
 
-#endif // _DIMENSIONS_H_
+#endif  // _DIMENSIONS_H_

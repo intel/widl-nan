@@ -1,21 +1,21 @@
-
+// Copyright (c) 2016 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a MIT-style license that can be
+// found in the LICENSE file.
 
 #ifndef _POINT_H_
 #define _POINT_H_
-#include <string>
+
 #include <node.h>
 #include <v8.h>
-#include "generator_helper.h"
+
+#include <string>
 
 class Point {
  public:
-
-  explicit Point();
-
-  ~Point ();
+  Point();
+  ~Point();
 
  public:
-
   float get_x() const {
     return this->x_;
   }
@@ -33,11 +33,8 @@ class Point {
   }
 
  private:
-
   float x_;
-
   float y_;
-
 };
 
-#endif // _POINT_H_
+#endif  // _POINT_H_

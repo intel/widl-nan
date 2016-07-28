@@ -1,20 +1,21 @@
-
+// Copyright (c) 2016 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a MIT-style license that can be
+// found in the LICENSE file.
 
 #ifndef _MEAL_H_
 #define _MEAL_H_
-#include <string>
+
 #include <node.h>
 #include <v8.h>
 
+#include <string>
+
 class Meal {
  public:
-
-  Meal ();
-
-  ~Meal ();
+  Meal();
+  ~Meal();
 
  public:
-
   const std::string get_type() const {
     return this->type_;
   }
@@ -34,11 +35,8 @@ class Meal {
   void initialize(const std::string& type, const float& size);
 
  private:
-
   std::string type_;
-
   float size_;
-
 };
 
-#endif // _MEAL_H_
+#endif  // _MEAL_H_
