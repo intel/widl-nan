@@ -1,4 +1,6 @@
+.DS_Store
+*.pyc
 build
+closure-linter
 gen
 node_modules
-.DS_Store

@@ -1,10 +1,13 @@
 language: node_js
 node_js:
   - "6"
+branches:
+  only:
+  - master
 os:
   - linux
   - osx
-sudo: false
+sudo: required
 addons:
   apt:
     sources:
@@ -18,7 +21,10 @@ before_install:
   - source ~/.nvm/nvm.sh
   - nvm install "$TRAVIS_NODE_VERSION"
   - npm install -g node-gyp
-
+  - git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git && export PATH=$PATH:$(pwd)/depot_tools
+  - sudo pip install https://github.com/google/closure-linter/zipball/master
+before_script:
+   - python ./tools/lint.py
 env:
   global:
     - CXX=g++-4.8

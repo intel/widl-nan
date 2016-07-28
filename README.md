@@ -1,29 +1,31 @@
-# Purpose #
-We're developing a node module for node-addon developers, providing the following features:
+# Purpose
 
- - Read & parse Web IDL definition (*.widl)
- - Extract `enum` definition from C++ header (*.h) and then expose them in JavaScript; Acceptable `enum` definition formats:
-   - `enum class XXX : YYY {...}`
-   - `enum XXX {...}`
-   - `typedef enum {...} XXX`
-   - `typedef enum _XXX {...} XXX`
- - Generate C++ NAN wrapper source code to provide JavaScript calling interface
- - Generate skeleton C++ impl source code to be used by developers
+This toolchain transcompiles [W3C Web IDL](https://www.w3.org/TR/WebIDL/) and [Version 2](https://heycam.github.io/webidl/) to the [NAN](https://github.com/nodejs/nan) C++ code. This tool improve efficiency of [Node.js Addon](https://nodejs.org/api/addons.html) developing, allows developers focus on spec definition and actual implementation codes.
 
-# Getting Started #
+This bindings code is highly repetitive, primarily passing values (arguments and return values) between V8 and native and doing various conversions and checks (e.g., type checking), hence it is mostly machine-generated.
 
-An example is always a good way to get started, please find it at [https://github.com/kenny-y/wn-example](https://github.com/kenny-y/wn-example)
+# Getting started
 
+Any folder under test can be example of how to use this toolchain. To be added.
 
-# List of Supported Features #
+# Contribution
+We're welcome any kind of contribution for this tool, reporting bugs/features, pull requests, etc.
 
- - `interface`
-   - `attributes` -- mapping to `NAN` `Getter` and/or `Setter` (depend on whether it's `readonly`), and also relevant C++ member variables + getter/setter
-   - method -- mapping to `NAN_METHOD` and C++ member functions.
-     (Note: Web IDL method overload is now supported)
-   - `partial interface`: no plan yet
-   - `[Constructor]`: supports `Constructor` and `Constructor(param)` syntax, multiple constructors can be declared
-   - Complete support of all data types: TODO
- - `exception` -- TODO
- - `enum` -- supported
- - `callback` -- supported
+## Bug tracking system
+
+We're using [JIRA](https://crosswalk-project.org/jira) instead of github issues for tracking. Please report related bug and feature request under component "Node RealSense" with "[widl]" prefix. To avoid duplication, please check all related bugs (Using filter https://crosswalk-project.org/jira/issues/?filter=14420) before reporting.
+
+## Coding style guideline
+
+We're following [Chromium coding style](https://chromium.googlesource.com/chromium/src/+/master/styleguide/styleguide.md), [C++](https://chromium.googlesource.com/chromium/src/+/master/styleguide/c++/c++.md), Python and JavaScript. You could do style checker `python ./tools/lint.py` before submitting your code. Note, please install [depot_tools](https://www.chromium.org/developers/how-tos/install-depot-tools) and [Closure Linter](https://developers.google.com/closure/utilities/docs/linter_howto)
+
+## Commit message guideline
+A comprehensive commit message will help reviewer to understand what your PR is trying to resolve. There are lots of article to share experience how to write a good commit message, please Google them or check any commit message on mature projects. For eg: https://cs.chromium.org/
+
+To close a related Jira issue, add a line with the format **BUG=XWALK-N** or **BUG=https://path/to/issue/XWALK-N**. Doing this will resolve the corresponding issue in Jira when the PR is merged.
+
+If a PR doesn't completely fix an issue, do not use the "BUG=" prefix, as the JIRA ticket would then be wrongly closed. A different prefix, such as **Related to: XWALK-N**, is fine and preferred over just stating the ticket number.
+
+If a PR fixes multiple issues, reference them on separate lines of the description, starting each with "BUG=".
+
+Note that although the prefix is "BUG=", this mechanism applies to features and tasks as well.
