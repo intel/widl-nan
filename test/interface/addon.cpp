@@ -4,22 +4,11 @@
 //
 // TODO: This file can be generated automatically.
 
-#include <node.h>
-#include <nan.h>
-
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <thread>
-#include <algorithm>
-#include <chrono>
-#include <tuple>
-
-#include "nan__dimensions.h"
 #include "nan__button.h"
-#include "nan__point.h"
 #include "nan__circle.h"
+#include "nan__dimensions.h"
 #include "nan__painter.h"
+#include "nan__point.h"
 
 void initModule(v8::Local<v8::Object> exports) {
   NanDimensions::Init(exports);
