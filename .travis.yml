@@ -1,14 +1,22 @@
 language: node_js
-
-sudo: required
-
 node_js:
   - "6"
-
+os:
+  - linux
+  - osx
+sudo: false
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - g++-4.8
 before_install:
-  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
-  - sudo apt-get update -q
-  - sudo apt-get install gcc-4.8 g++-4.8 -y
+  - export PATH=$HOME/.local/bin:$PATH
+  - rm -rf ~/.nvm
+  - git clone https://github.com/creationix/nvm.git ~/.nvm
+  - source ~/.nvm/nvm.sh
+  - nvm install "$TRAVIS_NODE_VERSION"
   - npm install -g node-gyp
 
 env:
