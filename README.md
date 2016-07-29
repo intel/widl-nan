@@ -17,7 +17,7 @@ We're using [JIRA](https://crosswalk-project.org/jira) instead of github issues 
 
 ## Coding style guideline
 
-We're following [Chromium coding style](https://chromium.googlesource.com/chromium/src/+/master/styleguide/styleguide.md), [C++](https://chromium.googlesource.com/chromium/src/+/master/styleguide/c++/c++.md), Python and JavaScript. You could do style checker `python ./tools/lint.py` before submitting your code. Note, please install [depot_tools](https://www.chromium.org/developers/how-tos/install-depot-tools) and [Closure Linter](https://developers.google.com/closure/utilities/docs/linter_howto)
+We're following [Chromium coding style](https://chromium.googlesource.com/chromium/src/+/master/styleguide/styleguide.md), [C++](https://chromium.googlesource.com/chromium/src/+/master/styleguide/c++/c++.md), Python and JavaScript. You could do style checker `python ./tools/lint.py` before submitting your code. Note, please install [depot_tools](https://www.chromium.org/developers/how-tos/install-depot-tools)
 
 ## Commit message guideline
 A comprehensive commit message will help reviewer to understand what your PR is trying to resolve. There are lots of article to share experience how to write a good commit message, please Google them or check any commit message on mature projects. For eg: https://cs.chromium.org/
