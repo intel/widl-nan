@@ -22,9 +22,6 @@ before_install:
   - nvm install "$TRAVIS_NODE_VERSION"
   - npm install -g node-gyp
   - git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git && export PATH=$PATH:$(pwd)/depot_tools
-  - sudo pip install https://github.com/google/closure-linter/zipball/master
+  - if [[ $TRAVIS_OS_NAME == "linux" ]]; then export CXX=g++-4.8; fi
 before_script:
    - python ./tools/lint.py
-env:
-  global:
-    - CXX=g++-4.8
