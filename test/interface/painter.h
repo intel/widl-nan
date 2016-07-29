@@ -1,29 +1,25 @@
-
+// Copyright (c) 2016 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a MIT-style license that can be
+// found in the LICENSE file.
 
 #ifndef _PAINTER_H_
 #define _PAINTER_H_
-#include <string>
+
 #include <node.h>
 #include <v8.h>
-#include "generator_helper.h"
+
+#include <string>
 
 #include "point.h"
 
 class Painter {
  public:
-
-  explicit Painter();
-
-  ~Painter ();
+  Painter();
+  ~Painter();
 
  public:
-
   void drawText(const float& x, const float& y, const std::string& text);
-
   void drawText(const Point& point, const std::string& text);
-
- private:
-
 };
 
-#endif // _PAINTER_H_
+#endif  // _PAINTER_H_

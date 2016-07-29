@@ -2,35 +2,34 @@
 // Use of this source code is governed by a MIT-style license that can be
 // found in the LICENSE file.
 
-"use strict"
+'use strict';
 
-var assert = require("assert"),
-    compile = require("./compile.js").compile,
-    path = require("path"),
-    buildAddon = require("./addon-builder.js").buildAddon,
-    testNoConstructor = require("./constructor.js").testNoConstructor,
-    testEnumProperty = require("./property.js").testEnumProperty,
-    spawn = require('child_process').spawn;
+/* global describe, it */
+var assert = require('assert');
+var buildAddon = require('./addon-builder.js').buildAddon;
+var compile = require('./compile.js').compile;
+var path = require('path');
 
 var B;
 
-describe('widl-nan Unit Test - Method Overloading', function () {
-  it('Generating binding C++ code', function () {
-    return compile('test/method_overload/method_overload.widl', 'test/method_overload/gen');
+describe('widl-nan Unit Test - Method Overloading', function() {
+  it('Generating binding C++ code', function() {
+    return compile('test/method_overload/method_overload.widl',
+                   'test/method_overload/gen');
   });
 
-  it('Building addon', function () {
+  it('Building addon', function() {
     // building addon maybe slow
     this.timeout(100000);
 
     return buildAddon('test/method_overload');
   });
 
-  it('Loading addon', function () {
+  it('Loading addon', function() {
     var addonDir = path.join(path.dirname(__filename), 'method_overload');
     var addon = require('bindings')(
-        {'bindings': 'testerAddon', 'module_root': addonDir});
-    // TODO: Detect errors
+        // eslint-disable-next-line camelcase
+        {bindings: 'testerAddon', module_root: addonDir});
 
     B = addon.B;
     assert.equal(typeof B, 'function');
@@ -43,5 +42,4 @@ describe('widl-nan Unit Test - Method Overloading', function () {
     assert.equal(x.f(6.28, 'str'), 'method3');
     done();
   });
-
 });

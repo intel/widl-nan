@@ -1,14 +1,13 @@
-
+// Copyright (c) 2016 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a MIT-style license that can be
+// found in the LICENSE file.
 
 #include "dimensions.h"
 
 Dimensions::Dimensions() {
-  // TODO: init your members
 }
 
 Dimensions::~Dimensions() {
-  // TODO: do cleanup if necessary
-
 }
 
 Dimensions& Dimensions::operator = (const Dimensions& rhs) {
@@ -18,4 +17,3 @@ Dimensions& Dimensions::operator = (const Dimensions& rhs) {
   }
   return *this;
 }
-

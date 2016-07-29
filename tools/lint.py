@@ -113,7 +113,7 @@ def get_change_file_list(base, ignore_array):
   return pyfiles, jsfiles, others
 
 
-def do_cpp_lint(changeset, args):
+def do_cpp_lint(changeset, options, args):
   # Try to import cpplint from depot_tools first
   try:
     import cpplint
@@ -131,19 +131,28 @@ def do_cpp_lint(changeset, args):
 
   origin_error = cpplint.Error
 
+  def ReportIgnoredError(filename, linenum, category, confidence, message):
+    if options.verbose:
+      sys.stdout.write('Ignored Error:\n  %s(%s):  %s  [%s] [%d]\n' % (
+          filename, linenum, message, category, confidence))
+
   def MyError(filename, linenum, category, confidence, message):
-    # Skip no header guard  error for MSVC generated files.
-    if (filename.endswith('resource.h')):
-      sys.stdout.write('Ignored Error:\n  %s(%s):  %s  [%s] [%d]\n' % (
-          filename, linenum, message, category, confidence))
-    # Skip no header guard  error for ipc messages definition,
-    # because they will be included multiple times for different macros.
-    elif (filename.endswith('messages.h') and linenum == 0 and
-          category == 'build/header_guard'):
-      sys.stdout.write('Ignored Error:\n  %s(%s):  %s  [%s] [%d]\n' % (
-          filename, linenum, message, category, confidence))
+    # Skip header guard error because we do not follow the full directory
+    # gurad name
+    if (category == 'build/header_guard'):
+      ReportIgnoredError(filename, linenum, category, confidence, message)
+    # Skip local include path error because we do not follow the full directory
+    # path include rule
+    elif (category == 'build/include' and
+          message.startswith('Include the directory when naming .h files')):
+      ReportIgnoredError(filename, linenum, category, confidence, message)
+    # Skip int error because we do not follow the full directory
+    # path include rule
+    elif (category == 'runtime/int'):
+      ReportIgnoredError(filename, linenum, category, confidence, message)
     else:
       origin_error(filename, linenum, category, confidence, message)
+
   cpplint.Error = MyError
 
   origin_FileInfo = cpplint.FileInfo
@@ -226,7 +235,7 @@ def do_py_lint(changeset):
   return error_count
 
 
-def do_js_lint(changeset):
+def do_js_lint(changeset, options):
   print '\n_____ do JavaScript lint'
   if sys.platform.startswith('win'):
     jslint_cmd = ['gjslint.exe']
@@ -286,7 +295,7 @@ def get_ignore_list(ignore_file):
   return ignore_array
 
 
-def do_lint(base, ignore_file, args):
+def do_lint(base, ignore_file, options, args):
   if base is None:
     base = get_tracking_remote()
 
@@ -294,9 +303,9 @@ def do_lint(base, ignore_file, args):
       get_change_file_list(base, get_ignore_list(ignore_file))
 
   total_erros = 0
-  total_erros += do_cpp_lint(changes_others, args)
+  total_erros += do_cpp_lint(changes_others, options, args)
   total_erros += do_py_lint(changes_py)
-  total_erros += do_js_lint(changes_js)
+  total_erros += do_js_lint(changes_js, options)
   print "The total errors found: %d\n" % total_erros
   return total_erros
 
@@ -314,9 +323,12 @@ def main():
   option_parser.add_option(
       '--ignore-file', default=DEFAULT_IGNORE_FILE,
       help='Filename that specifies intentionally untracked files to ignore.')
+  option_parser.add_option("-v", "--verbose",
+      action="store_true", dest="verbose",
+      help='Display verbose message.')
 
   options, args = option_parser.parse_args()
-  sys.exit(do_lint(options.base, options.ignore_file, args))
+  sys.exit(do_lint(options.base, options.ignore_file, options, args))
 
 
 if __name__ == '__main__':

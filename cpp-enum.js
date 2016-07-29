@@ -2,30 +2,31 @@
 // Use of this source code is governed by a MIT-style license that can be
 // found in the LICENSE file.
 
-"use strict";
+'use strict';
 
-const fs = require("fs.promised");
+const fs = require('fs.promised');
 const path = require('path');
-const dot = require("dot");
+const dot = require('dot');
 dot.templateSettings.strip = false; // Do not remove spaces & linebreaks
-const dots = dot.process({path: path.join(__dirname, "templates")});
+const dots = dot.process({path: path.join(__dirname, 'templates')});
 
+// eslint-disable-next-line max-len
 const ENUM_REGEX = /^\s*(typedef)*\s*(enum)\s*(\S*)\s*(\S*)\s*(:)*\s*(\S*)([\s\S\{](?!\}\s*\S*;))+\s*\}\s*(\S*)\s*;/gm;
 
 var matchEnumRegex = {
   // The regex
   // And then define the index of regex groups
-  // TODO: modify all these indices below, after any change of the regex above
-  numOfGroups : 8, enumGroup : 2,
+  // Modify all these indices below, after any change of the regex above
+  numOfGroups: 8, enumGroup: 2,
 
   // The followings work for: enum class type : int {...};
-  classGroup : 3, enumClassNameGroup : 4, colonGroup : 5, underlyingTypeGroup : 6,
+  classGroup: 3, enumClassNameGroup: 4, colonGroup: 5, underlyingTypeGroup: 6,
 
   // The followings work for:
   //  (1) typedef enum type {...} TYPE;
   //  (2) typedef enum {...} TYPE;
   //  (3) enum TYPE {...};
-  typdefKeywordGroup : 1, enumNameGroup : 3, curlyBracketGroup : 4, typedefTypeGroup : 8,
+  typdefKeywordGroup: 1, enumNameGroup: 3, curlyBracketGroup: 4, typedefTypeGroup: 8
 };
 
 function getEmptyEnumOption() {
@@ -43,40 +44,40 @@ function getEmptyEnumOption() {
   return emptyEnumOption;
 }
 
-const _parseHeaderEnum = function (fileText) {
+const _parseHeaderEnum = function(fileText) {
   var result = [];
 
   var match = /^namespace\s+(\S+)/m.exec(fileText);
-  var cxxNamespaceName = match ? (match[match.length-1] || '') : '';
+  var cxxNamespaceName = match ? (match[match.length - 1] || '') : '';
 
   var extractedEnumArray = fileText.match(ENUM_REGEX);
   if (!extractedEnumArray) {
-    console.log("Skipping (no enum definition found, or bad regex): " + fileText);
+    console.log('Skipping (no enum definition found, or bad regex): ' + fileText);
   }
-
 
   var enumNameCollection = [];
   extractedEnumArray.forEach(enumDef => {
-
     // Remove comments
     enumDef = enumDef.replace(/^\s*\/\/.*$/gm, '');
     enumDef = enumDef.replace(/^\s*\/\*([\s\S](?!\*\/))+.*\*\//gm, '');
 
     var enumOption = getEmptyEnumOption();
+    // eslint-disable-next-line max-len
     var match = /^\s*(typedef)*\s*(enum)\s*(\S*)\s*(\S*)\s*(:)*\s*(\S*)([\s\S\{](?!\}\s*\S*;))+\s*\}\s*(\S*)\s*;/gm.exec(enumDef);
 
-    var enumName = '', underlyingTypeName = '', cxxType = '';
+    var enumName = '';
+    var underlyingTypeName = '';
 
-    if (match[matchEnumRegex.typdefKeywordGroup] == 'typedef') {
+    if (match[matchEnumRegex.typdefKeywordGroup] === 'typedef') {
       // typedef enum
       enumName = match[matchEnumRegex.typedefTypeGroup];
       underlyingTypeName = 'int';
-    } else if (match[matchEnumRegex.colonGroup] == ':') {
+    } else if (match[matchEnumRegex.colonGroup] === ':') {
       // enum class
       enumName = match[matchEnumRegex.enumClassNameGroup];
       underlyingTypeName = match[matchEnumRegex.underlyingTypeGroup];
-    } else if ((!match[matchEnumRegex.typdefKeywordGroup])
-        && match[matchEnumRegex.curlyBracketGroup] == '{') {
+    } else if (!match[matchEnumRegex.typdefKeywordGroup] &&
+               match[matchEnumRegex.curlyBracketGroup] === '{') {
       // enum
       enumName = match[matchEnumRegex.enumNameGroup];
       underlyingTypeName = 'int';
@@ -85,13 +86,13 @@ const _parseHeaderEnum = function (fileText) {
     enumOption.name = enumOption.jsObjName = enumName;
     enumOption.cxxUnderlyingType = underlyingTypeName;
     if (cxxNamespaceName) {
-      enumOption.cxxType = cxxNamespaceName + "::" + enumName;
+      enumOption.cxxType = cxxNamespaceName + '::' + enumName;
     } else {
       enumOption.cxxType = enumName;
     }
 
-    // console.log("");
-    // console.log("enum: " + enumName);
+    // console.log('');
+    // console.log('enum: ' + enumName);
 
     enumNameCollection.push(enumOption.name);
 
@@ -101,27 +102,30 @@ const _parseHeaderEnum = function (fileText) {
     enumDef = enumDef.replace(/^\s*(typedef)*\s*enum[^{]*\{/gm, '');
     var lineTextArray = enumDef.split(/\n/);
     var lastSeenEnumCounter = 0;
-    lineTextArray.forEach( (lineText, index) => {
-      var rawName = '', rawValue = '';
+    lineTextArray.forEach((lineText, index) => {
+      var rawName = '';
+      var rawValue = '';
       // var lineMatch = /^\s*(\S+)\s*((:?=\s*([^,]*))|(:?\s*))\s*,?$/gm.exec(lineText);
+      // eslint-disable-next-line max-len
       var lineMatch = /^\s*([A-Za-z_]{1,1}[A-Za-z0-9_]*)\s*((:?=\s*([^,^}^{]*))|(:?\s*))\s*,?/gm.exec(lineText);
       if (lineMatch) {
         rawName = lineMatch[1];
         rawValue = lineMatch[4];
-        if (!rawValue) {
-          // Counting mode
-          ++ lastSeenEnumCounter;
-          rawValue = '' + lastSeenEnumCounter;
+        if (rawValue) {
+          // eslint-disable-next-line no-eval
+          lastSeenEnumCounter = eval(rawValue); // jshint ignore:line
+          rawValue = String(lastSeenEnumCounter);
         } else {
-          lastSeenEnumCounter = eval(rawValue);
-          rawValue = '' + lastSeenEnumCounter;
+          // Counting mode
+          ++lastSeenEnumCounter;
+          rawValue = String(lastSeenEnumCounter);
         }
-        // console.log("Found enum definition: " + rawName + " = " + rawValue);
+        // console.log('Found enum definition: ' + rawName + ' = ' + rawValue);
 
         enumOption.minValue = 0;
         enumOption.maxValue = 0;
         if (!enumOption.defaultValue) {
-          enumOption.defaultValue = enumOption.cxxType + "::" + rawName;
+          enumOption.defaultValue = enumOption.cxxType + '::' + rawName;
         }
         enumData.values.push({name: rawName, value: rawValue});
       }
@@ -134,28 +138,28 @@ const _parseHeaderEnum = function (fileText) {
     // console.log(enumData);
 
     // var idl = dots.enumIDL(enumData);
-    // writeFile("./gen/gen-enum-" + enumOption.name + ".widl", idl);
+    // writeFile('./gen/gen-enum-' + enumOption.name + '.widl', idl);
 
     // var jsonObj = JSON.parse(json);
     // enumOption.source = jsonObj;
     // var cxxSourceCode = dots.genEnumHeader(enumOption);
 
-    // writeFile("./gen/enum-" + enumOption.name + ".h", cxxSourceCode);
+    // writeFile('./gen/enum-' + enumOption.name + '.h', cxxSourceCode);
   });
 
   // console.log(enumNameCollection);
-  // writeFile("./gen/init_all_enum.h", dots.genAllEnumHeader(enumNameCollection));
-  // writeFile("./gen/test__all_enum.js", dots.genAllEnumHeaderTest(enumNameCollection));
+  // writeFile('./gen/init_all_enum.h', dots.genAllEnumHeader(enumNameCollection));
+  // writeFile('./gen/test__all_enum.js', dots.genAllEnumHeaderTest(enumNameCollection));
 
   return result;
 };
 
-const getCppEnumGenerator = function () {
+const getCppEnumGenerator = function() {
   var g = {
-  	headerStore: [] // C++ header files
+    headerStore: [] // C++ header files
   };
 
-  g.addFile = function (fileName) {
+  g.addFile = function(fileName) {
     var that = this;
     return fs.readFile(fileName)
       .then(data => {
@@ -163,7 +167,7 @@ const getCppEnumGenerator = function () {
       });
   };
 
-  g.addText = function (str, name) {
+  g.addText = function(str, name) {
     this.headerStore.push({
       name: name,
       text: str,
@@ -171,13 +175,13 @@ const getCppEnumGenerator = function () {
     });
   };
 
-  g.compile = function () {
+  g.compile = function() {
     this.headerStore.forEach(header => {
       header.definitions = _parseHeaderEnum(header.text);
     });
   };
 
-  g.writeTo = function (callback) {
+  g.writeTo = function(callback) {
     this.headerStore.forEach(header => {
       header.definitions.forEach(def => {
         console.log(dots.enumIDL(def));

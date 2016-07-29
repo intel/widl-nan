@@ -1,18 +1,16 @@
+// Copyright (c) 2016 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a MIT-style license that can be
+// found in the LICENSE file.
 
 #include "meal.h"
 
 Meal::Meal() {
-  // TODO: init your members
 }
 
 Meal::~Meal() {
-  // TODO: do cleanup if necessary
-
 }
 
 void Meal::initialize(const std::string& type, const float& size) {
-  // TODO: fill your code here
   type_ = type;
   size_ = size;
 }
-

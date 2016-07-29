@@ -2,20 +2,9 @@
 // Use of this source code is governed by a MIT-style license that can be
 // found in the LICENSE file.
 //
-// TODO: This file can be generated automatically.
+// This file can be generated automatically.
 
-#include <node.h>
-#include <nan.h>
-
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <thread>
-#include <algorithm>
-#include <chrono>
-#include <tuple>
-
-#include "nan__util.h"
+#include "gen/nan__util.h"
 
 void initModule(v8::Local<v8::Object> exports) {
   NanUtil::Init(exports);

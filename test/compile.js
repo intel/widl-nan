@@ -1,7 +1,11 @@
-"use strict";
+// Copyright (c) 2016 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a MIT-style license that can be
+// found in the LICENSE file.
 
-var path = require("path"),
-    gen = require("..").generator;
+'use strict';
+
+var gen = require('..').generator;
+var path = require('path');
 
 function compileWIDLOrCxxHeader(array, targetDir) {
   if (!Array.isArray(array)) {
@@ -20,7 +24,7 @@ function compileWIDLOrCxxHeader(array, targetDir) {
     }
   });
 
-  return Promise.all(promiseArray).then(function () {
+  return Promise.all(promiseArray).then(function() {
     gen.compile();
     gen.writeToDir(targetDir);
   }).catch(e => {

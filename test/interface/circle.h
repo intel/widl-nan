@@ -1,23 +1,23 @@
-
+// Copyright (c) 2016 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a MIT-style license that can be
+// found in the LICENSE file.
 
 #ifndef _CIRCLE_H_
 #define _CIRCLE_H_
-#include <string>
+
 #include <node.h>
 #include <v8.h>
-#include "generator_helper.h"
+
+#include <string>
 
 #include "point.h"
 
 class Circle {
  public:
-
-  explicit Circle();
-
-  ~Circle ();
+  Circle();
+  ~Circle();
 
  public:
-
   float get_cx() const {
     return this->cx_;
   }
@@ -45,13 +45,9 @@ class Circle {
   Point* triangulate(const Circle& c1, const Circle& c2, const Circle& c3);
 
  private:
-
   float cx_;
-
   float cy_;
-
   float radius_;
-
 };
 
-#endif // _CIRCLE_H_
+#endif  // _CIRCLE_H_

@@ -2,20 +2,20 @@
 // Use of this source code is governed by a MIT-style license that can be
 // found in the LICENSE file.
 
-"use strict";
+'use strict';
 
 const path = require('path');
-const fs = require("fs.promised");
-const mkdirp = require("mkdirp");
-const glob = require("glob");
-const webIDL2 = require("webidl2");
-const dot = require("dot");
+const fs = require('fs.promised');
+const mkdirp = require('mkdirp');
+const glob = require('glob');
+const webIDL2 = require('webidl2');
+const dot = require('dot');
 dot.templateSettings.strip = false; // Do not remove spaces & linebreaks
-const dots = dot.process({path: path.join(__dirname, "templates")});
+const dots = dot.process({path: path.join(__dirname, 'templates')});
 const enumGenerator = require('./cpp-enum.js');
 
 function helloWorld() {
-  console.log("Hello World!");
+  console.log('Hello World!');
 }
 
 const _writeFile = function(name, text) {
@@ -46,7 +46,9 @@ const _preprocessOverload = function(def) {
 };
 
 const _addOrAppend = function(param) {
-  var map = param.map, key = param.key, value = param.value;
+  var map = param.map;
+  var key = param.key;
+  var value = param.value;
   if (map[key]) {
     var valueOrArray = map[key];
     if (Array.isArray(valueOrArray)) {
@@ -64,7 +66,7 @@ const _preprocess = function(that) {
   that.idlStore.forEach(idl => {
     idl.tree = _parseIDL(idl.text);
     idl.tree.forEach(def => {
-      if (def.type == 'interface') {
+      if (def.type === 'interface') {
         _preprocessOverload(def);
         _addOrAppend({map: typeMap, key: def.name, value: def});
       } else if (def.type === 'enum') {
@@ -101,19 +103,19 @@ const _genImplCppName = function(def) {
 
 const _useImpl = function(def) {
   var constantCounter = 0;
-  for (var i = 0 ; i < def.members.length ; ++ i) {
+  for (var i = 0; i < def.members.length; ++i) {
     const member = def.members[i];
     if (member.type === 'operation' || member.type === 'attribute') {
       return true;
     } else if (member.type === 'const') {
-      ++ constantCounter;
+      ++constantCounter;
     }
-  };
+  }
   return constantCounter < def.members.length;
 };
 
-const WIDL2NanGenerator = function () {
-  const _readFile = function (path) {
+const widl2NanGenerator = function() {
+  const _readFile = function(path) {
     return fs.readFile(path);
   };
 
@@ -127,32 +129,32 @@ const WIDL2NanGenerator = function () {
     typeMap: {}
   };
 
-  generator.reset = function () {
+  generator.reset = function() {
     this.option = defaultOption;
     this.idlStore = [];
   };
 
-  generator.setOption = function (option) {
+  generator.setOption = function(option) {
     this.option = option || {};
   };
 
-  generator.addFile = function (fileName) {
+  generator.addFile = function(fileName) {
     return _readFile(fileName)
       .then(data => {
         this.addText(data.toString(), fileName);
       });
   };
 
-  generator.scanDir = function (dirName) {
-    return new Promise(function (resolve, reject) {
+  generator.scanDir = function(dirName) {
+    return new Promise(function(resolve, reject) {
       // options is optional
-      glob(path.join(dirName, '*.widl'), /*options, */function (er, files) {
+      glob(path.join(dirName, '*.widl'), /* options, */ function(er, files) {
         console.log(files);
-        // TODO: deal with files
+        // deal with files
 
         // files is an array of filenames.
         // If the `nonull` option is set, and nothing
-        // was found, then files is ["**/*.js"]
+        // was found, then files is ['**/*.js']
         // er is an error object or null.
 
         resolve('');
@@ -161,12 +163,10 @@ const WIDL2NanGenerator = function () {
       // glob(path.join(dirName, '*.h'), /*options, */function (er, files) {
       //   // TODO: use enumGenerator to deal with files
       // });
-
     });
-
   };
 
-  generator.addText = function (str, name) {
+  generator.addText = function(str, name) {
     this.idlStore.push({
       name: name,
       text: str,
@@ -178,15 +178,15 @@ const WIDL2NanGenerator = function () {
     });
   };
 
-  generator.addCppEnum = function (path) {
+  generator.addCppEnum = function(path) {
     const that = this;
-    const callback = function (fileName, idlText) {
+    const callback = function(fileName, idlText) {
       that.addText(idlText, fileName);
     };
 
-    return new Promise(function (resolve, reject) {
+    return new Promise(function(resolve, reject) {
       enumGenerator.addFile(path)
-        .then(function () {
+        .then(function() {
           enumGenerator.compile();
           enumGenerator.writeTo(callback);
           resolve(that.idlStore);
@@ -195,10 +195,9 @@ const WIDL2NanGenerator = function () {
           reject(e);
         });
     });
-
   };
 
-  generator.compile = function () {
+  generator.compile = function() {
     this.idlStore.forEach(idl => {
       idl.tree = _parseIDL(idl.text);
     });
@@ -228,36 +227,32 @@ const WIDL2NanGenerator = function () {
               text: _packEmptyLines(dots.implCpp(def))
             });
           }
-
         } else if (def.type === 'exception') {
-
         } else if (def.type === 'enum') {
-
         } else if (def.type === 'callback') {
-
         }
       });
     });
   };
 
-  generator.writeToDir = function (dirName) {
+  generator.writeToDir = function(dirName) {
     this.option.targetDir = dirName;
     var dirNameSkeleton = dirName + '/dont-build';
     mkdirp.sync(dirName);
     mkdirp.sync(dirNameSkeleton);
 
     var all = [];
-    const write = function (array) {
+    const write = function(array) {
       array.forEach(item => {
         all.push(_writeFile(path.join(dirName, item.name), item.text));
       });
-    }
+    };
 
-    const writeImpl = function (array) {
+    const writeImpl = function(array) {
       array.forEach(item => {
         all.push(_writeFile(path.join(dirNameSkeleton, item.name), item.text));
       });
-    }
+    };
 
     this.idlStore.forEach(idl => {
       write(idl.wrapperH);
@@ -268,19 +263,20 @@ const WIDL2NanGenerator = function () {
 
     all.push(_writeFile(path.join(dirName, 'generator_helper.h'), dots.helperHeader({})));
 
-    return new Promise(function (resolve, reject) {
-      Promise.all(all).then(() => {resolve('done');});
+    return new Promise(function(resolve, reject) {
+      Promise.all(all).then(() => {
+        resolve('done');
+      });
     });
   };
 
-  generator.writeTo = function (stream) {
+  generator.writeTo = function(stream) {
   };
-
 
   return generator;
 };
 
 module.exports = {
   hello: helloWorld,
-  generator: WIDL2NanGenerator(),
+  generator: widl2NanGenerator()
 };

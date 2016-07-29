@@ -1,37 +1,23 @@
-
+// Copyright (c) 2016 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a MIT-style license that can be
+// found in the LICENSE file.
 
 #include "b.h"
 
 B::B() {
-  // TODO: init your members
-
 }
 
 B::~B() {
-  // TODO: do cleanup if necessary
-
 }
 
 std::string B::f(const std::string& w) {
-  
-
-  // TODO: fill your code here
   return "method1";
 }
 
 std::string B::f(const long& w, const float& x) {
-  
-
-  // TODO: fill your code here
   return "method2";
-
 }
 
 std::string B::f(const float& w, const std::string& y) {
-  
-
-  // TODO: fill your code here
   return "method3";
-
 }
-

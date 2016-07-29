@@ -2,56 +2,67 @@
 // Use of this source code is governed by a MIT-style license that can be
 // found in the LICENSE file.
 
-"use strict"
+'use strict';
 
-var assert = require("assert"),
-    compile = require("./compile.js").compile,
-    path = require("path"),
-    buildAddon = require("./addon-builder.js").buildAddon,
-    testNoConstructor = require("./constructor.js").testNoConstructor,
-    testEnumProperty = require("./property.js").testEnumProperty,
-    spawn = require('child_process').spawn;
+/* global describe, it */
 
-var ordinal, number, another_number, yet_another_number;
+var assert = require('assert');
+var compile = require('./compile.js').compile;
+var path = require('path');
+var buildAddon = require('./addon-builder.js').buildAddon;
+var testNoConstructor = require('./constructor.js').testNoConstructor;
+var testEnumProperty = require('./property.js').testEnumProperty;
 
-describe('widl-nan Unit Test - C++ header enum', function () {
-  it('Generating binding C++ code', function () {
+var ordinal;
+var number;
+/* eslint-disable camelcase */
+var another_number;
+var yet_another_number;
+/* eslint-enable camelcase */
+
+describe('widl-nan Unit Test - C++ header enum', function() {
+  it('Generating binding C++ code', function() {
     return compile('test/cpp_header_enum/cpp_header.h', 'test/cpp_header_enum/gen');
   });
 
-  it('Building addon', function () {
+  it('Building addon', function() {
     // building addon maybe slow
     this.timeout(100000);
 
     return buildAddon('test/cpp_header_enum');
   });
 
-  it('Loading addon', function () {
+  it('Loading addon', function() {
     var addonDir = path.join(path.dirname(__filename), 'cpp_header_enum');
     var addon = require('bindings')(
-        {'bindings': 'testerAddon', 'module_root': addonDir});
-    // TODO: Detect errors
+        // eslint-disable-next-line camelcase
+        {bindings: 'testerAddon', module_root: addonDir});
 
     ordinal = addon.ordinal;
     number = addon.number;
+    /* eslint-disable camelcase */
     another_number = addon.another_number;
     yet_another_number = addon.yet_another_number;
+    /* eslint-enable camelcase */
 
     assert.equal(typeof ordinal, 'function');
     assert.equal(typeof number, 'function');
+    /* eslint-disable camelcase */
     assert.equal(typeof another_number, 'function');
     assert.equal(typeof yet_another_number, 'function');
+    /* eslint-enable camelcase */
   });
 
   it('C++ enum test: no constructor', () => {
     return Promise.all([
       testNoConstructor(ordinal),
       testNoConstructor(number),
+      /* eslint-disable camelcase */
       testNoConstructor(another_number),
-      testNoConstructor(yet_another_number),
+      testNoConstructor(yet_another_number)
+      /* eslint-enable camelcase */
     ]);
   });
-
 
   it('C++ enum value test for: enum ordinal {};', done => {
     testEnumProperty(ordinal, 'first', 1);
@@ -72,6 +83,7 @@ describe('widl-nan Unit Test - C++ header enum', function () {
     done();
   });
 
+  /* eslint-disable camelcase */
   it('C++ enum value test for: typedef enum {} another_number;', done => {
     testEnumProperty(another_number, 'one', 1);
     testEnumProperty(another_number, 'two', 2);
@@ -91,5 +103,5 @@ describe('widl-nan Unit Test - C++ header enum', function () {
     testEnumProperty(yet_another_number, 'thousand', 1000);
     done();
   });
-
+  /* eslint-enable camelcase */
 });

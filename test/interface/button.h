@@ -1,23 +1,23 @@
-
+// Copyright (c) 2016 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a MIT-style license that can be
+// found in the LICENSE file.
 
 #ifndef _BUTTON_H_
 #define _BUTTON_H_
-#include <string>
+
 #include <node.h>
 #include <v8.h>
-#include "generator_helper.h"
+
+#include <string>
 
 #include "dimensions.h"
 
 class Button {
  public:
-
-  explicit Button();
-
-  ~Button ();
+  Button();
+  ~Button();
 
  public:
-
   Dimensions get_dimensions() const {
     return this->dimensions_;
   }
@@ -33,9 +33,7 @@ class Button {
   void setDimensions(const uint32_t& width, const uint32_t& height);
 
  private:
-
   Dimensions dimensions_;
-
 };
 
-#endif // _BUTTON_H_
+#endif  // _BUTTON_H_

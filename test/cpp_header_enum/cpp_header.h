@@ -1,3 +1,7 @@
+// Copyright (c) 2016 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a MIT-style license that can be
+// found in the LICENSE file.
+
 #ifndef _CPP_HEADER_H_
 #define _CPP_HEADER_H_
 
@@ -37,7 +41,6 @@ namespace dummy {
     hundred = 100,
     thousand = 1000
   } yet_another_number;
-
 };
 
-#endif // _CPP_HEADER_H_
+#endif  // _CPP_HEADER_H_

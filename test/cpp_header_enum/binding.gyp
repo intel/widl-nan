@@ -17,7 +17,6 @@
       "include_dirs": [
         "<!(node -e \"require('nan')\")",
         "/usr/local/include",
-        "./gen",
         "."
       ],
       "cflags!": [

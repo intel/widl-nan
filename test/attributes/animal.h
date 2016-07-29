@@ -11,23 +11,21 @@
 
 #ifndef _ANIMAL_H_
 #define _ANIMAL_H_
-#include <string>
+
 #include <node.h>
 #include <v8.h>
 
+#include <string>
+
 class Animal {
  public:
-
-  explicit Animal();
-
+  Animal();
   explicit Animal(const std::string& name);
-
   explicit Animal(const std::string& name, const short& age);
 
-  ~Animal ();
+  ~Animal();
 
  public:
-
   const std::string get_name() const {
     return this->name_;
   }
@@ -41,11 +39,9 @@ class Animal {
   }
 
  private:
-
   std::string name_;
 
   short age_;
-
 };
 
-#endif // _ANIMAL_H_
+#endif  // _ANIMAL_H_

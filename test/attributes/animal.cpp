@@ -27,5 +27,4 @@ Animal::Animal(const std::string& name, const short& age)
 }
 
 Animal::~Animal() {
-  // TODO: do cleanup if necessary
 }
