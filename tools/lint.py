@@ -11,7 +11,6 @@
 # TODO(wang16): Only show error for the lines do changed in the changeset
 
 import os
-import os.path
 import re
 import sys
 
@@ -21,6 +20,7 @@ from optparse import OptionParser, BadOptionError
 PYTHON_EXTS = ['.py']
 JS_EXTS = ['.js']
 DEFAULT_IGNORE_FILE = '.lintignore'
+ROOT_DIR = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 
 
 class PassThroughOptionParser(OptionParser):
@@ -201,7 +201,7 @@ def do_cpp_lint(changeset, options, args):
   return cpplint_state.error_count
 
 
-def do_py_lint(changeset):
+def do_py_lint(changeset, options):
   print '_____ do python lint'
   if sys.platform.startswith('win'):
     pylint_cmd = ['pylint.bat']
@@ -216,7 +216,8 @@ def do_py_lint(changeset):
     py_dir, py_name = os.path.split(os.path.abspath(pyfile))
     previous_cwd = os.getcwd()
     os.chdir(py_dir)
-    print 'pylint %s' % pyfile
+    if options.verbose:
+      print("pylint %s" % pyfile)
     try:
       output = GetCommandOutput(pylint_cmd + [py_name]).strip()
       if len(output) > 0:
@@ -237,32 +238,30 @@ def do_py_lint(changeset):
 
 def do_js_lint(changeset, options):
   print '\n_____ do JavaScript lint'
-  if sys.platform.startswith('win'):
-    jslint_cmd = ['gjslint.exe']
-  else:
-    jslint_cmd = ['gjslint']
+
+  node_bin_dir = os.path.join(ROOT_DIR, 'node_modules', '.bin')
   error_count = 0
+
   for jsfile in changeset:
     if not os.path.exists(jsfile):
       print "Skipping file %s: File doesn't exist." % jsfile
       continue
-    args = ['--strict', '--nojsdoc', '--max_line_length', '100', '--unix_mode']
-    js_dir, js_name = os.path.split(os.path.abspath(jsfile))
-    previous_cwd = os.getcwd()
-    os.chdir(js_dir)
-    print 'jslint %s' % jsfile
-    args.append(js_name)
-    try:
-      output = GetCommandOutput(jslint_cmd + args).strip()
-      if len(output) > 0:
-        print output
-      else:
+
+    for linter in ['eslint', 'jshint']:
+      if options.verbose:
+        print("%s %s" % (linter, jsfile))
+
+      try:
+        cmd = os.path.join(node_bin_dir, linter)
+        output = GetCommandOutput(['node'] + [cmd, jsfile]).strip()
+        if len(output) > 0:
+          print output
+          error_count += 1
+      except Exception, e:
+        print e
         error_count += 1
-    except Exception, e:
-      print e
-      error_count += 1
-    os.chdir(previous_cwd)
-  print "jslint errors %d\n" % error_count
+
+  print "Javascript lint errors %d\n" % error_count
   return error_count
 
 
@@ -304,7 +303,7 @@ def do_lint(base, ignore_file, options, args):
 
   total_erros = 0
   total_erros += do_cpp_lint(changes_others, options, args)
-  total_erros += do_py_lint(changes_py)
+  total_erros += do_py_lint(changes_py, options)
   total_erros += do_js_lint(changes_js, options)
   print "The total errors found: %d\n" % total_erros
   return total_erros
