@@ -13,11 +13,11 @@ We're welcome any kind of contribution for this tool, reporting bugs/features, p
 
 ## Bug tracking system
 
-We're using [JIRA](https://crosswalk-project.org/jira) instead of github issues for tracking. Please report related bug and feature request under component "Node RealSense" with "[widl]" prefix. To avoid duplication, please check all related bugs (Using filter https://crosswalk-project.org/jira/issues/?filter=14420) before reporting.
+We're using [JIRA](https://crosswalk-project.org/jira) instead of github issues for tracking. Please report related bug and feature request under component **Node RealSense** with **[widl]** prefix. To avoid duplication, please check the exsiting bugs (filter https://crosswalk-project.org/jira/issues/?filter=14420) before reporting.
 
 ## Coding style guideline
 
-We're following [Chromium coding style](https://chromium.googlesource.com/chromium/src/+/master/styleguide/styleguide.md), [C++](https://chromium.googlesource.com/chromium/src/+/master/styleguide/c++/c++.md), Python and JavaScript. You could do style checker `python ./tools/lint.py` before submitting your code. Note, please install [depot_tools](https://www.chromium.org/developers/how-tos/install-depot-tools)
+We're following [Chromium coding style](https://chromium.googlesource.com/chromium/src/+/master/styleguide/styleguide.md) for different languages: [C++](https://chromium.googlesource.com/chromium/src/+/master/styleguide/c++/c++.md), [Python](https://google.github.io/styleguide/pyguide.html) and [JavaScript](https://google.github.io/styleguide/javascriptguide.xml). Please run style checker `python ./tools/lint.py` before submitting your code. [depot_tools](https://www.chromium.org/developers/how-tos/install-depot-tools) need to be installed and added to `PATH` env.
 
 ## Commit message guideline
 A comprehensive commit message will help reviewer to understand what your PR is trying to resolve. There are lots of article to share experience how to write a good commit message, please Google them or check any commit message on mature projects. For eg: https://cs.chromium.org/
