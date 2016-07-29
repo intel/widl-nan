@@ -1,7 +1,7 @@
 {{
 
 var classNameToMemberName = function (className) {
-  /* TODO: covert camel style to under bar style */
+  /* TODO(widl-nan): covert camel style to under bar style */
   return className.toLowerCase() + '_';
 };
 

@@ -1,3 +1,5 @@
+// To add your copyright and license header
+
 {{ var guardName = it.name.toUpperCase(); }}
 {{#def.callback}}
 {{#def.argument}}
@@ -7,10 +9,13 @@
 
 #ifndef _{{=guardName}}_H_
 #define _{{=guardName}}_H_
-#include <string>
+
 #include <node.h>
 #include <v8.h>
-#include "generator_helper.h"
+
+#include <string>
+
+#include "gen/generator_helper.h"
 
 {{
 var callback = extractAllCallbackMethod(it);
@@ -34,13 +39,13 @@ class {{=helperClassName}}
   {{=helperClassName}}() {
   }
 
-  virtual ~ {{=helperClassName}}() {
+  virtual ~{{=helperClassName}}() {
   }
 
-{{
+  {{
   var numArgs = p.arguments.length;
   var paramStr = generateParameterList(p, it.refTypeMap);
-}}
+  }}
 
   void CallJavaScriptFunction({{=paramStr}}) {
     Nan::HandleScope scope;
@@ -61,10 +66,8 @@ class {{=helperClassName}}
 {{~}}
 {{?}}
 
-
 class {{=it.name}} {
  public:
-
 {{#def.extractConstructors}}
 
 {{ var constructors = extractConstructors(it); }}
@@ -72,14 +75,19 @@ class {{=it.name}} {
 {{? constructors.length }}
 
 {{~ constructors :p:i }}
-  explicit {{=it.name}}({{=generateParameterList(p, it.refTypeMap)}});
+  {{ var paramStr = generateParameterList(p, it.refTypeMap); }}
+  {{? paramStr === "" }}
+  {{=it.name}}({{=paramStr}});
+  {{??}}
+  explicit {{=it.name}}({{=paramStr}});
+  {{?}}
 {{~}}
 
 {{?? true}}
-  {{=it.name}} ();
+  {{=it.name}}();
 {{?}}
 
-  ~{{=it.name}} ();
+  ~{{=it.name}}();
 
   {{=it.name}}& operator = (const {{=it.name}}& rhs);
 
@@ -93,14 +101,14 @@ class {{=it.name}} {
 {{? hasCallback}}
 {{~ callback.callbacksArray :p:i}}
 {{var helperClassName = getCallbackHelperClassName(p.name);}}
-  // TODO: use a collection if you want to hold multiple callbacks at the same time
+  // TODO(widl-nan): Use a collection if want to hold multiple callbacks
   std::shared_ptr<{{=helperClassName}}> {{=classNameToMemberName(helperClassName)}};
 {{
  var paramStr = generateParameterList(p, it.refTypeMap);
  var argStr = generateArgumentList(p);
 }}
   void Call{{=helperClassName}}({{=paramStr}}) {
-    // TODO: use a collection if you want to hold multiple callbacks at the same time
+    // TODO(widl-nan): Use a collection if want to hold multiple callbacks
     {{=classNameToMemberName(helperClassName)}}->CallJavaScriptFunction({{=argStr}});
   }
 {{~}}
@@ -108,4 +116,4 @@ class {{=it.name}} {
 
 };
 
-#endif // _{{=guardName}}_H_
+#endif  // _{{=guardName}}_H_

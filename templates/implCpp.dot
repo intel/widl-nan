@@ -1,3 +1,5 @@
+// To add your copyright and license header
+
 {{#def.callback}}
 {{#def.argument}}
 {{#def.className}}
@@ -5,39 +7,33 @@
 
 {{
 var className = it.name;
+var headerFileName = className.toLowerCase();
+var constructors = extractConstructors(it);
 }}
 
-{{ var headerFileName = className.toLowerCase(); }}
 #include "{{=headerFileName}}.h"
-
-
-
-{{ var constructors = extractConstructors(it); }}
 
 {{? constructors.length }}
 
 {{~ constructors :p:i }}
 {{=className}}::{{=className}}({{=generateParameterList(p, it.refTypeMap)}}) {
-  // TODO: init your members
+  // TODO(widl-nan): init your members
 }
 {{~}}
 
 {{?? true}}
 {{=className}}::{{=className}}() {
-  // TODO: init your members
-
+  // TODO(widl-nan): init your members
 }
 {{?}}
 
-
 {{=className}}::~{{=className}}() {
-  // TODO: do cleanup if necessary
-
+  // TODO(widl-nan): do cleanup if necessary
 }
 
 {{=className}}& {{=className}}::operator = (const {{=className}}& rhs) {
   if (&rhs != this) {
-    // TODO: copy members from rhs
+    // TODO(widl-nan): copy members from rhs
   }
   return *this;
 }

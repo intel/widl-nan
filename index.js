@@ -25,7 +25,13 @@ const _writeFile = function(name, text) {
 };
 
 const _packEmptyLines = function(str) {
-  return str.replace(/\n{3,}/gm, '\n\n').replace(/(\r\n){3,}/gm, '\r\n\r\n');
+  /* eslint-disable indent */
+  return str.replace(/([ \t]*\n){3,}/g, '\n\n') // multiple blank lines into one
+            .replace(/public:\n\n/g, 'public:\n') // remove blank line after public:
+            .replace(/private:\n\n/g, 'private:\n') // remove blank line after private:
+            .replace(/\n\n};/g, '\n};') // remove blank line before };
+            .replace(/{\n\n/g, '{\n'); // remove blank line after {
+  /* eslint-enable indent */
 };
 
 const _parseIDL = function(idlText) {

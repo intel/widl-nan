@@ -50,7 +50,7 @@ var getCallbackHelperAssignmentString = function(method, padding) {
     method.arguments.forEach(arg => {
       if (isCallback(arg.idlType, callback)) {
         if (returnList.length == 0) {
-          returnList.push('// TODO: use a collection if you want to hold multiple callbacks at the same time');
+          returnList.push('// TODO(widl-nan): Use a collection if want to hold multiple callbacks');
         }
 
         var helperClassName = getCallbackHelperClassName(arg.idlType.idlType);
@@ -61,13 +61,12 @@ var getCallbackHelperAssignmentString = function(method, padding) {
         str += ');';
         returnList.push(str);
 
-        str = '// TODO: use this->';
+        str = '// TODO(widl-nan): use this->';
         str += 'Call' + helperClassName + '()';
         returnList.push(str);
 
         str = '//       to call JavaScript callback function in the future (Do NOT do it a thread)';
         returnList.push(str);
-
       }
     });
   }
