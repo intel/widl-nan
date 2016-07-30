@@ -4,9 +4,37 @@ This toolchain transcompiles [W3C Web IDL](https://www.w3.org/TR/WebIDL/) and [V
 
 This bindings code is highly repetitive, primarily passing values (arguments and return values) between V8 and native and doing various conversions and checks (e.g., type checking), hence it is mostly machine-generated.
 
-# Getting started
+# Quick Start
+1. Init your addon workspace
+```
+npm init
+```
 
-Any folder under test can be example of how to use this toolchain. To be added.
+2. Install widl-nan
+You can install with npm globally
+```
+$ npm install -g ssh://git@github.com/otcshare/widl-nan.git
+```
+If you do not want install globally, remember call as `./node_modules/.bin/widl-nan` instead.
+```
+$ npm install --save ssh://git@github.com/otcshare/widl-nan.git
+```
+TODO: Use name `widl-nan` after open sourced.
+
+3. Prepare your Web IDL (check [examples](https://github.com/otcshare/widl-nan/tree/master/test)) and generate C++
+```
+widl-nan <your_widl_file>
+```
+
+4. (Optional) Init your project helper files
+```
+widl-nan -i
+```
+
+5. Build your addon
+```
+node-gyp rebuild
+```
 
 # Contribution
 We're welcome any kind of contribution for this tool, reporting bugs/features, pull requests, etc.
