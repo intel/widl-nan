@@ -6,8 +6,8 @@
 
 /* global describe, it */
 var assert = require('assert');
-var buildAddon = require('./addon-builder.js').buildAddon;
-var compile = require('./compile.js').compile;
+var buildAddon = require('../lib/addon-builder.js').buildAddon;
+var compile = require('../lib/compile.js').compile;
 var path = require('path');
 
 var Animal = null;
