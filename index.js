@@ -4,15 +4,17 @@
 
 'use strict';
 
-const path = require('path');
 const fs = require('fs.promised');
-const mkdirp = require('mkdirp');
 const glob = require('glob');
+const mkdirp = require('mkdirp');
+const path = require('path');
 const webIDL2 = require('webidl2');
+
+const enumGenerator = require('./lib/cpp-enum.js');
+
 const dot = require('dot');
 dot.templateSettings.strip = false; // Do not remove spaces & linebreaks
 const dots = dot.process({path: path.join(__dirname, 'templates')});
-const enumGenerator = require('./cpp-enum.js');
 
 function helloWorld() {
   console.log('Hello World!');

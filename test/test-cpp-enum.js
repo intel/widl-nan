@@ -7,9 +7,9 @@
 /* global describe, it */
 
 var assert = require('assert');
-var compile = require('./compile.js').compile;
+var compile = require('../lib/compile.js').compile;
+var buildAddon = require('../lib/addon-builder.js').buildAddon;
 var path = require('path');
-var buildAddon = require('./addon-builder.js').buildAddon;
 var testNoConstructor = require('./constructor.js').testNoConstructor;
 var testEnumProperty = require('./property.js').testEnumProperty;
 
