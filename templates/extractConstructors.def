@@ -10,5 +10,4 @@ var extractConstructors = function(it) {
   return constructors;
 };
 
-
 }}
