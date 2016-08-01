@@ -179,6 +179,7 @@ const widl2NanGenerator = function() {
       name: name,
       text: str,
       tree: {},
+      classes: [],
       wrapperH: [],
       wrapperCpp: [],
       implH: [],
@@ -215,6 +216,8 @@ const widl2NanGenerator = function() {
     this.idlStore.forEach(idl => {
       idl.tree.forEach(def => {
         if (def.type === 'interface') {
+          idl.classes.push(def.name);
+
           idl.wrapperH.push({
             name: _genWrapperHeaderName(def),
             text: _packEmptyLines(dots.nanCxxHeader(def))
@@ -245,7 +248,7 @@ const widl2NanGenerator = function() {
 
   generator.writeToDir = function(dirName) {
     this.option.targetDir = dirName;
-    var dirNameSkeleton = dirName + '/dont-build';
+    var dirNameSkeleton = path.join(dirName, 'dont-build');
     mkdirp.sync(dirName);
     mkdirp.sync(dirNameSkeleton);
 
@@ -269,7 +272,10 @@ const widl2NanGenerator = function() {
       writeImpl(idl.implCpp);
     });
 
+    // generate some helper files
     all.push(_writeFile(path.join(dirName, 'generator_helper.h'), dots.helperHeader({})));
+    all.push(_writeFile(path.join(dirNameSkeleton, 'addon.cpp'), dots.addonCpp(this)));
+    all.push(_writeFile(path.join(dirNameSkeleton, 'binding.gyp'), dots.bindingGYP(this)));
 
     return new Promise(function(resolve, reject) {
       Promise.all(all).then(() => {

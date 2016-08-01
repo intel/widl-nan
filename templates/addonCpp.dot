@@ -1,0 +1,29 @@
+// Add your copyright and license header
+
+{{ for ( var x in it) { }}
+{{~ it[x] :idl:index }}
+{{ for (var y in idl) { }}
+{{? y == "wrapperH" }}
+{{~ idl[y] :header:index2 }}
+#include "gen/{{=header.name}}"
+{{~}}
+{{?}}
+{{ } }}
+{{~}}
+{{ } }}
+
+void initModule(v8::Local<v8::Object> exports) {
+{{ for ( var x in it) { }}
+{{~ it[x] :idl:index }}
+{{ for (var y in idl) { }}
+{{? y == "classes" }}
+{{~ idl[y] :c:index2 }}
+  Nan{{=c}}::Init(exports);
+{{~}}
+{{?}}
+{{ } }}
+{{~}}
+{{ } }}
+}
+
+NODE_MODULE(testAttributes, initModule);
