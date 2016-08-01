@@ -273,9 +273,12 @@ const widl2NanGenerator = function() {
     });
 
     // generate some helper files
-    all.push(_writeFile(path.join(dirName, 'generator_helper.h'), dots.helperHeader({})));
-    all.push(_writeFile(path.join(dirNameSkeleton, 'addon.cpp'), dots.addonCpp(this)));
-    all.push(_writeFile(path.join(dirNameSkeleton, 'binding.gyp'), dots.bindingGYP(this)));
+    all.push(_writeFile(path.join(dirName, 'generator_helper.h'),
+                        _packEmptyLines(dots.helperHeader({}))));
+    all.push(_writeFile(path.join(dirNameSkeleton, 'addon.cpp'),
+                        _packEmptyLines(dots.addonCpp(this))));
+    all.push(_writeFile(path.join(dirNameSkeleton, 'binding.gyp'),
+                        _packEmptyLines(dots.bindingGYP(this))));
 
     return new Promise(function(resolve, reject) {
       Promise.all(all).then(() => {
