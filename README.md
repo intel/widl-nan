@@ -9,36 +9,24 @@ This bindings code is highly repetitive, primarily passing values (arguments and
 ```
 npm init
 ```
-
-2. Install widl-nan
-You can install with npm globally
-```
-$ npm install -g ssh://git@github.com/otcshare/widl-nan.git
-```
-If you do not want install globally, remember call as `./node_modules/.bin/widl-nan` instead.
+2. Install widl-nan (TODO: Use name `widl-nan` after open sourced)
 ```
 $ npm install --save ssh://git@github.com/otcshare/widl-nan.git
 ```
-TODO: Use name `widl-nan` after open sourced.
-
-3. Prepare your Web IDL (check [examples](https://github.com/otcshare/widl-nan/tree/master/test)) and generate C++
+3. Prepare your Web IDL (check [examples](https://github.com/otcshare/widl-nan/tree/master/test)) and generate the C++ code
 ```
 widl-nan <your_widl_file>
 ```
-
-4. (Optional) Init your project helper files
+4. (Optional) Init your project helper files. Or you need write the implementation C++ files, `binding.gyp` and `addon.cpp` from scratch.
 ```
 widl-nan -i
 ```
-
 5. Build your addon
 ```
 node-gyp rebuild
 ```
 
 # Contribution
-We're welcome any kind of contribution for this tool, reporting bugs/features, pull requests, etc.
-
 ## Bug tracking system
 
 We're using [JIRA](https://crosswalk-project.org/jira) instead of github issues for tracking. Please report related bug and feature request under component **Node RealSense** with **[widl]** prefix. To avoid duplication, please check the exsiting bugs (filter https://crosswalk-project.org/jira/issues/?filter=14420) before reporting.
@@ -57,3 +45,15 @@ If a PR doesn't completely fix an issue, do not use the "BUG=" prefix, as the JI
 If a PR fixes multiple issues, reference them on separate lines of the description, starting each with "BUG=".
 
 Note that although the prefix is "BUG=", this mechanism applies to features and tasks as well.
+
+# License
+
+The MIT License (MIT)
+
+Copyright (c) 2016 Intel Corporation. All rights reserved.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
