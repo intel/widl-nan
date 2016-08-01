@@ -3,7 +3,7 @@
 {
   "targets": [
     {
-      "target_name": "widlNanAddon", # Change to your addon name
+      "target_name": "widlNanAddon",
       "sources": [
         "addon.cpp",
 {{ for ( var x in it) { }}

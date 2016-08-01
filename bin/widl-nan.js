@@ -82,6 +82,12 @@ function initWorkspace(options) {
     cli.info('File ' + destFile + ' copied.');
   }
 
+  // Replace addon name described in package.json
+  var config = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+  var bindingGyp = path.join(options.dest, 'binding.gyp');
+  var content = fs.readFileSync(bindingGyp, 'utf8').replace(/widlNanAddon/g, config.name);
+  fs.writeFileSync(bindingGyp, content, 'utf8');
+
   cli.ok('Init workspace sucessfully. You can now run \'node-gyp rebuild\' under ' + options.dest);
   process.exit(0);
 }
