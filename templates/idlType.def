@@ -27,12 +27,22 @@ var idlType2CxxType = function (idlType, refTypeMap) {
     type = 'std::string';
   } else if (type === 'boolean') {
     type = 'bool';
+  } else if (type === 'byte') {
+    type = 'int8_t';
   } else if (type === 'octet') {
     type = 'uint8_t';
+  } else if (type === 'short') {
+    type = 'int16_t';
+  } else if (type === 'unsigned short') {
+    type = 'uint16_t';
   } else if (type === 'long') {
     type = 'int32_t';
   } else if (type === 'unsigned long') {
     type = 'uint32_t';
+  } else if (type === 'long long') {
+    type = 'int64_t';
+  } else if (type === 'unsigned long long') {
+    type = 'uint64_t';
   } else if (typeof type === 'object' && idlType.generic === 'Promise') {
     type = 'v8::Handle<v8::Promise>';
   } else {

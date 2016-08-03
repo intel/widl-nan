@@ -31,7 +31,8 @@ inline double EXTRACT_v8_double(v8::Local<v8::Value> value) {
   return value->NumberValue();
 }
 
-inline short EXTRACT_v8_short(v8::Local<v8::Value> value) {
+//for byte type
+inline int8_t EXTRACT_v8_int8_t(v8::Local<v8::Value> value) {
   if (value->IsNumber()) {
   } else {
     // throw ...
@@ -39,7 +40,8 @@ inline short EXTRACT_v8_short(v8::Local<v8::Value> value) {
   return value->NumberValue();
 }
 
-inline long EXTRACT_v8_long(v8::Local<v8::Value> value) {
+//for octet type
+inline uint8_t EXTRACT_v8_uint8_t(v8::Local<v8::Value> value) {
   if (value->IsNumber()) {
   } else {
     // throw ...
@@ -47,6 +49,25 @@ inline long EXTRACT_v8_long(v8::Local<v8::Value> value) {
   return value->NumberValue();
 }
 
+//for short type
+inline int16_t EXTRACT_v8_int16_t(v8::Local<v8::Value> value) {
+  if (value->IsNumber()) {
+  } else {
+    // throw ...
+  }
+  return value->NumberValue();
+}
+
+//for unsigned short type
+inline uint16_t EXTRACT_v8_uint16_t(v8::Local<v8::Value> value) {
+  if (value->IsNumber()) {
+  } else {
+    // throw ...
+  }
+  return value->NumberValue();
+}
+
+//for long type
 inline int32_t EXTRACT_v8_int32_t(v8::Local<v8::Value> value) {
   if (value->IsNumber()) {
   } else {
@@ -55,7 +76,26 @@ inline int32_t EXTRACT_v8_int32_t(v8::Local<v8::Value> value) {
   return value->NumberValue();
 }
 
+//for unsigned long type
 inline uint32_t EXTRACT_v8_uint32_t(v8::Local<v8::Value> value) {
+  if (value->IsNumber()) {
+  } else {
+    // throw ...
+  }
+  return value->NumberValue();
+}
+
+//for long long type
+inline int64_t EXTRACT_v8_int64_t(v8::Local<v8::Value> value) {
+  if (value->IsNumber()) {
+  } else {
+    // throw ...
+  }
+  return value->NumberValue();
+}
+
+//for unsigned long long
+inline uint64_t EXTRACT_v8_uint64_t(v8::Local<v8::Value> value) {
   if (value->IsNumber()) {
   } else {
     // throw ...
