@@ -14,11 +14,8 @@ const enumGenerator = require('./lib/cpp-enum.js');
 
 const dot = require('dot');
 dot.templateSettings.strip = false; // Do not remove spaces & linebreaks
+dot.verbose = process.env.WIDL_NAN_VERBOSE || false;
 const dots = dot.process({path: path.join(__dirname, 'templates')});
-
-function helloWorld() {
-  console.log('Hello World!');
-}
 
 const _writeFile = function(name, text) {
   return fs.writeFile(name, text);
@@ -89,7 +86,6 @@ const _preprocess = function(that) {
     idl.tree.forEach(def => {
       def.refTypeMap = typeMap;
     });
-    console.log(idl.tree);
   });
 };
 
@@ -157,7 +153,6 @@ const widl2NanGenerator = function() {
     return new Promise(function(resolve, reject) {
       // options is optional
       glob(path.join(dirName, '*.widl'), /* options, */ function(er, files) {
-        console.log(files);
         // deal with files
 
         // files is an array of filenames.
@@ -294,6 +289,5 @@ const widl2NanGenerator = function() {
 };
 
 module.exports = {
-  hello: helloWorld,
   generator: widl2NanGenerator()
 };
