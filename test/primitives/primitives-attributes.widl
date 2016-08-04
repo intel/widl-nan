@@ -12,4 +12,9 @@ interface PrimitivesAttributes {
   attribute unsigned short vUnsignedShort;
   attribute long vLong;
   attribute unsigned long vUnsignedLong;
+  attribute boolean vBoolean;
+  attribute float vFloat;
+  attribute unrestricted float vUnrestrictFloat;
+  attribute double vDouble;
+  attribute unrestricted double vUnrestrictDouble;
 };

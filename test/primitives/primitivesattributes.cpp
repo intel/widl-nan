@@ -15,3 +15,7 @@ PrimitivesAttributes::PrimitivesAttributes()
 
 PrimitivesAttributes::~PrimitivesAttributes() {
 }
+
+PrimitivesAttributes& PrimitivesAttributes::operator =
+    (const PrimitivesAttributes& rhs) {
+}
