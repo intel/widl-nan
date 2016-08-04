@@ -43,6 +43,11 @@ var idlType2CxxType = function (idlType, refTypeMap) {
     type = 'int64_t';
   } else if (type === 'unsigned long long') {
     type = 'uint64_t';
+  } else if (type === 'float'
+    || type === 'unrestricted float'
+    || type === 'double'
+    || type === 'unrestricted double') {
+    type = 'double';
   } else if (typeof type === 'object' && idlType.generic === 'Promise') {
     type = 'v8::Handle<v8::Promise>';
   } else {

@@ -86,7 +86,7 @@ NAN_METHOD(Nan{{=it.name}}::New) {
     Nan{{=it.name}}* obj = new Nan{{=it.name}}();
 
 {{~ constructors :p:i }}
-    {{?i>0}}else {{?}}if (info.Length() == {{=i}}) {
+    {{?i>0}}else {{?}}if (info.Length() == {{?p.arguments}} {{=p.arguments.length}} {{??}} 0 {{?}}) {
 
 {{#def.argumentList}}
 

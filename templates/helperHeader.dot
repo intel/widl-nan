@@ -103,6 +103,14 @@ inline uint64_t EXTRACT_v8_uint64_t(v8::Local<v8::Value> value) {
   return value->NumberValue();
 }
 
+inline bool EXTRACT_v8_bool(v8::Local<v8::Value> value) {
+  if (value->IsBoolean()) {
+  } else {
+    // throw ...
+  }
+  return value->BooleanValue();
+}
+
 inline v8::Local<v8::Function> EXTRACT_v8_function(v8::Local<v8::Value> value) {
   if (value->IsFunction()) {
   } else {

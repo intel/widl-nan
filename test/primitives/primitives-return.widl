@@ -6,6 +6,12 @@
 Constructor
 ]
 interface PrimitivesReturn {
+    attribute boolean vBoolean;
+    attribute float vFloat;
+    attribute unrestricted float vUnrestrictFloat;
+    attribute double vDouble;
+    attribute unrestricted double vUnrestrictDouble;
+
     byte showByte();
     octet showOctet();
     short showShort();
@@ -13,5 +19,10 @@ interface PrimitivesReturn {
     long showLong();
     unsigned long showUnsignedLong();
     DOMString showDOMString();
+    boolean showBoolean();
+    float showFloat();
+    double showDouble();
+    unrestricted float showUnrestrictFloat();
+    unrestricted double showUnrestrictDouble();
 };
 

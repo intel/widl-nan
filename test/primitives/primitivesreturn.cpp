@@ -10,6 +10,9 @@ PrimitivesReturn::PrimitivesReturn() {
 PrimitivesReturn::~PrimitivesReturn() {
 }
 
+PrimitivesReturn& PrimitivesReturn::operator = (const PrimitivesReturn& rhs) {
+}
+
 int8_t PrimitivesReturn::showByte() {
   return -127;
 }
@@ -37,3 +40,24 @@ uint32_t PrimitivesReturn::showUnsignedLong() {
 std::string PrimitivesReturn::showDOMString() {
   return "DOMString";
 }
+
+bool PrimitivesReturn::showBoolean() {
+    return vBoolean_;
+}
+
+double PrimitivesReturn::showFloat() {
+    return vFloat_;
+}
+
+double PrimitivesReturn::showDouble() {
+    return vDouble_;
+}
+
+double PrimitivesReturn::showUnrestrictFloat() {
+    return vUnrestrictFloat_;
+}
+
+double PrimitivesReturn::showUnrestrictDouble() {
+    return vUnrestrictDouble_;
+}
+

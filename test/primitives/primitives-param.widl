@@ -6,6 +6,12 @@
 Constructor
 ]
 interface PrimitivesParam {
+   attribute boolean vBoolean;
+   attribute float vFloat;
+   attribute unrestricted float vUnrestrictFloat;
+   attribute double vDouble;
+   attribute unrestricted double vUnrestrictDouble;
+
    byte addByte(byte a, byte b);
    octet addOctet(octet a, octet b);
    short addShort(short a, short b);
@@ -13,5 +19,6 @@ interface PrimitivesParam {
    long addLong(long a, long b);
    unsigned long addUnsignedLong(unsigned long a, unsigned long b);
    DOMString show(DOMString str);
+   void setvalue(boolean flag,float f,double d,unrestricted float uf,unrestricted double ud);
 };
 

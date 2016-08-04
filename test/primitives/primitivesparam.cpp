@@ -10,6 +10,10 @@ PrimitivesParam::PrimitivesParam() {
 PrimitivesParam::~PrimitivesParam() {
 }
 
+PrimitivesParam& PrimitivesParam::operator =
+(const PrimitivesParam& rhs) {
+}
+
 int8_t PrimitivesParam::addByte(const int8_t& a, const int8_t& b) {
   return a + b;
 }
@@ -40,3 +44,13 @@ uint32_t PrimitivesParam::addUnsignedLong(
 std::string PrimitivesParam::show(const std::string& str) {
   return str;
 }
+
+void PrimitivesParam::setvalue(const bool& flag, const double& f,
+const double& d, const double& uf, const double& ud) {
+    vBoolean_ = flag;
+    vFloat_ = f;
+    vDouble_ = d;
+    vUnrestrictFloat_ = uf;
+    vUnrestrictDouble_ = ud;
+}
+

@@ -54,6 +54,25 @@ describe('widl-nan Unit Test - primitives', function() {
     assert.equal(x.vUnsignedShort, 65535);
     assert.equal(x.vLong, -200000);
     assert.equal(x.vUnsignedLong, 200000);
+
+    assert.equal(typeof x.vBoolean, 'boolean');
+    assert.equal(typeof x.vFloat, 'number');
+    assert.equal(typeof x.vDouble, 'number');
+    assert.equal(typeof x.vUnrestrictFloat, 'number');
+    assert.equal(typeof x.vUnrestrictDouble, 'number');
+
+    x.vBoolean = true;
+    x.vFloat = 1.0;
+    x.vDouble = 2.0;
+    x.vUnrestrictFloat = Infinity;
+    x.vUnrestrictDouble = -Infinity;
+
+    assert.equal(x.vBoolean, true);
+    assert.equal(x.vFloat, 1.0);
+    assert.equal(x.vDouble, 2.0);
+    assert.equal(x.vUnrestrictFloat, Infinity);
+    assert.equal(x.vUnrestrictDouble, -Infinity);
+
     done();
   });
 
@@ -66,6 +85,15 @@ describe('widl-nan Unit Test - primitives', function() {
     assert.equal(y.addLong(-100000, -30000), -130000);
     assert.equal(y.addUnsignedLong(120000, 240000), 360000);
     assert.equal(y.show('DOMString'), 'DOMString');
+
+    y.setvalue(false, 2.0, 3.0, Infinity, -Infinity);
+
+    assert.equal(y.vBoolean, false);
+    assert.equal(y.vFloat, 2.0);
+    assert.equal(y.vDouble, 3.0);
+    assert.equal(y.vUnrestrictFloat, Infinity);
+    assert.equal(y.vUnrestrictDouble, -Infinity);
+
     done();
   });
 
@@ -78,6 +106,19 @@ describe('widl-nan Unit Test - primitives', function() {
     assert.equal(z.showLong(), -1234567);
     assert.equal(z.showUnsignedLong(), 1234567);
     assert.equal(z.showDOMString(), 'DOMString');
+
+    z.vBoolean = true;
+    z.vFloat = 1.0;
+    z.vDouble = 2.0;
+    z.vUnrestrictFloat = Infinity;
+    z.vUnrestrictDouble = -Infinity;
+
+    assert.equal(z.showBoolean(), true);
+    assert.equal(z.showFloat(), 1.0);
+    assert.equal(z.showDouble(), 2.0);
+    assert.equal(z.showUnrestrictFloat(), Infinity);
+    assert.equal(z.showUnrestrictDouble(), -Infinity);
+
     done();
   });
 });
