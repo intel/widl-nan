@@ -21,27 +21,27 @@ class Animal {
  public:
   Animal();
   explicit Animal(const std::string& name);
-  explicit Animal(const std::string& name, const short& age);
+  explicit Animal(const std::string& name, const uint16_t& age);
 
   ~Animal();
 
  public:
-  const std::string get_name() const {
+  std::string get_name() const {
     return this->name_;
   }
 
-  const short get_age() const {
+  uint16_t get_age() const {
     return this->age_;
   }
 
-  void set_age(const short& new_value) {
+  void set_age(const uint16_t& new_value) {
     this->age_ = new_value;
   }
 
  private:
   std::string name_;
 
-  short age_;
+  uint16_t age_;
 };
 
 #endif  // _ANIMAL_H_

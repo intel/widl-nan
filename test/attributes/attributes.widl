@@ -7,18 +7,16 @@
 
 [
 Constructor,
-Constructor(String name),
-Constructor(String name, short age)
+Constructor(DOMString name),
+Constructor(DOMString name, unsigned short age)
 ]
 interface Animal {
 
   // A simple attribute that can be set to any string value.
-  // TODO: Add DOMString support
-  readonly attribute String name;
+  readonly attribute DOMString name;
 
   // An attribute whose value can be assigned to.
-  // TODO: change short to unsigned short
-  attribute short age;
+  attribute unsigned short age;
 };
 
 // TODO: Attribute inheritance support

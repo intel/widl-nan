@@ -21,7 +21,7 @@ Animal::Animal(const std::string& name)
       age_(0) {
 }
 
-Animal::Animal(const std::string& name, const short& age)
+Animal::Animal(const std::string& name, const uint16_t& age)
     : name_(name),
       age_(age) {
 }
