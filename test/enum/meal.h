@@ -16,7 +16,7 @@ class Meal {
   ~Meal();
 
  public:
-  const std::string get_type() const {
+  std::string get_type() const {
     return this->type_;
   }
 
@@ -24,7 +24,7 @@ class Meal {
     this->type_ = new_value;
   }
 
-  const float get_size() const {
+  float get_size() const {
     return this->size_;
   }
 
