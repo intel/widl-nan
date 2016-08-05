@@ -41,4 +41,11 @@ describe('widl-nan Unit Test - Buffer', function() {
     assert.equal(bufferTest.getArrayBuffer().toString(), "hello world!");
     done();
   });
+
+  it('Passing ArrayBuffer as paramter', done => {
+     var bufferTest = new BufferTest();
+     const buffer = new Buffer('This is node Buffer');
+     assert.equal(bufferTest.buffer2String(buffer), 'This is node Buffer');
+     done();
+   });
 });

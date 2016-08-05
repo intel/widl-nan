@@ -19,6 +19,10 @@ class Buffer {
 
  public:
   ArrayBuffer getArrayBuffer();
+
+  std::string buffer2String(const ArrayBuffer& arrayBuffer) {
+    return std::string(arrayBuffer.data, arrayBuffer.size);
+  }
 };
 
 #endif  // _BUFFER_H_
