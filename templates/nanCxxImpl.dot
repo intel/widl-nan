@@ -1,7 +1,8 @@
+{{#def.className}}
 {{#def.interface}}
 
 {{
-  var headerFileName = it.name.toLowerCase();
+  var headerFileName = classNameToFileName(it.name);
 
   var constCounter = 0;
   it.members.forEach(mem => {
@@ -19,7 +20,7 @@
 
 {{~foreignInterfaces.interfaceArray :interface}}
 {{? interface.name != it.name}}
-#include "nan__{{=(interface.name.toLowerCase())}}.h"
+#include "nan__{{=classNameToFileName(interface.name)}}.h"
 {{?}}
 {{~}}
 

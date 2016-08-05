@@ -1,11 +1,12 @@
 // To add your copyright and license header
 
-{{ var guardName = it.name.toUpperCase(); }}
 {{#def.callback}}
 {{#def.argument}}
 {{#def.className}}
 {{#def.idlType}}
 {{#def.interface}}
+
+{{ var guardName = classNameToGuardName(it.name); }}
 
 #ifndef _{{=guardName}}_H_
 #define _{{=guardName}}_H_

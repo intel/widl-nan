@@ -7,7 +7,7 @@
 
 {{
 var className = it.name;
-var headerFileName = className.toLowerCase();
+var headerFileName = classNameToFileName(className);
 var constructors = extractConstructors(it);
 }}
 
