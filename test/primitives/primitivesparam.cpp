@@ -12,6 +12,10 @@ PrimitivesParam::~PrimitivesParam() {
 
 PrimitivesParam& PrimitivesParam::operator =
 (const PrimitivesParam& rhs) {
+  if (&rhs != this) {
+    // TODO(widl-nan): copy members from rhs
+  }
+  return *this;
 }
 
 int8_t PrimitivesParam::addByte(const int8_t& a, const int8_t& b) {
