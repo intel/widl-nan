@@ -9,12 +9,12 @@
       "target_name": "testerAddon",
       "sources": [
         "addon.cpp",
-        "primitivesattributes.cpp",
-        "primitivesparam.cpp",
-        "primitivesreturn.cpp",
-        "gen/nan__primitivesattributes.cpp",
-        "gen/nan__primitivesparam.cpp",
-        "gen/nan__primitivesreturn.cpp",
+        "primitives_attributes.cpp",
+        "primitives_param.cpp",
+        "primitives_return.cpp",
+        "gen/nan__primitives_attributes.cpp",
+        "gen/nan__primitives_param.cpp",
+        "gen/nan__primitives_return.cpp",
       ],
       "include_dirs": [
         "<!(node -e \"require('nan')\")",

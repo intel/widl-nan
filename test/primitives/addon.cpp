@@ -4,9 +4,9 @@
 //
 // This file can be generated automatically.
 
-#include "gen/nan__primitivesattributes.h"
-#include "gen/nan__primitivesparam.h"
-#include "gen/nan__primitivesreturn.h"
+#include "gen/nan__primitives_attributes.h"
+#include "gen/nan__primitives_param.h"
+#include "gen/nan__primitives_return.h"
 
 void initModule(v8::Local<v8::Object> exports) {
     NanPrimitivesAttributes::Init(exports);

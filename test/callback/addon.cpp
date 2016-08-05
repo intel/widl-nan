@@ -4,7 +4,7 @@
 //
 // This file can be generated automatically.
 
-#include "gen/nan__asyncoperations.h"
+#include "gen/nan__async_operations.h"
 
 void initModule(v8::Local<v8::Object> exports) {
   NanAsyncOperations::Init(exports);
