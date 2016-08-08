@@ -18,4 +18,8 @@ PrimitivesAttributes::~PrimitivesAttributes() {
 
 PrimitivesAttributes& PrimitivesAttributes::operator =
     (const PrimitivesAttributes& rhs) {
+  if (&rhs != this) {
+    // TODO(widl-nan): copy members from rhs
+  }
+  return *this;
 }

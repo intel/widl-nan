@@ -11,6 +11,10 @@ PrimitivesReturn::~PrimitivesReturn() {
 }
 
 PrimitivesReturn& PrimitivesReturn::operator = (const PrimitivesReturn& rhs) {
+  if (&rhs != this) {
+    // TODO(widl-nan): copy members from rhs
+  }
+  return *this;
 }
 
 int8_t PrimitivesReturn::showByte() {
