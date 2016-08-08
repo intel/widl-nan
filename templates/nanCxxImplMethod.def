@@ -47,7 +47,7 @@ NAN_METHOD({{=className}}::{{=methodName}}) {
   }
 }}
 
-  {{=elseIf}}if (info.Length() == {{=numArgs}} && ({{=generateArgsIfConditionStr(method, it.refTypeMap, callback)}})) {
+  {{=elseIf}}if ({{=generateArgsIfConditionStr(method, it.refTypeMap, callback)}}) {
     // Method: name = {{=method.name}}, taking {{=numArgs}} argument(s)
 
 {{ var argStr = ""; }}
@@ -70,7 +70,19 @@ NAN_METHOD({{=className}}::{{=methodName}}) {
     auto nanArg{{=j}} = {{=extractArgument(q.idlType, it.refTypeMap)}}(info[{{=j}}]);
     auto arg{{=j}} = *(ObjectWrap::Unwrap<Nan{{=q.idlType.idlType}}>(nanArg{{=j}})->{{=generateGetImplMethodName(q.idlType.idlType)}}());
 {{?? true}}
-    auto arg{{=j}} = {{=extractArgument(q.idlType, it.refTypeMap)}}(info[{{=j}}]);
+
+{{
+var defaultValueStr = '';
+if (q.default && q.default.value) {
+  if (q.default.type === 'string' || q.default.type === 'DOMString') {
+    defaultValueStr = ', "' + q.default.value + '"';
+  } else {
+    defaultValueStr = ', ' + q.default.value;
+  }
+}
+}}
+    auto arg{{=j}} = {{=extractArgument(q.idlType, it.refTypeMap)}}(info[{{=j}}]{{=defaultValueStr}});
+
 {{?}}
 
 
