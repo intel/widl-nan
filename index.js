@@ -89,20 +89,31 @@ const _preprocess = function(that) {
   });
 };
 
+const _classNameToCppFilename = function(className) {
+  // Follow https://google.github.io/styleguide/cppguide.html#File_Names
+  // If interface name is MyTestInterface, the C++ file name will be my_test_interface.cpp|h
+  var fileName = className.replace(/([A-Z])/g, '_$1').toLowerCase();
+
+  if (fileName[0] === '_')
+    fileName = fileName.replace(/_/, '');
+
+  return fileName;
+};
+
 const _genWrapperHeaderName = function(def) {
-  return 'nan__' + def.name.toLowerCase() + '.h';
+  return 'nan__' + _classNameToCppFilename(def.name) + '.h';
 };
 
 const _genWrapperCppName = function(def) {
-  return 'nan__' + def.name.toLowerCase() + '.cpp';
+  return 'nan__' + _classNameToCppFilename(def.name) + '.cpp';
 };
 
 const _genImplHeaderName = function(def) {
-  return def.name.toLowerCase() + '.h';
+  return _classNameToCppFilename(def.name) + '.h';
 };
 
 const _genImplCppName = function(def) {
-  return def.name.toLowerCase() + '.cpp';
+  return _classNameToCppFilename(def.name) + '.cpp';
 };
 
 const _useImpl = function(def) {

@@ -1,7 +1,8 @@
+{{#def.className}}
 {{#def.impl}}
 
-{{ var guardName = it.name.toUpperCase(); }}
-{{ var headerFileName = it.name.toLowerCase(); }}
+{{ var guardName = classNameToGuardName(it.name); }}
+{{ var headerFileName = classNameToFileName(it.name); }}
 {{
   var constCounter = 0;
   it.members.forEach(mem => {

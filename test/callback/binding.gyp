@@ -9,8 +9,8 @@
       "target_name": "testerAddon",
       "sources": [
         "addon.cpp",
-        "asyncoperations.cpp",
-        "gen/nan__asyncoperations.cpp",
+        "async_operations.cpp",
+        "gen/nan__async_operations.cpp",
       ],
       "include_dirs": [
         "<!(node -e \"require('nan')\")",
