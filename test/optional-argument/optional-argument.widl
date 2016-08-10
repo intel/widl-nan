@@ -1,0 +1,28 @@
+// Copyright (c) 2016 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a MIT-style license that can be
+// found in the LICENSE file.
+//
+// Extracted from https://www.w3.org/TR/WebIDL/#dfn-optional-argument-default-value
+// W3C Candidate Recommendation 19 April 2012
+
+[
+Constructor
+]
+interface ColorCreator {
+  DOMString createColor(float r, float g, float b, optional float alpha);
+  DOMString createColor2(float r, float g, float b, optional float alpha = 0.75);
+
+  DOMString primitiveTypeCoverage1(float r, float g, float b, optional unrestricted double alpha = 0.75);
+  DOMString primitiveTypeCoverage2(float r, float g, float b, optional unrestricted float alpha = 0.75);
+  DOMString primitiveTypeCoverage3(float r, float g, float b, optional double alpha = 0.75);
+  DOMString primitiveTypeCoverage4(float r, float g, float b, optional byte alpha = 75);
+  DOMString primitiveTypeCoverage5(float r, float g, float b, optional octet alpha = 75);
+  DOMString primitiveTypeCoverage6(float r, float g, float b, optional short alpha = 275);
+  DOMString primitiveTypeCoverage7(float r, float g, float b, optional unsigned short alpha = 20275);
+  DOMString primitiveTypeCoverage8(float r, float g, float b, optional long alpha = 800275);
+  DOMString primitiveTypeCoverage9(float r, float g, float b, optional unsigned long alpha = 3000000275);
+  DOMString primitiveTypeCoverage10(float r, float g, float b, optional long long alpha = 2000000275);
+  DOMString primitiveTypeCoverage11(float r, float g, float b, optional unsigned long long alpha = 3000000275);
+  DOMString primitiveTypeCoverage12(float r, float g, float b, optional DOMString alpha = "0x1000");
+  DOMString primitiveTypeCoverage13(float r, float g, float b, optional boolean alpha = true);
+};

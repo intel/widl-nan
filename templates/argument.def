@@ -67,20 +67,52 @@ var generateInitList = function (method, padding){
 };
 
 var generateArgsIfConditionStr = function (method, refTypeMap, callback) {
+  var retVal = 'info.Length()';
+  var optionalArgFound = false;
+  var optionalArgCount = 0;
+  const totalArgs = method.arguments.length;
+
   var list = [];
   if (method.arguments) {
     method.arguments.forEach((arg, idx) => {
+      const argName = 'info[' + idx + ']';
+
+      if (arg.optional) {
+        ++optionalArgCount;
+        optionalArgFound = true;
+      }
+
+      /* Build the condition for this argument*/
       var condition = '';
-      condition += 'info[' + idx + ']->';
+      condition += '(';
+      if (arg.optional) {
+        condition += '(info.Length() > ' + idx + ') ? (';
+      }
+      condition += argName + '->';
       condition += idlType2V8TypeCheck(arg.idlType, refTypeMap, callback);
       condition += '()';
+      if (arg.optional) {
+        condition += ') : true';
+      }
+      condition += ')';
       list.push(condition);
     });
   }
-  if (list.length === 0) {
-    return 'true';
+
+  if (optionalArgFound) {
+    retVal += ' >= ' + (totalArgs - optionalArgCount);
+  } else {
+    retVal += ' == ' + totalArgs;
   }
-  return list.join(' && ');
+
+  if (list.length > 0) {
+    retVal += ' && ';
+    retVal += '(';
+    retVal += list.join(' && ');
+    retVal += ')';
+  }
+
+  return retVal;
 };
 
 
