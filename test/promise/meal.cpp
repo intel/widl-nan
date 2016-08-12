@@ -19,7 +19,7 @@ v8::Handle<v8::Promise> Meal::cook(const std::string& chefName) {
   // TODO(widl-nan): fill your code here
   using ResolverPersistent = Nan::Persistent<v8::Promise::Resolver>;
 
-  auto period = 3000; // In ms
+  auto period = 3000;  // In ms
   auto resolver = v8::Promise::Resolver::New(v8::Isolate::GetCurrent());
   auto persistent = new ResolverPersistent(resolver);
 
@@ -45,7 +45,7 @@ v8::Handle<v8::Promise> Meal::cook(const std::string& chefName) {
              [](uv_handle_t* handle) -> void {delete handle;});
 
     myself->isRawMeal_ = false;
-  
+
     auto resolver = Nan::New(*persistent);
     resolver->Resolve(Nan::New("Microwave Ding").ToLocalChecked());
 
