@@ -50,14 +50,12 @@ NAN_METHOD({{=className}}::{{=methodName}}) {
   {{=elseIf}}if ({{=generateArgsIfConditionStr(method, it.refTypeMap, callback)}}) {
     // Method: name = {{=method.name}}, taking {{=numArgs}} argument(s)
 
-{{ var argStr = ""; }}
+{{ var args = []; }}
+
 {{~ method.arguments :q:j}}
 
 {{
-  argStr += "arg" + j;
-  if (j<method.arguments.length-1) {
-    argStr += ', ';
-  }
+args.push('arg' + j);
 }}
 
 {{? isCallback(q.idlType, callback) }}
@@ -101,11 +99,16 @@ if (q.default && q.default.value) {
 {{~}}
 
 
-
+{{
+if (method.idlType.generic === 'Promise') {
+  /*args.push('info.GetIsolate()');*/
+}
+var argStr = args.join(', ');
+}}
 
 {{? method.idlType.generic === 'Promise' }}
     // Return promise
-    auto promise = myself->impl_->{{=methodName}}({{=argStr}}, info.GetIsolate());
+    auto promise = myself->impl_->{{=methodName}}({{=argStr}});
     info.GetReturnValue().Set(promise);
 {{?? method.idlType.idlType === 'void' }}
     // Return type is void
