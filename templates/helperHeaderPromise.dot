@@ -1,0 +1,79 @@
+#ifndef _PROMISE_HELPER_H_
+#define _PROMISE_HELPER_H_
+
+#include <node.h>
+#include <nan.h>
+
+#include <string>
+
+// This class can help on v8::Promise usage
+class PromiseHelper {
+ public:
+  PromiseHelper() {}
+
+  ~PromiseHelper() {
+    js_resolver_.Reset();
+  }
+
+  v8::Local<v8::Promise> CreatePromise() {
+    auto resolver = v8::Promise::Resolver::New(v8::Isolate::GetCurrent());
+    js_resolver_.Reset(resolver);
+    return resolver->GetPromise();
+  }
+
+  void CreatePromiseAndSetFunctionReturnValue(Nan::NAN_METHOD_ARGS_TYPE info) {
+    auto promise = CreatePromise();
+    info.GetReturnValue().Set(promise);
+  }
+
+  void ResolvePromise(v8::Local<v8::Value> value) {
+    auto resolver = Nan::New(js_resolver_);
+    resolver->Resolve(value);
+  }
+
+  void ResolvePromise(const std::string& str) {
+    ResolvePromise(Nan::New(str.c_str()).ToLocalChecked());
+  }
+
+  void ResolvePromise() {
+    ResolvePromise(Nan::Undefined());
+  }
+
+  template<typename T>
+  void ResolvePromiseT(const T& t) {
+    auto resolver = Nan::New(js_resolver_);
+    resolver->Resolve(Nan::New(t));
+  }
+
+  void RejectPromise(v8::Local<v8::Value> value) {
+    auto resolver = Nan::New(js_resolver_);
+    resolver->Reject(value);
+  }
+
+  void RejectPromise(const std::string& str) {
+    RejectPromise(Nan::New(str.c_str()).ToLocalChecked());
+  }
+
+  void RejectPromise() {
+    RejectPromise(Nan::Undefined());
+  }
+
+  template<typename T>
+  void RejectPromiseT(const T& t) {
+    auto resolver = Nan::New(js_resolver_);
+    resolver->Reject(Nan::New(t));
+  }
+
+  void DestroyPromise() {
+    js_resolver_.Reset();
+  }
+
+  bool IsPromiseCreated() {
+    return js_resolver_.IsEmpty();
+  }
+
+ private:
+  Nan::Persistent<v8::Promise::Resolver> js_resolver_;
+};
+
+#endif  // _PROMISE_HELPER_H_

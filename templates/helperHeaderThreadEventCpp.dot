@@ -1,0 +1,101 @@
+#include "thread-event-helper.h"
+
+ThreadEventHelper::ThreadEventHelper():
+    thread_waiting_lock_(thread_waiting_mutex_) {
+  Reset();
+}
+
+ThreadEventHelper::~ThreadEventHelper() {
+}
+
+void ThreadEventHelper::Reset() {
+  thread_singleloop_flag_ = false;
+  thread_cont_working_ = true;
+  thread_started_flag_ = false;
+  thread_failed_flag_ = false;
+}
+
+v8::Local<v8::Promise> ThreadEventHelper::StartThread() {
+  Reset();
+  auto promise = GetThreadStartPromiseHelper().CreatePromise();
+  uv_async_init(uv_default_loop(), &async_, AsyncProc);
+  uv_thread_create(&thread_, ThreadProc, this);
+  return promise;
+}
+
+void ThreadEventHelper::PauseThread() {
+  // TODO(widl-nan): make thread wait
+}
+
+void ThreadEventHelper::ResumeThread() {
+  // TODO(widl-nan): resume thread
+}
+
+void ThreadEventHelper::StopThread() {
+  thread_cont_working_ = false;
+  uv_thread_join(&thread_);
+  uv_close(reinterpret_cast<uv_handle_t*>(&async_), NULL);
+  ResetJavaScriptThis();
+  Reset();
+}
+
+void ThreadEventHelper::AsyncProc(uv_async_t *handle) {
+  Nan::HandleScope scope;
+
+  auto me = static_cast<ThreadEventHelper*>(handle->data);
+
+  if (me->thread_started_flag_) {
+    me->thread_started_flag_ = false;
+    me->GetThreadStartPromiseHelper().ResolvePromise();
+  }
+
+  if (me->thread_failed_flag_) {
+    me->thread_failed_flag_ = false;
+    auto msg = std::string("Worker thread fail");
+    me->GetThreadStartPromiseHelper().RejectPromise(msg);
+  }
+
+  if (me->thread_singleloop_flag_) {
+    me->thread_singleloop_flag_ = false;
+    me->OnSingleLoopFinished(EventEmitter(&me->js_this_));
+  }
+}
+
+void ThreadEventHelper::ThreadProc(void* arg) {
+  ThreadEventHelper* me = reinterpret_cast<ThreadEventHelper*>(arg);
+
+  try {
+    bool thread_started = me->ThreadStarter();
+
+    if (thread_started) {
+      // Resolve promise here
+      me->thread_started_flag_ = true;
+    } else {
+      me->thread_failed_flag_ = true;
+    }
+    me->async_.data = me;
+    uv_async_send(&me->async_);
+
+    long long counter = 0;
+    while (thread_started && me->thread_cont_working_) {
+      ++counter;
+      bool continue_working = me->ThreadWorker(counter);
+
+      // Finished one single loop
+      me->thread_singleloop_flag_ = true;
+      uv_async_send(&me->async_);
+
+      me->thread_cont_working_ = continue_working;
+
+      // TODO(widl-nan): wait (thread pause)
+    }
+  } catch (const std::exception& e) {
+    me->thread_failed_flag_ = true;
+    uv_async_send(&me->async_);
+  } catch (...) {
+    me->thread_failed_flag_ = true;
+    uv_async_send(&me->async_);
+  }
+
+  me->ThreadCleaner();
+}

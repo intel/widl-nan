@@ -281,6 +281,12 @@ const widl2NanGenerator = function() {
     // generate some helper files
     all.push(_writeFile(path.join(dirName, 'generator_helper.h'),
                         _packEmptyLines(dots.helperHeader({}))));
+    all.push(_writeFile(path.join(dirName, 'promise-helper.h'),
+                        _packEmptyLines(dots.helperHeaderPromise({}))));
+    all.push(_writeFile(path.join(dirName, 'thread-event-helper.h'),
+                        _packEmptyLines(dots.helperHeaderThreadEvent({}))));
+    all.push(_writeFile(path.join(dirName, 'thread-event-helper.cpp'),
+                        _packEmptyLines(dots.helperHeaderThreadEventCpp({}))));
     all.push(_writeFile(path.join(dirNameSkeleton, 'addon.cpp'),
                         _packEmptyLines(dots.addonCpp(this))));
     all.push(_writeFile(path.join(dirNameSkeleton, 'binding.gyp'),

@@ -23,6 +23,11 @@ class Meal {
 
   void initialize();
 
+  void SetJavaScriptThis(v8::Local<v8::Object> obj) {
+    // Ignore this if you don't need it
+    // Typical usage: emit an event on `obj`
+  }
+
   v8::Handle<v8::Promise> cook(const std::string& chefName);
 
  private:

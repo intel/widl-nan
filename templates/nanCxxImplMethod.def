@@ -108,6 +108,7 @@ var argStr = args.join(', ');
 
 {{? method.idlType.generic === 'Promise' }}
     // Return promise
+    myself->impl_->SetJavaScriptThis(info.This());
     auto promise = myself->impl_->{{=methodName}}({{=argStr}});
     info.GetReturnValue().Set(promise);
 {{?? method.idlType.idlType === 'void' }}
