@@ -1,0 +1,86 @@
+#ifndef _THREAD_EVENT_HELPER_H_
+#define _THREAD_EVENT_HELPER_H_
+
+#include <node.h>
+#include <nan.h>
+
+#include <string>
+#include <mutex>
+#include <condition_variable>
+
+#include "promise-helper.h"
+
+// This class can help on thread + event programming model
+class ThreadEventHelper {
+ public:
+  ThreadEventHelper();
+  virtual ~ThreadEventHelper();
+
+  void SetJavaScriptThis(v8::Local<v8::Object> JavaScriptThis) {
+    js_this_.Reset(JavaScriptThis);
+  }
+
+  void ResetJavaScriptThis() {
+    js_this_.Reset();
+  }
+
+  v8::Local<v8::Promise> StartThread();
+  void PauseThread();
+  void ResumeThread();
+  void StopThread();
+
+ protected:
+  class EventEmitter {
+   private:
+    explicit EventEmitter(Nan::Persistent<v8::Object>* JavaScriptThis) {
+      js_this_ = JavaScriptThis;
+    }
+
+   public:
+    void Emit(int argc, v8::Local<v8::Value>* argv) const {
+      v8::Local<v8::Object> JavaScriptObj = Nan::New(*js_this_);
+      Nan::MakeCallback(JavaScriptObj, "emit", argc, argv);
+    }
+
+   private:
+    Nan::Persistent<v8::Object>* js_this_;
+    friend class ThreadEventHelper;
+  };
+
+  // Running in worker thread, to set up the pipeline
+  // Return true to indicate thread is successfully started
+  virtual bool ThreadStarter() = 0;
+  // Running in worker thread, to deal with the pipeline loop
+  // Return true to continue loop
+  virtual bool ThreadWorker(long long numOfLoops) = 0;
+  // Running in worker thread, to clean things up
+  virtual void ThreadCleaner() = 0;
+  // Running in main thread
+  // Note: use emitter.Emit(argc, argv) to emit event to JavaScript
+  virtual void OnSingleLoopFinished(const EventEmitter& emitter) = 0;
+
+ private:
+  static void AsyncProc(uv_async_t *handle);
+  static void ThreadProc(void* arg);
+  void Reset();
+
+  inline PromiseHelper& GetThreadStartPromiseHelper() {
+    return thread_start_promise_;
+  }
+
+ private:
+  PromiseHelper thread_start_promise_;
+
+  bool thread_cont_working_;
+  Nan::Persistent<v8::Object> js_this_;
+  uv_async_t async_;
+  uv_thread_t thread_;
+  std::mutex thread_waiting_mutex_;
+  std::unique_lock<std::mutex> thread_waiting_lock_;
+  std::condition_variable thread_waiting_cv_;
+  bool thread_singleloop_flag_;
+  bool thread_started_flag_;
+  bool thread_failed_flag_;
+};
+
+#endif  // _THREAD_EVENT_HELPER_H_
