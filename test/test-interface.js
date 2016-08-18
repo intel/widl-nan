@@ -16,7 +16,7 @@ var Dimensions;
 var Painter;
 var Point;
 
-describe('widl-nan Unit Test - const attributes', function() {
+describe('widl-nan Unit Test - interface', function() {
   it('Generating binding C++ code', function() {
     return compile([
       'test/interface/param.widl',
