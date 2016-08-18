@@ -84,8 +84,11 @@ void ThreadEventHelper::ThreadProc(void* arg) {
       // Finished one single loop
       me->thread_singleloop_flag_ = true;
       uv_async_send(&me->async_);
-
-      me->thread_cont_working_ = continue_working;
+      //only set thread_cont_working to false if the worker want to quit.
+      //don't set it to true as this may overwrite the false value if StopThread has been called but
+      //the worker want to continue.
+      if(!continue_working)
+          me->thread_cont_working_ = continue_working;
 
       // TODO(widl-nan): wait (thread pause)
     }
