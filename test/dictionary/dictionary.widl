@@ -1,0 +1,24 @@
+[
+Constructor,
+Constructor(long x, long y)
+]
+interface Point {
+  attribute long x;
+  attribute long y;
+};
+
+dictionary PaintOptions {
+  Point offset;
+  DOMString? color = "black";
+  DOMString? subscript = null;
+  required short flags;
+};
+
+[
+Constructor
+]
+interface Painter {
+  void drawText(DOMString text, PaintOptions options);  
+  attribute PaintOptions options;
+  PaintOptions getFactoryOptions();
+};

@@ -78,6 +78,8 @@ const _preprocess = function(that) {
         _addOrAppend({map: typeMap, key: def.name, value: def});
       } else if (def.type === 'callback') {
         _addOrAppend({map: typeMap, key: def.name, value: def});
+      } else if (def.type === 'dictionary') {
+        _addOrAppend({map: typeMap, key: def.name, value: def});
       }
     });
   });
@@ -188,6 +190,7 @@ const widl2NanGenerator = function() {
       classes: [],
       wrapperH: [],
       wrapperCpp: [],
+      dictH: [],
       implH: [],
       implCpp: []
     });
@@ -247,6 +250,11 @@ const widl2NanGenerator = function() {
         } else if (def.type === 'exception') {
         } else if (def.type === 'enum') {
         } else if (def.type === 'callback') {
+        } else if (def.type === 'dictionary') {
+          idl.dictH.push({
+            name: _genImplHeaderName(def),
+            text: _packEmptyLines(dots.dictionaryHeader(def))
+          });
         }
       });
     });
@@ -274,6 +282,7 @@ const widl2NanGenerator = function() {
     this.idlStore.forEach(idl => {
       write(idl.wrapperH);
       write(idl.wrapperCpp);
+      write(idl.dictH);
       writeImpl(idl.implH);
       writeImpl(idl.implCpp);
     });
@@ -281,6 +290,8 @@ const widl2NanGenerator = function() {
     // generate some helper files
     all.push(_writeFile(path.join(dirName, 'generator_helper.h'),
                         _packEmptyLines(dots.helperHeader({}))));
+    all.push(_writeFile(path.join(dirName, 'widl_dictionary_helper.h'),
+                        _packEmptyLines(dots.helperHeaderWIDLDictionaryBase({}))));
     all.push(_writeFile(path.join(dirName, 'promise-helper.h'),
                         _packEmptyLines(dots.helperHeaderPromise({}))));
     all.push(_writeFile(path.join(dirName, 'thread-event-helper.h'),

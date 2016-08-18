@@ -4,6 +4,7 @@
 {{#def.enum}}
 {{#def.impl}}
 {{#def.interface}}
+{{#def.dictionary}}
 {{#def.returnType}}
 {{#def.buildValidEnumValuesList}}
 {{#def.extractV8Value}}
@@ -39,6 +40,8 @@ NAN_GETTER({{=className}}::{{=p.name}}Getter) {
     auto value = Nan{{=retType}}::NewInstance();
     ObjectWrap::Unwrap<Nan{{=retType}}>(value)->Copy{{=retType}}Impl(impl_val);
   info.GetReturnValue().Set(value);
+{{?? isDictionary(p.idlType, it.refTypeMap)}}
+  info.GetReturnValue().Set(static_cast<v8::Local<v8::Object>>(impl_val));
 {{?? true}}
   info.GetReturnValue().Set(Nan::New(impl_val){{=str}});
 {{?}}

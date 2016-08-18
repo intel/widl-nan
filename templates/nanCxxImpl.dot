@@ -1,5 +1,6 @@
 {{#def.className}}
 {{#def.interface}}
+{{#def.dictionary}}
 
 {{
   var headerFileName = classNameToFileName(it.name);
@@ -19,7 +20,7 @@
 #include "generator_helper.h"
 
 {{~foreignInterfaces.interfaceArray :interface}}
-{{? interface.name != it.name}}
+{{? interface.name != it.name && interface.type === 'interface'}}
 #include "nan__{{=classNameToFileName(interface.name)}}.h"
 {{?}}
 {{~}}

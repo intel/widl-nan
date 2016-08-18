@@ -1,0 +1,112 @@
+{{#def.className}}
+{{#def.idlType}}
+{{#def.extractV8Value}}
+{{#def.dictionary}}
+{{#def.interface}}
+
+{{
+var dictionaryClassName = it.name;
+var foreignTypeList = [];
+var guardName = classNameToGuardName(it.name);
+
+var extractAllReferenceInterfaceTypeForDictionary = function (dic, refTypeMap) {
+  var interfaceArray = [];
+  dic.members.forEach(member => {
+    if (member.type == 'field' && isInterface(member.idlType, refTypeMap)) {
+      interfaceArray.push(member.idlType.idlType);
+    }
+  });
+  return interfaceArray;
+};
+
+var allForeignInterfaceTypes = extractAllReferenceInterfaceTypeForDictionary(it, it.refTypeMap);
+}}
+
+
+#ifndef {{=guardName}}
+#define {{=guardName}}
+
+#include "gen/generator_helper.h"
+#include "gen/widl_dictionary_helper.h"
+
+{{~allForeignInterfaceTypes :p:i}}
+#include "{{=classNameToFileName(p)}}.h"
+#include "gen/nan__{{=classNameToFileName(p)}}.h"
+{{~}}
+
+class {{=dictionaryClassName}} : public WIDLDictionaryBase {
+ public:
+  {{=dictionaryClassName}}() {}
+
+  {{=dictionaryClassName}}(v8::Local<v8::Object> source) : WIDLDictionaryBase(source) {}
+
+  ~{{=dictionaryClassName}}() {}
+
+  explicit operator v8::Local<v8::Object> () const {
+    return GetObject();
+  }
+
+  static bool RequiredMemberCheck(v8::Local<v8::Object> source) {
+    {{=dictionaryClassName}} temp(source);
+{{
+var requiredMembers = [];
+it.members.forEach(member => {
+  if (member.type === 'field' && member.required) {
+    requiredMembers.push('"' + member.name + '"');
+  }
+});
+var requiredMembersStr = '{' + requiredMembers.join(', ') + '}';
+}}
+    const char* REQUIRED_MEMBERS[] = {{=requiredMembersStr}};
+    for ( int i = 0 ; i < {{=requiredMembers.length}} ; ++ i ) {
+      if (!temp.IsMemberPresent(REQUIRED_MEMBERS[i])) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+
+{{~it.members :p:i}}
+
+{{
+var memberName = p.name;
+var memberType = idlType2CxxType(p.idlType, it.refTypeMap);
+var extraMacroType = convertIDLType2ExtractMacro(p.idlType, it.refTypeMap);
+}}
+
+  bool has_{{=memberName}}() const {return IsMemberPresent("{{=memberName}}"); }
+
+{{? p.type === 'field' && isNonStringPrimitiveType(p.idlType) }}
+  {{=memberType}} get_{{=memberName}}() const {return EXTRACT_v8_{{=extraMacroType}}(GetMember("{{=memberName}}")); }
+  void set_{{=memberName}}(const {{=memberType}}& value) {SetMemberT("{{=memberName}}", value); }
+
+{{?? p.type === 'field' && isString(p.idlType) }}
+  {{=memberType}} get_{{=memberName}}() const {return EXTRACT_v8_{{=extraMacroType}}(GetMember("{{=memberName}}")); }
+  void set_{{=memberName}}(const {{=memberType}}& value) {SetMember("{{=memberName}}", value); }
+
+{{?? p.type === 'field' && isInterface(p.idlType, it.refTypeMap)}}
+
+{{var interfaceType = p.idlType.idlType;}}
+
+  {{=interfaceType}} get_{{=memberName}}() const {
+    auto value = GetMember("{{=memberName}}");
+    auto nan_wrapper_obj = Nan::ObjectWrap::Unwrap<Nan{{=interfaceType}}>(value->ToObject());
+    return *nan_wrapper_obj->Get{{=interfaceType}}Impl();
+  }
+
+  void set_{{=memberName}}(const {{=interfaceType}}& value) {
+    auto obj = Nan{{=interfaceType}}::NewInstance();
+    auto nan_wrapper_obj = Nan::ObjectWrap::Unwrap<Nan{{=interfaceType}}>(obj);
+    nan_wrapper_obj->Copy{{=interfaceType}}Impl(value);
+    SetMember("{{=memberName}}", obj);
+  }
+
+{{?}}
+
+{{~}}
+
+
+};
+
+#endif  // {{=guardName}}
