@@ -92,14 +92,9 @@ const _preprocess = function(that) {
 };
 
 const _classNameToCppFilename = function(className) {
-  // Follow https://google.github.io/styleguide/cppguide.html#File_Names
+  // Following https://google.github.io/styleguide/cppguide.html#File_Names
   // If interface name is MyTestInterface, the C++ file name will be my_test_interface.cpp|h
-  var fileName = className.replace(/([A-Z])/g, '_$1').toLowerCase();
-
-  if (fileName[0] === '_')
-    fileName = fileName.replace(/_/, '');
-
-  return fileName;
+  return className.replace(/((?!^)[A-Z][a-z0-9]+)/g, '_$1').toLowerCase();
 };
 
 const _genWrapperHeaderName = function(def) {
