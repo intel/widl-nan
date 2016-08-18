@@ -3,29 +3,49 @@
 {{#def.buildValidEnumValuesList}}
 {{#def.extractV8Value}}
 
+{{
+var argumentListStr = '';
+var returnList = [];
+if ( p.arguments ) {
+  p.arguments.forEach((arg, idx) => {
+    returnList.push('arg' + idx);
+  });
+}
+argumentListStr = returnList.join(', ');
+}}
+
 {{~ p.arguments :q:j }}
-      auto {{=q.name}} = {{=extractArgument(q.idlType, it.refTypeMap)}}(info[{{=j}}]);
 {{
   var enumCheck = isEnumType(q.idlType, it.refTypeMap);
   var enumDef = getEnumDef(q.idlType, it.refTypeMap);
   var enumName = enumDef.name;
+  var paramName = 'arg' + j;
+  var finalParamName = paramName;
+  var paramIsInterface = isInterface(q.idlType, it.refTypeMap);
+  if (paramIsInterface) {
+    paramName = 'nan_' + paramName;
+  }
 }}
+      auto {{=paramName}} = {{=extractArgument(q.idlType, it.refTypeMap)}}(info[{{=j}}]);
 
 {{? enumCheck }}
       // Valid enum values for parameter info{{=j}}, original IDL type: {{=enumName}}
       const char* VALID_ENUM_{{=(enumName.toUpperCase())}}_INFO[] = { {{=buildValidEnumValuesList(enumDef)}} };
-      if (!IsEnumValueValid({{=q.name}}, VALID_ENUM_{{=(enumName.toUpperCase())}}_INFO)) {
+      if (!IsEnumValueValid({{=paramName}}, VALID_ENUM_{{=(enumName.toUpperCase())}}_INFO)) {
         // TODO: modify argumentList.def to handle this case
         std::string err = "Illegal argument: ";
         err += "{{=enumName}}";
         err += " ";
-        err += "{{=q.name}}";
+        err += "{{=paramName}}";
         err += " == ";
         err += "'";
-        err += {{=q.name}};
+        err += {{=paramName}};
         err += "'";
         Nan::ThrowTypeError(err.c_str());
       }
+{{?? paramIsInterface }}
+      // Convert to impl {{=q.idlType.idlType}} pointer
+      auto {{=finalParamName}} = *(ObjectWrap::Unwrap<Nan{{=q.idlType.idlType}}>({{=paramName}})->{{=generateGetImplMethodName(q.idlType.idlType)}}());
 {{?}}
 
 {{~}}

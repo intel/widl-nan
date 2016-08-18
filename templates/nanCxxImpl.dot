@@ -1,6 +1,7 @@
 {{#def.className}}
 {{#def.interface}}
 {{#def.dictionary}}
+{{#def.impl}}
 
 {{
   var headerFileName = classNameToFileName(it.name);
@@ -96,7 +97,7 @@ NAN_METHOD(Nan{{=it.name}}::New) {
 
 {{#def.argumentList}}
 
-      obj->impl_ = new {{=it.name}}({{=generateArgumentList(p)}});
+      obj->impl_ = new {{=it.name}}({{=argumentListStr}});
     }
 {{~}}
     else {
