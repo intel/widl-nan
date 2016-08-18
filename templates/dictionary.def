@@ -1,0 +1,12 @@
+{{
+
+var isDictionary = function (idlType, refTypeMap) {
+  var retValue = false;
+  var typeName = idlType.idlType;
+  if (refTypeMap && refTypeMap[typeName] && refTypeMap[typeName].type == 'dictionary') {
+    retValue = true;
+  }
+  return retValue;
+};
+
+}}

@@ -132,6 +132,10 @@ var argStr = args.join(', ');
     auto value = Nan{{=retType}}::NewInstance();
     ObjectWrap::Unwrap<Nan{{=retType}}>(value)->Set{{=retType}}Impl(implObj);
     info.GetReturnValue().Set(value);
+{{?? isDictionary(method.idlType, it.refTypeMap)}}
+    // Return type is a dictionary object
+    auto value = myself->impl_->{{=methodName}}({{=argStr}});
+    info.GetReturnValue().Set(static_cast<v8::Local<v8::Object>>(value));
 {{?? true }}
     // Primitive types (int, double ...)
     auto value = myself->impl_->{{=methodName}}({{=argStr}});
