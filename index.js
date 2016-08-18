@@ -149,6 +149,7 @@ const widl2NanGenerator = function() {
   generator.reset = function() {
     this.option = defaultOption;
     this.idlStore = [];
+    this.typeMap = {};
   };
 
   generator.setOption = function(option) {
