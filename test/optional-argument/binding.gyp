@@ -6,15 +6,11 @@
       "target_name": "widlNanAddon",
       "sources": [
         "addon.cpp",
-
-        "gen/nan__color_creator.cpp",
-
         "color_creator.cpp",
-
+        "gen/nan__color_creator.cpp",
       ],
       "include_dirs": [
         "<!(node -e \"require('nan')\")",
-        "/usr/local/include",
         "."
       ],
       "cflags!": [

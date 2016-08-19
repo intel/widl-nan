@@ -9,20 +9,19 @@
       "target_name": "testerAddon",
       "sources": [
         "addon.cpp",
-        "dimensions.cpp",
         "button.cpp",
-        "point.cpp",
         "circle.cpp",
-        "painter.cpp",
+        "dimensions.cpp",
         "gen/nan__dimensions.cpp",
         "gen/nan__button.cpp",
         "gen/nan__point.cpp",
         "gen/nan__circle.cpp",
         "gen/nan__painter.cpp",
+        "point.cpp",
+        "painter.cpp",
       ],
       "include_dirs": [
         "<!(node -e \"require('nan')\")",
-        "/usr/local/include",
         "."
       ],
       "cflags!": [

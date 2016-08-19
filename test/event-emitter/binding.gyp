@@ -9,13 +9,12 @@
       "target_name": "testerAddon",
       "sources": [
         "addon.cpp",
-        "meal.cpp",
         "gen/thread-event-helper.cpp",
-        "gen/nan__meal.cpp"
+        "gen/nan__meal.cpp",
+        "meal.cpp"
       ],
       "include_dirs": [
         "<!(node -e \"require('nan')\")",
-        "/usr/local/include",
         "./gen",
         "."
       ],

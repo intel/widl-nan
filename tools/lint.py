@@ -146,10 +146,6 @@ def do_cpp_lint(changeset, options, args):
     elif (category == 'build/include' and
           message.startswith('Include the directory when naming .h files')):
       ReportIgnoredError(filename, linenum, category, confidence, message)
-    # Skip int error because we do not follow the full directory
-    # path include rule
-    elif (category == 'runtime/int'):
-      ReportIgnoredError(filename, linenum, category, confidence, message)
     else:
       origin_error(filename, linenum, category, confidence, message)
 
