@@ -1,4 +1,6 @@
-// To add your copyright and license header
+// Copyright (c) 2016 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a MIT-style license that can be
+// found in the LICENSE file.
 
 #include "painter.h"
 
@@ -18,12 +20,12 @@ Painter& Painter::operator = (const Painter& rhs) {
 }
 
 PaintOptions Painter::get_options() const {
-  PaintOptions tmp;
-  tmp.set_offset(options_pt_);
-  tmp.set_color(options_color_);
-  tmp.set_subscript(options_subscript_);
-  tmp.set_flags(options_flags_);
-  return tmp;
+  PaintOptions options;
+  options.set_offset(options_pt_);
+  options.set_color(options_color_);
+  options.set_subscript(options_subscript_);
+  options.set_flags(options_flags_);
+  return options;
 }
 
 void Painter::set_options(const PaintOptions& new_value) {

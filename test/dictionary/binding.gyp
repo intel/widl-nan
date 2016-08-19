@@ -6,15 +6,10 @@
       "target_name": "widlNanAddon",
       "sources": [
         "addon.cpp",
-
-        "gen/nan__point.cpp",
-
         "gen/nan__painter.cpp",
-
-        "point.cpp",
-
+        "gen/nan__point.cpp",
         "painter.cpp",
-
+        "point.cpp",
       ],
       "include_dirs": [
         "<!(node -e \"require('nan')\")",
