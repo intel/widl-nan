@@ -1,4 +1,6 @@
-# Add your copyright and license header
+# Copyright (c) 2016 Intel Corporation. All rights reserved.
+# Use of this source code is governed by a MIT-style license that can be
+# found in the LICENSE file.
 #
 {
   "targets": [
@@ -6,21 +8,14 @@
       "target_name": "widlNanAddon",
       "sources": [
         "addon.cpp",
-
-        "gen/nan__my_class.cpp",
-
-        "gen/nan__no_constructor_class.cpp",
-
-        "gen/nan__container_class.cpp",
-
-        "my_class.cpp",
-
         "container_class.cpp",
-
+        "gen/nan__container_class.cpp",
+        "gen/nan__my_class.cpp",
+        "gen/nan__no_constructor_class.cpp",
+        "my_class.cpp",
       ],
       "include_dirs": [
         "<!(node -e \"require('nan')\")",
-        "/usr/local/include",
         "."
       ],
       "cflags!": [

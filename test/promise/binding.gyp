@@ -9,12 +9,11 @@
       "target_name": "testerAddon",
       "sources": [
         "addon.cpp",
-        "meal.cpp",
         "gen/nan__meal.cpp",
+        "meal.cpp",
       ],
       "include_dirs": [
         "<!(node -e \"require('nan')\")",
-        "/usr/local/include",
         "."
       ],
       "cflags!": [
