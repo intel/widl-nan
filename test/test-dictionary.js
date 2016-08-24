@@ -41,7 +41,8 @@ describe('widl-nan Unit Test - IDL dictionary', function() {
     x.drawText('&Menu', {
       offset: new Point(10, 20),
       color: 'red',
-      flags: 1860
+      flags: 1860,
+      others: {switch: true}
     });
 
     done();
@@ -52,7 +53,8 @@ describe('widl-nan Unit Test - IDL dictionary', function() {
     x.drawText('&Menu', {
       offset: new Point(10, 20),
       color: 'red',
-      flags: 1860
+      flags: 1860,
+      others: {switch: true}
     });
 
     var option = x.options;
@@ -60,6 +62,7 @@ describe('widl-nan Unit Test - IDL dictionary', function() {
     assert.equal(option.offset.y, 20);
     assert.equal(option.color, 'red');
     assert.equal(option.flags, 1860);
+    assert.equal(option.others.switch, true);
 
     done();
   });
@@ -69,7 +72,8 @@ describe('widl-nan Unit Test - IDL dictionary', function() {
     x.drawText('&Menu', {
       offset: new Point(10, 20),
       color: 'red',
-      flags: 1860
+      flags: 1860,
+      others: {switch: true}
     });
 
     var option = x.getFactoryOptions();
@@ -77,6 +81,7 @@ describe('widl-nan Unit Test - IDL dictionary', function() {
     assert.equal(option.offset.y, 20);
     assert.equal(option.color, 'red');
     assert.equal(option.flags, 1860);
+    assert.equal(option.others.switch, true);
 
     done();
   });

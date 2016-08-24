@@ -19,7 +19,19 @@ var extractAllReferenceInterfaceTypeForDictionary = function (dic, refTypeMap) {
   return interfaceArray;
 };
 
+var extractAllReferenceDictionaryTypeForDictionary = function (dic, refTypeMap) {
+  var dictionaryArray = [];
+  dic.members.forEach(member => {
+    if (member.type == 'field' && isDictionary(member.idlType, refTypeMap)) {
+      dictionaryArray.push(member.idlType.idlType);
+    }
+  });
+  return dictionaryArray;
+};
+
+
 var allForeignInterfaceTypes = extractAllReferenceInterfaceTypeForDictionary(it, it.refTypeMap);
+var allForeignDictionaryTypes = extractAllReferenceDictionaryTypeForDictionary(it, it.refTypeMap);
 }}
 
 
@@ -32,6 +44,10 @@ var allForeignInterfaceTypes = extractAllReferenceInterfaceTypeForDictionary(it,
 {{~allForeignInterfaceTypes :p:i}}
 #include "{{=classNameToFileName(p)}}.h"
 #include "gen/nan__{{=classNameToFileName(p)}}.h"
+{{~}}
+
+{{~allForeignDictionaryTypes :p:i}}
+#include "gen/{{=classNameToFileName(p)}}.h"
 {{~}}
 
 class {{=dictionaryClassName}} : public WIDLDictionaryBase {
@@ -100,6 +116,18 @@ var extraMacroType = convertIDLType2ExtractMacro(p.idlType, it.refTypeMap);
     auto nan_wrapper_obj = Nan::ObjectWrap::Unwrap<Nan{{=interfaceType}}>(obj);
     nan_wrapper_obj->Copy{{=interfaceType}}Impl(value);
     SetMember("{{=memberName}}", obj);
+  }
+{{?? p.type === 'field' && (isDictionary(p.idlType, it.refTypeMap))}}
+
+{{var dictionaryType = p.idlType.idlType;}}
+
+  {{=dictionaryType}} get_{{=memberName}}() const {
+    auto value = GetMember("{{=memberName}}");
+    return value->ToObject();
+  }
+
+  void set_{{=memberName}}(const {{=dictionaryType}}& value) {
+    SetMember("{{=memberName}}", value.GetObject());
   }
 
 {{?}}

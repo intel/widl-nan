@@ -36,6 +36,7 @@ class Painter {
   }
 
  private:
+  bool switch_;
   Point options_pt_;
   std::string options_color_;
   std::string options_subscript_;
