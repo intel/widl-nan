@@ -10,11 +10,16 @@ interface Point {
   attribute long y;
 };
 
+dictionary OtherOptions {
+    required boolean switch;
+};
+
 dictionary PaintOptions {
   Point offset;
   DOMString? color = "black";
   DOMString? subscript = null;
   required short flags;
+  OtherOptions others;
 };
 
 [

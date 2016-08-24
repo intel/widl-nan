@@ -21,10 +21,13 @@ Painter& Painter::operator = (const Painter& rhs) {
 
 PaintOptions Painter::get_options() const {
   PaintOptions options;
+  OtherOptions others;
+  others.set_switch(switch_);
   options.set_offset(options_pt_);
   options.set_color(options_color_);
   options.set_subscript(options_subscript_);
   options.set_flags(options_flags_);
+  options.set_others(others);
   return options;
 }
 
@@ -36,6 +39,7 @@ void Painter::drawText(const std::string& text, const PaintOptions& options) {
   options_color_ = options.get_color();
   options_subscript_ = options.get_subscript();
   options_flags_ = options.get_flags();
+  switch_ = options.get_others().get_switch();
 }
 
 PaintOptions Painter::getFactoryOptions() {
