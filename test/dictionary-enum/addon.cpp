@@ -4,7 +4,6 @@
 
 void initModule(v8::Local<v8::Object> exports) {
   NanComputingDeviceNetwork::Init(exports);
-
 }
 
 NODE_MODULE(testAttributes, initModule);

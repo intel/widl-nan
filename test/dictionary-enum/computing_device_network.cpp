@@ -10,7 +10,8 @@ ComputingDeviceNetwork::~ComputingDeviceNetwork() {
   // TODO(widl-nan): do cleanup if necessary
 }
 
-ComputingDeviceNetwork& ComputingDeviceNetwork::operator = (const ComputingDeviceNetwork& rhs) {
+ComputingDeviceNetwork& ComputingDeviceNetwork::operator = (
+    const ComputingDeviceNetwork& rhs) {
   if (&rhs != this) {
     // TODO(widl-nan): copy members from rhs
   }
