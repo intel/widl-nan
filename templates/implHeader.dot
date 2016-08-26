@@ -23,12 +23,17 @@ var callback = extractAllCallbackMethod(it);
 var hasCallback = callback.methods.length > 0;
 
 var foreignInterfaces = extractAllReferenceInterfaceType(it, it.refTypeMap);
+var foreignDictionaries = extractAllReferenceDictionaryType(it, it.refTypeMap);
 }}
 
 {{~foreignInterfaces.interfaceArray :interface}}
 {{? interface.name != it.name}}
 #include "{{=classNameToFileName(interface.name)}}.h"
 {{?}}
+{{~}}
+
+{{~foreignDictionaries.interfaceArray :dictionary}}
+#include "gen/{{=classNameToFileName(dictionary.name)}}.h"
 {{~}}
 
 {{? hasCallback}}
