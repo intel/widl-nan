@@ -3,6 +3,7 @@
 {{#def.extractV8Value}}
 {{#def.dictionary}}
 {{#def.interface}}
+{{#def.enum}}
 
 {{
 var dictionaryClassName = it.name;
@@ -40,6 +41,8 @@ var allForeignDictionaryTypes = extractAllReferenceDictionaryTypeForDictionary(i
 
 #include "gen/generator_helper.h"
 #include "gen/widl_dictionary_helper.h"
+
+#include <string>
 
 {{~allForeignInterfaceTypes :p:i}}
 #include "{{=classNameToFileName(p)}}.h"
@@ -129,6 +132,12 @@ var extraMacroType = convertIDLType2ExtractMacro(p.idlType, it.refTypeMap);
   void set_{{=memberName}}(const {{=dictionaryType}}& value) {
     SetMember("{{=memberName}}", value.GetObject());
   }
+
+{{?? p.type === 'field' && (isEnumType(p.idlType, it.refTypeMap)) }}
+
+  std::string get_{{=memberName}}() const {return EXTRACT_v8_string(GetMember("{{=memberName}}")); }
+  void set_{{=memberName}}(const std::string& value) { SetMember("{{=memberName}}", value); }
+
 
 {{?}}
 
