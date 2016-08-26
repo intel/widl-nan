@@ -1,0 +1,29 @@
+// Copyright (c) 2016 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a MIT-style license that can be
+// found in the LICENSE file.
+
+enum ComputingDeviceType {
+  "mainframe",
+  "desktop",
+  "laptop",
+  "tablet",
+  "phone"
+};
+
+dictionary NodeAttr {
+  required DOMString name;
+  double quantity;
+  ComputingDeviceType type;
+};
+
+[
+Constructor
+]
+interface ComputingDeviceNetwork {
+  readonly attribute DOMString name;
+  readonly attribute double quantity;
+  readonly attribute ComputingDeviceType type;
+
+  void addNode(NodeAttr node);
+  NodeAttr getLastNode();
+};
