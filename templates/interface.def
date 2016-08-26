@@ -18,7 +18,7 @@ var extractAllReferenceInterfaceType = function(def, refTypeMap) {
   };
 
   function processType(entity) {
-    if (isInterface(entity.idlType, refTypeMap) || isDictionary(entity.idlType, refTypeMap)) {
+    if (isInterface(entity.idlType, refTypeMap)) {
       var typeName = entity.idlType.idlType;
       var interfaceDef = refTypeMap[typeName];
       if (! result.interfaces[typeName]) {
