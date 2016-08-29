@@ -7,8 +7,8 @@
   var generateMethod = isFirstMethodInOverloadList(it, p, i);
 }}
 
-{{? generateMethod && p.static === false }}
-  Nan::SetPrototypeMethod(tpl, "{{=p.name}}", {{=p.name}});
+{{? generateMethod && p.static === true }}
+  Nan::SetMethod(function, "{{=p.name}}", {{=p.name}});
 {{?}}
 
 {{?}}{{~}}

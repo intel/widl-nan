@@ -58,6 +58,10 @@ void Nan{{=it.name}}::Init(v8::Local<v8::Object> exports) {
 
   auto function = tpl->GetFunction();
 
+{{#def.nanCxxImplStaticMethodInitList}}
+
+{{#def.nanCxxImplStaticPropertyInitList}}
+
 {{#def.nanCxxImplConstantInitList}}
 
   constructor.Reset(function);

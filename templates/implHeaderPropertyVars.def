@@ -2,7 +2,7 @@
 
 {{#def.idlType}}
 
-{{? p.type === 'attribute' }}
+{{? p.type === 'attribute' && p.static === false }}
   {{=idlType2CxxType(p.idlType, it.refTypeMap)}} {{=p.name}}_;
 {{?}}
 {{~}}

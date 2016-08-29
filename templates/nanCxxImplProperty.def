@@ -14,11 +14,18 @@
 
 {{
   var str = getToLocalCheckedString(p.idlType, it.refTypeMap);
+  var isStaticProperty = (p.static === true);
+  var functionCallPrefix = 'myself->impl_->';
+  if ( isStaticProperty ) {
+    functionCallPrefix = it.name + '::';
+  }
 }}
 
 NAN_GETTER({{=className}}::{{=p.name}}Getter) {
+{{? !isStaticProperty }}
   auto myself = ObjectWrap::Unwrap<{{=className}}>(info.Holder());
-  auto impl_val = myself->impl_->get_{{=p.name}}();
+{{?}}
+  auto impl_val = {{=functionCallPrefix}}get_{{=p.name}}();
 
 {{
   var enumCheck = isEnumType(p.idlType, it.refTypeMap);
@@ -50,7 +57,9 @@ NAN_GETTER({{=className}}::{{=p.name}}Getter) {
 
 {{? ! p.readonly }}
 NAN_SETTER({{=className}}::{{=p.name}}Setter) {
+{{? !isStaticProperty }}
   auto myself = ObjectWrap::Unwrap<{{=className}}>(info.Holder());
+{{?}}
   auto v8_value = {{=extractArgument(p.idlType, it.refTypeMap)}}(value);
 
 {{
@@ -63,7 +72,7 @@ NAN_SETTER({{=className}}::{{=p.name}}Setter) {
   // Valid enum values for parameter info{{=j}}, original IDL type: {{=enumName}}
   const char* VALID_ENUM_{{=(enumName.toUpperCase())}}_INFO[] = { {{=buildValidEnumValuesList(enumDef)}} };
   if (IsEnumValueValid(v8_value, VALID_ENUM_{{=(enumName.toUpperCase())}}_INFO)) {
-    myself->impl_->set_{{=p.name}}(v8_value);
+    {{=functionCallPrefix}}set_{{=p.name}}(v8_value);
   } else {
     // TODO: modify nanCxxImplProperty.def to handle this case
   }
@@ -71,9 +80,9 @@ NAN_SETTER({{=className}}::{{=p.name}}Setter) {
   // Extract data from the JavaScript object
   // First, convert to impl {{=p.idlType.idlType}} pointer
   auto impl_value = *(ObjectWrap::Unwrap<Nan{{=p.idlType.idlType}}>(v8_value)->{{=generateGetImplMethodName(p.idlType.idlType)}}());
-  myself->impl_->set_{{=p.name}}(impl_value);
+  {{=functionCallPrefix}}set_{{=p.name}}(impl_value);
 {{?? true}}
-  myself->impl_->set_{{=p.name}}(v8_value);
+  {{=functionCallPrefix}}set_{{=p.name}}(v8_value);
 {{?}}
 
 }

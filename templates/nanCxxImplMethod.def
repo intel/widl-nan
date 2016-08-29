@@ -20,6 +20,14 @@ var hasCallback = callback.methods.length > 0;
 {{? p.type === 'operation' }}
 
 {{
+  var unwrapStr = 'auto myself = ObjectWrap::Unwrap<' + className + '>(info.Holder());';
+  var functionCallPrefix = 'myself->impl_->';
+  var isStaticMethod = (p.static === true);
+  if ( isStaticMethod ) {
+    functionCallPrefix = it.name + '::';
+    unwrapStr = '';
+  }
+
   var generateMethod = isFirstMethodInOverloadList(it, p, i);
   var overloadList = it.operationMap[p.name];
 
@@ -33,8 +41,8 @@ var hasCallback = callback.methods.length > 0;
 {{? generateMethod}}
 
 NAN_METHOD({{=className}}::{{=methodName}}) {
-  // Nan::HandleScope scope;
-  auto myself = ObjectWrap::Unwrap<{{=className}}>(info.Holder());
+
+{{=unwrapStr}}
 
   info.GetReturnValue().Set(Nan::Undefined());
 
@@ -108,37 +116,37 @@ var argStr = args.join(', ');
 
 {{? method.idlType.generic === 'Promise' }}
     // Return promise
-    myself->impl_->SetJavaScriptThis(info.This());
-    auto promise = myself->impl_->{{=methodName}}({{=argStr}});
+    {{=functionCallPrefix}}SetJavaScriptThis(info.This());
+    auto promise = {{=functionCallPrefix}}{{=methodName}}({{=argStr}});
     info.GetReturnValue().Set(promise);
 {{?? method.idlType.idlType === 'void' }}
     // Return type is void
-    myself->impl_->{{=methodName}}({{=argStr}});
+    {{=functionCallPrefix}}{{=methodName}}({{=argStr}});
     info.GetReturnValue().Set(Nan::Undefined());
 {{?? method.idlType.idlType === 'String' || method.idlType.idlType === 'DOMString' }}
     // Return type is string
-    auto value = myself->impl_->{{=methodName}}({{=argStr}});
+    auto value = {{=functionCallPrefix}}{{=methodName}}({{=argStr}});
     info.GetReturnValue().Set(Nan::New(value).ToLocalChecked());
 {{?? method.idlType.idlType === 'ArrayBuffer' }}
     // Return type is ArrayBuffer
-    ArrayBuffer arrayBuffer = myself->impl_->{{=methodName}}({{=argStr}});
+    ArrayBuffer arrayBuffer = {{=functionCallPrefix}}{{=methodName}}({{=argStr}});
     v8::Local<v8::Object> value;
     if (Nan::NewBuffer(arrayBuffer.data, arrayBuffer.size).ToLocal(&value))
       info.GetReturnValue().Set(value);
 {{?? isInterface(method.idlType, it.refTypeMap)}}
     // Return type is an interface object
-    auto implObj = myself->impl_->{{=methodName}}({{=argStr}});
+    auto implObj = {{=functionCallPrefix}}{{=methodName}}({{=argStr}});
 {{ var retType = method.idlType.idlType; }}
     auto value = Nan{{=retType}}::NewInstance();
     ObjectWrap::Unwrap<Nan{{=retType}}>(value)->Set{{=retType}}Impl(implObj);
     info.GetReturnValue().Set(value);
 {{?? isDictionary(method.idlType, it.refTypeMap)}}
     // Return type is a dictionary object
-    auto value = myself->impl_->{{=methodName}}({{=argStr}});
+    auto value = {{=functionCallPrefix}}{{=methodName}}({{=argStr}});
     info.GetReturnValue().Set(static_cast<v8::Local<v8::Object>>(value));
 {{?? true }}
     // Primitive types (int, double ...)
-    auto value = myself->impl_->{{=methodName}}({{=argStr}});
+    auto value = {{=functionCallPrefix}}{{=methodName}}({{=argStr}});
     info.GetReturnValue().Set(Nan::New(value));
 {{?}}
 

@@ -1,9 +1,10 @@
 {{~ it.members :p:i }}
-{{? p.type === 'attribute' && p.static === false }}
+{{? p.type === 'attribute' && p.static === true }}
 {{
 var readAccessStr = p.readonly ? 'v8::ReadOnly' : 'v8::None';
 }}
-  Nan::SetAccessor(tpl->InstanceTemplate(), Nan::New("{{=p.name}}").ToLocalChecked(),
+  Nan::SetAccessor(static_cast<v8::Local<v8::Object>>(function),
+      Nan::New("{{=p.name}}").ToLocalChecked(),
       {{=p.name}}Getter,
       {{? !p.readonly }}{{=p.name}}Setter{{?? true}}nullptr{{?}},
       v8::Local<v8::Value>(),

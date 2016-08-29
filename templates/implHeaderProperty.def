@@ -1,5 +1,5 @@
 {{~ it.members :p:i }}
-{{? p.type === 'attribute' }}
+{{? p.type === 'attribute' && p.static === false }}
 
 {{#def.idlType}}
 {{var propertyType = idlType2CxxType(p.idlType, it.refTypeMap);}}

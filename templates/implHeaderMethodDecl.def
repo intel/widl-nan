@@ -4,6 +4,13 @@
 {{#def.returnType}}
 {{#def.argument}}
 
-  {{=idlType2CxxReturnType(p.idlType, it.refTypeMap)}} {{=p.name}}({{=generateParameterList(p, it.refTypeMap)}});
+{{
+var staticPrefix = '';
+if (p.static === true) {
+  staticPrefix = 'static ';
+}
+}}
+
+  {{=staticPrefix}}{{=idlType2CxxReturnType(p.idlType, it.refTypeMap)}} {{=p.name}}({{=generateParameterList(p, it.refTypeMap)}});
 {{?}}
 {{~}}

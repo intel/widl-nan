@@ -99,6 +99,8 @@ class {{=it.name}} {
 
  public:
 {{#def.implHeaderProperty}}
+{{#def.implHeaderStaticProperty}}
+
 {{#def.implHeaderMethodDecl}}
 
   void SetJavaScriptThis(v8::Local<v8::Object> obj) {
