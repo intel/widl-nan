@@ -1,0 +1,18 @@
+{{~ it.members :p:i }}
+{{? p.type === 'attribute' && p.static === true }}
+
+{{#def.idlType}}
+{{var propertyType = idlType2CxxType(p.idlType, it.refTypeMap);}}
+
+  static {{=propertyType}} get_{{=p.name}}() {
+  }
+
+{{? ! p.readonly }}
+
+  static void set_{{=p.name}}(const {{=propertyType}}& new_value) {
+  }
+
+{{?}}
+
+{{?}}
+{{~}}

@@ -1,0 +1,28 @@
+// Copyright (c) 2016 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a MIT-style license that can be
+// found in the LICENSE file.
+
+[
+Constructor,
+Constructor(long x, long y)
+]
+interface Point {
+  attribute long x;
+  attribute long y;
+};
+
+[
+Constructor,
+Constructor(Point pt1, Point pt2),
+Constructor(long x1, long y1, long x2, long y2)
+]
+interface Line {
+  attribute Point startPt;
+  attribute Point endPt;
+  readonly attribute Point centerPt;
+
+  static readonly attribute long pointsInALine;
+  static attribute DOMString createdBy;
+  static Point intersectionPoint(Line lineA, Line lineB);
+  void offset(Point pt);
+};
