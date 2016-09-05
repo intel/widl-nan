@@ -7,7 +7,7 @@
 {{#def.extractV8Value}}
 {{#def.callback}}
 {{#def.overload}}
-
+{{#def.array}}
 
 {{
 var callback = extractAllCallbackMethod(it);
@@ -144,6 +144,9 @@ var argStr = args.join(', ');
     // Return type is a dictionary object
     auto value = {{=functionCallPrefix}}{{=methodName}}({{=argStr}});
     info.GetReturnValue().Set(static_cast<v8::Local<v8::Object>>(value));
+{{?? isArray(method.idlType) }}
+    auto value = myself->impl_->{{=methodName}}({{=argStr}});
+    info.GetReturnValue().Set(static_cast<v8::Local<v8::Array>>(value));
 {{?? true }}
     // Primitive types (int, double ...)
     auto value = {{=functionCallPrefix}}{{=methodName}}({{=argStr}});

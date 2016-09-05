@@ -290,6 +290,8 @@ const widl2NanGenerator = function() {
                         _packEmptyLines(dots.helperHeaderWIDLDictionaryBase({}))));
     all.push(_writeFile(path.join(dirName, 'promise-helper.h'),
                         _packEmptyLines(dots.helperHeaderPromise({}))));
+    all.push(_writeFile(path.join(dirName, 'array_helper.h'),
+                        _packEmptyLines(dots.helperHeaderArray({}))));
     all.push(_writeFile(path.join(dirName, 'thread-event-helper.h'),
                         _packEmptyLines(dots.helperHeaderThreadEvent({}))));
     all.push(_writeFile(path.join(dirName, 'thread-event-helper.cpp'),

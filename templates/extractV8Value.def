@@ -12,6 +12,8 @@ var convertIDLType2ExtractMacro = function (idlType, refTypeMap, callback) {
     type = 'function';
   } else if (isInterface(idlType, refTypeMap) || isDictionary(idlType, refTypeMap)) {
     type = 'object';
+  } else if (type === 'v8::Local<v8::Array>') {
+    type = 'array';
   }
   return type;
 };

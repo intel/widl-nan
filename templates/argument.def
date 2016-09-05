@@ -26,6 +26,11 @@ var generateParameterList = function (method, refTypeMap){
   return returnList.join(', ');
 };
 
+var generateImplParameterList = function (method, refTypeMap) {
+  var str = generateParameterList(method, refTypeMap);
+  return str.replace('v8::Local<v8::Array>', 'ArrayHelper');
+};
+
 var generateArgvList = function(method, padding) {
   padding = padding || '';
   var returnList = [];

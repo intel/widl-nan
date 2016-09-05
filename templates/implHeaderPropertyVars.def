@@ -1,8 +1,9 @@
+{{#def.propertyReturnType}}
+
 {{~ it.members :p:i }}
 
-{{#def.idlType}}
-
 {{? p.type === 'attribute' && p.static === false }}
-  {{=idlType2CxxType(p.idlType, it.refTypeMap)}} {{=p.name}}_;
+  {{=idlType2CxxImplPrivateDataMemberType(p.idlType, it.refTypeMap)}} {{=p.name}}_;
 {{?}}
+
 {{~}}
