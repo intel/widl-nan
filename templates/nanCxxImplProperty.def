@@ -8,6 +8,7 @@
 {{#def.returnType}}
 {{#def.buildValidEnumValuesList}}
 {{#def.extractV8Value}}
+{{#def.array}}
 
 {{~ it.members :p:i }}
 {{? p.type === 'attribute' }}
@@ -44,11 +45,13 @@ NAN_GETTER({{=className}}::{{=p.name}}Getter) {
 {{?? isInterface(p.idlType, it.refTypeMap)}}
   // Returns an object to JavaScript
 {{ var retType = p.idlType.idlType; }}
-    auto value = Nan{{=retType}}::NewInstance();
-    ObjectWrap::Unwrap<Nan{{=retType}}>(value)->Copy{{=retType}}Impl(impl_val);
+  auto value = Nan{{=retType}}::NewInstance();
+  ObjectWrap::Unwrap<Nan{{=retType}}>(value)->Copy{{=retType}}Impl(impl_val);
   info.GetReturnValue().Set(value);
 {{?? isDictionary(p.idlType, it.refTypeMap)}}
   info.GetReturnValue().Set(static_cast<v8::Local<v8::Object>>(impl_val));
+{{?? isArray(p.idlType) }}
+  info.GetReturnValue().Set(static_cast<v8::Local<v8::Array>>(impl_val));
 {{?? true}}
   info.GetReturnValue().Set(Nan::New(impl_val){{=str}});
 {{?}}

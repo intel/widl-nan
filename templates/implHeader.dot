@@ -17,6 +17,7 @@
 #include <string>
 
 #include "gen/generator_helper.h"
+#include "gen/array_helper.h"
 
 {{
 var callback = extractAllCallbackMethod(it);

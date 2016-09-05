@@ -1,0 +1,162 @@
+#ifndef _WIDLNAN_ARRAY_HELPER_H_
+#define _WIDLNAN_ARRAY_HELPER_H_
+
+#include <node.h>
+#include <v8.h>
+#include <nan.h>
+
+#include <string>
+
+#include "generator_helper.h"
+
+class ArrayHelper {
+ public:
+  ArrayHelper() {
+    v8_array_ = v8::Array::New(v8::Isolate::GetCurrent());
+  }
+
+  explicit ArrayHelper(uint32_t length) {
+    v8_array_ = v8::Array::New(v8::Isolate::GetCurrent(), length);
+  }
+
+  ~ArrayHelper() {}
+
+  ArrayHelper(const ArrayHelper& rhs) {
+    v8_array_ = rhs.v8_array_;
+  }
+
+  ArrayHelper(v8::Local<v8::Array> source) {
+    v8_array_ = source;
+  }
+
+  operator v8::Local<v8::Array> () const { return v8_array_; }
+
+  void CopyFrom(v8::Local<v8::Array> source) {
+    v8_array_ = v8::Array::New(v8::Isolate::GetCurrent(), source->Length());
+    for (uint32_t i = 0 ; i < source->Length() ; ++i) {
+      v8_array_->Set(i, source->CloneElementAt(i));
+    }
+  }
+
+  ArrayHelper& operator = (const ArrayHelper& rhs) {
+    if (this != &rhs) {
+      v8_array_ = rhs.v8_array_;
+    }
+    return *this;
+  }
+
+  uint32_t Length() const { return v8_array_->Length(); }
+  v8::Local<v8::Value> CloneElementAt(uint32_t index) const { return v8_array_->CloneElementAt(index); }
+
+  void Set(uint32_t index, const std::string& elem) { v8_array_->Set(index, Nan::New(elem.c_str()).ToLocalChecked()); }
+  void Set(uint32_t index, const char* elem) { v8_array_->Set(index, Nan::New(elem).ToLocalChecked()); }
+  void Set(uint32_t index, v8::Local<v8::Value> elem) { v8_array_->Set(index, elem); }
+  template <typename T> void SetT(uint32_t index, const T& elem) {v8_array_->Set(index, Nan::New(elem)); }
+
+  bool GetBoolean(uint32_t index) const  { return EXTRACT_v8_bool(v8_array_->Get(index)); }
+  int8_t  GetInt8_t(uint32_t index) const  { return EXTRACT_v8_int8_t(v8_array_->Get(index)); }
+  int16_t GetInt16_t(uint32_t index) const  { return EXTRACT_v8_int16_t(v8_array_->Get(index)); }
+  int32_t GetInt32_t(uint32_t index) const  { return EXTRACT_v8_int32_t(v8_array_->Get(index)); }
+  uint8_t  GetUInt8_t(uint32_t index) const  { return EXTRACT_v8_uint8_t(v8_array_->Get(index)); }
+  uint16_t GetUInt16_t(uint32_t index) const  { return EXTRACT_v8_uint16_t(v8_array_->Get(index)); }
+  uint32_t GetUInt32_t(uint32_t index) const  { return EXTRACT_v8_uint32_t(v8_array_->Get(index)); }
+  float GetFloat(uint32_t index) const  { return EXTRACT_v8_double(v8_array_->Get(index)); }
+  double GetDouble(uint32_t index) const  { return EXTRACT_v8_double(v8_array_->Get(index)); }
+  std::string GetString(uint32_t index) const { return EXTRACT_v8_string(v8_array_->Get(index)); }
+  v8::Local<v8::Value> GetValue(uint32_t index) const;
+  ArrayBuffer GetArrayBuffer(uint32_t index) const  { return EXTRACT_v8_ArrayBuffer(v8_array_->Get(index)); }
+  v8::Local<v8::Object> GetObject(uint32_t index) const  { return EXTRACT_v8_object(v8_array_->Get(index)); }
+  v8::Local<v8::Array> GetArray(uint32_t index) const { return EXTRACT_v8_array(v8_array_->Get(index)); }
+  v8::Local<v8::Function> GetFunction(uint32_t index) const { return EXTRACT_v8_function(v8_array_->Get(index)); }
+
+  static ArrayHelper Clone(const ArrayHelper& rhs) {
+    ArrayHelper tmp;
+    tmp.CopyFrom(rhs);
+    return tmp;
+  }
+
+  template <typename IterType>
+  void FromStringArray(IterType first, IterType last) {
+    v8_array_ = v8::Array::New(v8::Isolate::GetCurrent());
+    for ( uint32_t i = 0 ; first != last ; ++ first, ++ i) {
+      this->Set(i, *first);
+    }
+  }
+
+  template <typename IterType>
+  void ToStringArray(IterType first, IterType last) const {
+    for ( uint32_t i = 0 ; first != last ; ++ first, ++ i ) {
+      *first = this->GetString(i);
+    }
+  }
+
+  template <typename IterType>
+  void ToDoubleArray(IterType first, IterType last) const {
+    for ( uint32_t i = 0 ; first != last ; ++ first, ++ i ) {
+      *first = this->GetDouble(i);
+    }
+  }
+
+  template <typename IterType>
+  void ToIntArray(IterType first, IterType last) const {
+    for ( uint32_t i = 0 ; first != last ; ++ first, ++ i ) {
+      *first = this->GetInt32_t(i);
+    }
+  }
+
+  template <typename IterType>
+  void FromArrayT(IterType first, IterType last) {
+    v8_array_ = v8::Array::New(v8::Isolate::GetCurrent());
+    for ( uint32_t i = 0 ; first != last ; ++ first) {
+      this->SetT(i++, *first);
+    }
+  }
+
+  template <typename T>
+  void FromArrayT(const T* ptr, uint32_t length) {
+    v8_array_ = v8::Array::New(v8::Isolate::GetCurrent());
+    for ( uint32_t i = 0 ; i < length ; ++ i ) {
+      this->SetT(i, ptr[i]);
+    }
+  }
+
+ private:
+  mutable v8::Local<v8::Array> v8_array_;
+};
+
+class ArrayHelperStorage {
+ public:
+  ArrayHelperStorage() {
+  }
+
+  ArrayHelperStorage(const ArrayHelper& rhs) {
+    FromArrayHelper(rhs);
+  }
+
+  void SaveArray(v8::Local<v8::Array> array) {
+    array_.Reset(array);
+  }
+
+  operator ArrayHelper () const {
+    auto array = Nan::New(array_);
+    ArrayHelper helper(array);
+    return helper;
+  }
+
+  void FromArrayHelper (const ArrayHelper& helper) {
+    array_.Reset(static_cast<v8::Local<v8::Array>>(helper));
+  }
+
+  ArrayHelperStorage& operator = (const ArrayHelper& rhs) {
+    FromArrayHelper(rhs);
+  }
+
+  void FreeArray() {
+    array_.Reset();
+  }
+
+ private:
+  Nan::Persistent<v8::Array> array_;
+};
+
+#endif  // _WIDLNAN_ARRAY_HELPER_H_

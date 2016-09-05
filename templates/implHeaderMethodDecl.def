@@ -11,6 +11,7 @@ if (p.static === true) {
 }
 }}
 
-  {{=staticPrefix}}{{=idlType2CxxReturnType(p.idlType, it.refTypeMap)}} {{=p.name}}({{=generateParameterList(p, it.refTypeMap)}});
+  {{=staticPrefix}}{{=idlType2CxxImplReturnType(p.idlType, it.refTypeMap)}} {{=p.name}}({{=generateImplParameterList(p, it.refTypeMap)}});
+
 {{?}}
 {{~}}

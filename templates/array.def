@@ -1,0 +1,7 @@
+{{
+
+var isArray = function (idlType) {
+  return (idlType && idlType.array === 1) || (idlType && typeof idlType.idlType === 'object' && (idlType.sequence || idlType.generic === 'sequence'));
+};
+
+}}
