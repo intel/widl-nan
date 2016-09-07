@@ -26,6 +26,9 @@ var idlType2CxxReturnType = function (idlType, refTypeMap) {
   if (isInterface(idlType, refTypeMap)) {
     type += '*';
   }
+  if (isArray(idlType)) {
+    type = 'ArrayHelper';
+  }
   return type;
 };
 

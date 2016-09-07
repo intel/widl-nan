@@ -3,7 +3,7 @@
 {{~ it.members :p:i }}
 
 {{? p.type === 'attribute' && p.static === false }}
-  {{=idlType2CxxImplPrivateDataMemberType(p.idlType, it.refTypeMap)}} {{=p.name}}_;
+  {{=idlType2CxxPropertyPrivateDataMemberType(p.idlType, it.refTypeMap)}} {{=p.name}}_;
 {{?}}
 
 {{~}}

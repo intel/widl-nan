@@ -3,7 +3,7 @@
 {{~ it.members :p:i }}
 {{? p.type === 'attribute' && p.static === false }}
 
-{{var propertyType = idlType2CxxImplReturnType(p.idlType, it.refTypeMap);}}
+{{var propertyType = idlType2CxxPropertyReturnType(p.idlType, it.refTypeMap);}}
 
   {{=propertyType}} get_{{=p.name}}() const {
     return this->{{=p.name}}_;

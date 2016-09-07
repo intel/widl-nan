@@ -1,17 +1,11 @@
-{{#def.idlType}}
+{{#def.returnType}}
 
 {{
 
-var idlType2CxxImplReturnType = function (idlType, refTypeMap) {
-  var type = idlType2CxxType(idlType, refTypeMap);
-  if (isArray(idlType)) {
-    type = 'ArrayHelper';
-  }
-  return type;
-};
+var idlType2CxxPropertyReturnType = idlType2CxxReturnType;
 
-var idlType2CxxImplPrivateDataMemberType = function (idlType, refTypeMap) {
-  var type = idlType2CxxImplReturnType(idlType, refTypeMap);
+var idlType2CxxPropertyPrivateDataMemberType = function (idlType, refTypeMap) {
+  var type = idlType2CxxPropertyReturnType(idlType, refTypeMap);
   if (type === 'ArrayHelper') {
     type = 'ArrayHelperStorage';
   }
