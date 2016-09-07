@@ -123,7 +123,6 @@ def do_cpp_lint(changeset, options, args):
   try:
     import cpplint
     import cpplint_chromium
-    import gcl
   except ImportError:
     sys.stderr.write("Can't find cpplint, please add your depot_tools "
                      "to PATH or PYTHONPATH\n")
@@ -168,18 +167,11 @@ def do_cpp_lint(changeset, options, args):
   if len(changeset) == 0:
     print 'changeset is empty except python files'
     return 0
-  # Following code is referencing depot_tools/gcl.py: CMDlint
-  # Process cpplints arguments if any.
+
   filenames = cpplint.ParseArguments(args + changeset)
 
-  white_list = gcl.GetCodeReviewSetting("LINT_REGEX")
-  if not white_list:
-    white_list = gcl.DEFAULT_LINT_REGEX
-  white_regex = re.compile(white_list)
-  black_list = gcl.GetCodeReviewSetting("LINT_IGNORE_REGEX")
-  if not black_list:
-    black_list = gcl.DEFAULT_LINT_IGNORE_REGEX
-  black_regex = re.compile(black_list)
+  white_regex = re.compile(r"(.*\.cpp|.*\.cc|.*\.h)")
+  black_regex = re.compile(r"$^")
   extra_check_functions = [cpplint_chromium.CheckPointerDeclarationWhitespace]
   # pylint: disable=W0212
   cpplint_state = cpplint._cpplint_state
