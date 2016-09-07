@@ -11,14 +11,13 @@ npm init
 ```
 ### Install widl-nan
 ```
-npm install --save ssh://git@github.com/otcshare/widl-nan.git
+npm install --save ssh://git@github.com/01org/widl-nan.git
 ```
-(TODO: Use name `widl-nan` after open sourced)
 ### Compile your Web IDL
 ```
 ./node_modules/.bin/widl-nan <your_widl_file>
 ```
-Check Web IDL examples under https://github.com/otcshare/widl-nan/tree/master/test, basically each supported feature has a test case.
+Check Web IDL examples under https://github.com/01org/widl-nan/tree/master/test, basically each supported feature has a test case.
 ### (Optional) Init helper files.
 ```
 ./node_modules/.bin/widl-nan -i
@@ -30,9 +29,6 @@ node-gyp rebuild
 ```
 
 # Contribution
-## Bug tracking system
-
-We're using [JIRA](https://crosswalk-project.org/jira) instead of github issues for tracking. Please report related bug and feature request under component **Node RealSense** with **[widl]** prefix. To avoid duplication, please check the exsiting bugs (filter https://crosswalk-project.org/jira/issues/?filter=14420) before reporting.
 
 ## Coding style guideline
 
@@ -41,13 +37,7 @@ We're following [Chromium coding style](https://chromium.googlesource.com/chromi
 ## Commit message guideline
 A comprehensive commit message will help reviewer to understand what your PR is trying to resolve. There are lots of article to share experience how to write a good commit message, please Google them or check any commit message on mature projects. For eg: https://cs.chromium.org/
 
-To close a related Jira issue, add a line with the format **BUG=XWALK-N** or **BUG=https://path/to/issue/XWALK-N**. Doing this will resolve the corresponding issue in Jira when the PR is merged.
-
-If a PR doesn't completely fix an issue, do not use the "BUG=" prefix, as the JIRA ticket would then be wrongly closed. A different prefix, such as **Related to: XWALK-N**, is fine and preferred over just stating the ticket number.
-
-If a PR fixes multiple issues, reference them on separate lines of the description, starting each with "BUG=".
-
-Note that although the prefix is "BUG=", this mechanism applies to features and tasks as well.
+To close a related issue, we highly suggest to use [Closing issues via commit messages](https://help.github.com/articles/closing-issues-via-commit-messages/) format, for eg: Fixes.
 
 # License
 
