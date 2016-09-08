@@ -2,7 +2,13 @@
 
 {{
 
-var idlType2CxxPropertyReturnType = idlType2CxxReturnType;
+var idlType2CxxPropertyReturnType = function (idlType, refTypeMap) {
+  var type = idlType2CxxType(idlType, refTypeMap);
+  if (isArray(idlType)) {
+    type = 'ArrayHelper';
+  }
+  return type;
+};
 
 var idlType2CxxPropertyPrivateDataMemberType = function (idlType, refTypeMap) {
   var type = idlType2CxxPropertyReturnType(idlType, refTypeMap);
