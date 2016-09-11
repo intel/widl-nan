@@ -9,10 +9,10 @@
   "keywords": [
     "TBD"
   ],
-  "homepage": "https://github.com/otcshare/widl-nan",
+  "homepage": "https://github.com/01org/widl-nan",
   "repository": {
     "type": "https",
-    "url": "https://github.com/otcshare/widl-nan"
+    "url": "https://github.com/01org/widl-nan"
   },
   "author": "Kenny Yuan <kaining.yuan@intel.com>",
   "license": "SEE LICENSE IN LICENSE",
