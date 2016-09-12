@@ -1,13 +1,19 @@
 {
   "name": "widl-nan",
-  "version": "0.0.1",
-  "description": "Generate C++ NAN node-addon by Web IDL",
+  "version": "0.1.0",
+  "description": "Auto generate native C++ addon source code by parsing Web IDL definition",
   "main": "index.js",
   "scripts": {
     "test": "mocha"
   },
   "keywords": [
-    "TBD"
+    "c++",
+    "native",
+    "addon",
+    "nan",
+    "node-gyp",
+    "webidl",
+    "webidl2"
   ],
   "homepage": "https://github.com/01org/widl-nan",
   "repository": {
