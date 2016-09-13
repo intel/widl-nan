@@ -2,14 +2,24 @@
 {{? p.type === 'attribute' && p.static === true }}
 
 {{#def.idlType}}
-{{var propertyType = idlType2CxxType(p.idlType, it.refTypeMap);}}
+{{
+var propertyType = idlType2CxxPropertyReturnType(p.idlType, it.refTypeMap);
+var ptrStr = '';
+var addrStr = '';
+if (isInterface(p.idlType, it.refTypeMap)) {
+  ptrStr = '*';
+  addrStr = '&';
+}
+}}
 
-  static {{=propertyType}} get_{{=p.name}}() {
+  static {{=propertyType}}{{=ptrStr}} get_{{=p.name}}() {
+    return {{=addrStr}}{{=p.name}}_;
   }
 
 {{? ! p.readonly }}
 
   static void set_{{=p.name}}(const {{=propertyType}}& new_value) {
+    {{=p.name}}_ = new_value;
   }
 
 {{?}}

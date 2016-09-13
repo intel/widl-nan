@@ -41,6 +41,7 @@ describe('widl-nan Unit Test - static attribute/method', function() {
     assert.equal(typeof x.intersectionPoint, 'undefined');
     assert.equal(typeof Line.prototype.intersectionPoint, 'undefined');
     assert.equal(typeof Line.intersectionPoint, 'function');
+    // eslint-disable-next-line new-cap
     var pt = Line.intersectionPoint(Line(0, 0, 200, 0), Line(120, 20, 120, -20));
     assert(pt instanceof Point);
     assert.equal(pt.x, 120);
@@ -54,6 +55,10 @@ describe('widl-nan Unit Test - static attribute/method', function() {
     assert.equal(typeof Line.prototype.pointsInALine, 'undefined');
     assert.equal(typeof Line.pointsInALine, 'number');
     assert.equal(Line.pointsInALine, 2);
+    Line.whateverPoint.x = 1989;
+    Line.whateverPoint.y = 2016;
+    assert.equal(Line.whateverPoint.x, 1989);
+    assert.equal(Line.whateverPoint.y, 2016);
     done();
   });
 });

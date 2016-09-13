@@ -27,8 +27,8 @@ class ContainerClass {
   ContainerClass& operator = (const ContainerClass& rhs);
 
  public:
-  MyClass get_embedded() const {
-    return this->embedded_;
+  MyClass* get_embedded() const {
+    return &this->embedded_;
   }
 
   double get_diameter() const {
@@ -41,7 +41,7 @@ class ContainerClass {
   }
 
  private:
-  MyClass embedded_;
+  mutable MyClass embedded_;
 
   double diameter_;
 };

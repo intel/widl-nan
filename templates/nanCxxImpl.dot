@@ -28,19 +28,30 @@
 
 Nan::Persistent<v8::Function> Nan{{=it.name}}::constructor;
 
+{{#def.nanCxxImplPropertyVarsDef}}
+
 {{? useImpl}}
 Nan{{=it.name}}::Nan{{=it.name}}()
-    : impl_(nullptr) {
+    : impl_(nullptr)
+    , owns_impl_(true) {
+
+{{#def.nanCxxImplPropertyVarsInit}}
 }
 
 Nan{{=it.name}}::~Nan{{=it.name}}() {
-  delete impl_;
+  if (owns_impl_) {
+    delete impl_;
+  }
+
+{{#def.nanCxxImplPropertyVarsRelease}}
 }
 {{?? true}}
 Nan{{=it.name}}::Nan{{=it.name}}() {
+{{#def.nanCxxImplPropertyVarsInit}}
 }
 
 Nan{{=it.name}}::~Nan{{=it.name}}() {
+{{#def.nanCxxImplPropertyVarsRelease}}
 }
 {{?}}
 

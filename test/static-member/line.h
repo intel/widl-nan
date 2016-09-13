@@ -9,6 +9,7 @@
 #include <string>
 
 #include "gen/generator_helper.h"
+#include "gen/array_helper.h"
 
 #include "point.h"
 
@@ -19,42 +20,52 @@ class Line {
   explicit Line(const Point& pt1, const Point& pt2);
 
   explicit Line(const int32_t& x1, const int32_t& y1,
-    const int32_t& x2, const int32_t& y2);
+      const int32_t& x2, const int32_t& y2);
 
   ~Line();
 
   Line& operator = (const Line& rhs);
 
  public:
-  Point get_startPt() const {
-    return this->startPt_;
+  Point* get_startPt() const {
+    return &this->startPt_;
   }
 
   void set_startPt(const Point& new_value) {
     this->startPt_ = new_value;
   }
 
-  Point get_endPt() const {
-    return this->endPt_;
+  Point* get_endPt() const {
+    return &this->endPt_;
   }
 
   void set_endPt(const Point& new_value) {
     this->endPt_ = new_value;
   }
 
-  Point get_centerPt() const {
-    return this->centerPt_;
+  Point* get_centerPt() const {
+    return &this->centerPt_;
   }
 
   static int32_t get_pointsInALine() {
-    return 2;
+    return pointsInALine_;
   }
 
   static std::string get_createdBy() {
+    // return createdBy_;
     return "";
   }
 
   static void set_createdBy(const std::string& new_value) {
+    // createdBy_ = new_value;
+  }
+
+  static Point* get_whateverPoint() {
+    return &whateverPoint_;
+  }
+
+  static void set_whateverPoint(const Point& new_value) {
+    whateverPoint_ = new_value;
   }
 
   static Point* intersectionPoint(const Line& lineA, const Line& lineB);
@@ -67,13 +78,18 @@ class Line {
   }
 
  private:
-  Point startPt_;
+  mutable Point startPt_;
 
-  Point endPt_;
+  mutable Point endPt_;
 
-  Point centerPt_;  // Should be calculated, ignore for now
+  mutable Point centerPt_;
 
-  Point offset_;
+  static int32_t pointsInALine_;
+
+  // Commented out since Chromium lint tool doesn't allow a static string member
+  // static std::string createdBy_;
+
+  static Point whateverPoint_;
 };
 
 #endif  // _LINE_H_

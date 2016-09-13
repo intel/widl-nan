@@ -1,0 +1,7 @@
+{{#def.interface}}
+
+{{~ it.members :p:i }}
+{{? p.type === 'attribute' && !p.static && isInterface(p.idlType, it.refTypeMap) }}
+  {{=p.name}}_.reset();
+{{?}}
+{{~}}

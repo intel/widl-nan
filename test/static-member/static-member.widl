@@ -23,6 +23,7 @@ interface Line {
 
   static readonly attribute long pointsInALine;
   static attribute DOMString createdBy;
+  static attribute Point whateverPoint;
   static Point intersectionPoint(Line lineA, Line lineB);
   void offset(Point pt);
 };

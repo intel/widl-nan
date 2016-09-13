@@ -30,7 +30,8 @@ class {{=nanClassName}} : public Nan::ObjectWrap {
 {{? useImpl}}
   {{=implClassName}}* {{=generateGetImplMethodName(implClassName)}}() { return impl_; }
   const {{=implClassName}}* {{=generateGetImplMethodName(implClassName)}}() const { return impl_; }
-  void {{=generateSetImplMethodName(implClassName)}}({{=implClassName}}* newObj) { delete impl_; impl_ = newObj; }
+  void {{=generateSetImplMethodName(implClassName)}}({{=implClassName}}* newObj) { delete impl_; impl_ = newObj; owns_impl_ = true; }
+  void {{=generateBorrowImplMethodName(implClassName)}}({{=implClassName}}* newObj) { impl_ = newObj; owns_impl_ = false; }
   void {{=generateCopyImplMethodName(implClassName)}}(const {{=implClassName}}& obj) { *impl_ = obj; }
 {{?}}
 
@@ -46,7 +47,10 @@ class {{=nanClassName}} : public Nan::ObjectWrap {
 {{? useImpl}}
  private:
   {{=implClassName}}* impl_;
+  bool owns_impl_;
 {{?}}
+
+{{#def.nanCxxHeaderPropertyVars}}
 
 };
 

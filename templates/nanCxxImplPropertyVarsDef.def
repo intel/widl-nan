@@ -1,0 +1,7 @@
+{{#def.interface}}
+
+{{~ it.members :p:i }}
+{{? p.type === 'attribute' && p.static && isInterface(p.idlType, it.refTypeMap) }}
+std::unique_ptr<Nan::Persistent<v8::Object>> Nan{{=it.name}}::{{=p.name}}_;
+{{?}}
+{{~}}

@@ -23,9 +23,13 @@
 }}
 
 NAN_GETTER({{=className}}::{{=p.name}}Getter) {
-{{? !isStaticProperty }}
+{{ var myself = isStaticProperty ? '' : 'myself->'; }}
+
+{{? isStaticProperty }}
+{{??}}
   auto myself = ObjectWrap::Unwrap<{{=className}}>(info.Holder());
 {{?}}
+
   auto impl_val = {{=functionCallPrefix}}get_{{=p.name}}();
 
 {{
@@ -43,11 +47,14 @@ NAN_GETTER({{=className}}::{{=p.name}}Getter) {
     // TODO: modify nanCxxImplProperty.def to handle this case
   }
 {{?? isInterface(p.idlType, it.refTypeMap)}}
-  // Returns an object to JavaScript
 {{ var retType = p.idlType.idlType; }}
-  auto value = Nan{{=retType}}::NewInstance();
-  ObjectWrap::Unwrap<Nan{{=retType}}>(value)->Copy{{=retType}}Impl(impl_val);
-  info.GetReturnValue().Set(value);
+  if (! {{=myself}}{{=p.name}}_) {
+    {{=myself}}{{=p.name}}_.reset(new Nan::Persistent<v8::Object>(Nan{{=retType}}::NewInstance()));
+  }
+  v8::Local<v8::Object> obj = Nan::New(*{{=myself}}{{=p.name}}_);
+  auto obj_ptr = ObjectWrap::Unwrap<Nan{{=retType}}>(obj);
+  obj_ptr->Borrow{{=retType}}Impl(impl_val);
+  info.GetReturnValue().Set(obj);
 {{?? isDictionary(p.idlType, it.refTypeMap)}}
   info.GetReturnValue().Set(static_cast<v8::Local<v8::Object>>(impl_val));
 {{?? isArray(p.idlType) }}

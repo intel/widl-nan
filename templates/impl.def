@@ -12,6 +12,10 @@ var generateSetImplMethodName = function (implClassName) {
   return 'Set' + implClassName + 'Impl';
 };
 
+var generateBorrowImplMethodName = function (implClassName) {
+  return 'Borrow' + implClassName + 'Impl';
+};
+
 var generateCopyImplMethodName = function (implClassName) {
   return 'Copy' + implClassName + 'Impl';
 };

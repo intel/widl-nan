@@ -2,6 +2,12 @@
 
 #include "line.h"
 
+int32_t Line::pointsInALine_ = 2;
+
+// std::string Line::createdBy_ = "";
+
+Point Line::whateverPoint_;
+
 Line::Line() {
   // TODO(widl-nan): init your members
 }
@@ -33,6 +39,5 @@ Point* Line::intersectionPoint(const Line& lineA, const Line& lineB) {
 }
 
 void Line::offset(const Point& pt) {
-  offset_ = pt;
 }
 

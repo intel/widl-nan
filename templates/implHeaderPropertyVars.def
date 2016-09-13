@@ -2,8 +2,19 @@
 
 {{~ it.members :p:i }}
 
-{{? p.type === 'attribute' && p.static === false }}
-  {{=idlType2CxxPropertyPrivateDataMemberType(p.idlType, it.refTypeMap)}} {{=p.name}}_;
+{{
+var staticStr = '';
+if (p.static) {
+  staticStr = 'static ';
+}
+var mutableStr = '';
+if (! p.static && isInterface(p.idlType, it.refTypeMap)) {
+  mutableStr = 'mutable ';
+}
+}}
+
+{{? p.type === 'attribute' }}
+  {{=staticStr}}{{=mutableStr}}{{=idlType2CxxPropertyPrivateDataMemberType(p.idlType, it.refTypeMap)}} {{=p.name}}_;
 {{?}}
 
 {{~}}

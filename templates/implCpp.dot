@@ -13,6 +13,8 @@ var constructors = extractConstructors(it);
 
 #include "{{=headerFileName}}.h"
 
+{{#def.implCppPropertyVarsDef}}
+
 {{? constructors.length }}
 
 {{~ constructors :p:i }}
