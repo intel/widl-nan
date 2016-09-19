@@ -1,0 +1,41 @@
+// Copyright (c) 2016 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a MIT-style license that can be
+// found in the LICENSE file.
+//
+
+// https://www.w3.org/TR/WebIDL/#idl-stringifiers
+// W3C Candidate Recommendation 19 April 2012
+
+[Constructor]
+interface Student {
+  attribute unsigned long id;
+  stringifier attribute DOMString name;
+};
+
+[Constructor]
+interface Student2 {
+  attribute unsigned long id;
+  attribute DOMString? familyName;
+  attribute DOMString givenName;
+
+  stringifier DOMString ();
+};
+
+[Constructor]
+interface Student3 {
+  attribute unsigned long id;
+  attribute DOMString? familyName;
+  attribute DOMString givenName;
+
+  stringifier;
+};
+
+// Wrong case: multiple stringifier defined
+[Constructor]
+interface Student4 {
+  attribute unsigned long id;
+  attribute DOMString? familyName;
+  stringifier attribute DOMString givenName;
+
+  stringifier;
+};

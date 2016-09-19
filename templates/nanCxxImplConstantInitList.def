@@ -1,6 +1,6 @@
 {{#def.idlType}}
+{{#def.members}}
 
-{{~ it.members :p:i }}
-{{? p.type === 'const' }}
+{{~ getAllConstMembers(it) :p:i }}
   _FORCE_SET_ENUM(function, {{=p.name}}, {{=p.value.value}}, {{=idlType2CxxType(p)}});
-{{?}}{{~}}
+{{~}}

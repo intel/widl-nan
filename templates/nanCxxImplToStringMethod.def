@@ -1,0 +1,27 @@
+{{#def.toString}}
+
+{{? hasStringifier(it) }}
+
+NAN_METHOD(Nan{{=it.name}}::ToString) {
+
+{{? hasMultipleStringifier(it) }}
+  // Multiple `stringifier` found in Web IDL definition
+  // TODO: define the desired behavior in your source code
+  info.GetReturnValue().Set(Nan::New("TODO: choose from one of the stringifiers defined in Web IDL").ToLocalChecked());
+{{?? isValidAttributeStringifier(it) }}
+  // The stringifier is defined on a property
+  auto myself = ObjectWrap::Unwrap<Nan{{=it.name}}>(info.Holder());
+  auto value = myself->impl_->get_{{=getStringifierMember(it).name}}();
+  info.GetReturnValue().Set(Nan::New(value.c_str()).ToLocalChecked());
+{{?? isValidOperationStringifier(it) }}
+  // The stringifier is defined by a method
+  auto myself = ObjectWrap::Unwrap<Nan{{=it.name}}>(info.Holder());
+  auto value = myself->impl_->ToString();
+  info.GetReturnValue().Set(Nan::New(value.c_str()).ToLocalChecked());
+{{??}}
+  // Can't reach here
+{{?}}
+
+}
+
+{{?}}

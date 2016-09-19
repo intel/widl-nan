@@ -1,6 +1,7 @@
+{{#def.members}}
+
   static NAN_METHOD(New);
-{{~ it.members :p:i }}
-{{? p.type === 'operation' }}
+{{~ getAllMethodMembers(it) :p:i }}
 
 {{#def.overload}}
 
@@ -12,5 +13,4 @@
   static NAN_METHOD({{=p.name}});
 {{?}}
 
-{{?}}
 {{~}}

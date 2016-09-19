@@ -1,5 +1,6 @@
 {{#def.className}}
 {{#def.impl}}
+{{#def.toString}}
 
 {{ var guardName = classNameToGuardName(it.name); }}
 {{ var headerFileName = classNameToFileName(it.name); }}
@@ -26,6 +27,13 @@ class {{=nanClassName}} : public Nan::ObjectWrap {
  public:
   static void Init(v8::Local<v8::Object> exports);
   static v8::Local<v8::Object> NewInstance(int argc = 0, v8::Local<v8::Value> argv[] = nullptr);
+
+{{? hasStringifier(it) }}
+{{? hasMultipleStringifier(it) }}
+  // Multiple `stringifier` found in Web IDL definition
+  // TODO: define the desired behavior in your source code {{?}}
+  static NAN_METHOD(ToString);
+{{?}}
 
 {{? useImpl}}
   {{=implClassName}}* {{=generateGetImplMethodName(implClassName)}}() { return impl_; }

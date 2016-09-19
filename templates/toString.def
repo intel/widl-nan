@@ -1,0 +1,40 @@
+{{#def.members}}
+{{#def.idlType}}
+
+{{
+
+var hasStringifier = function (def) {
+  return getStringifierMembers(def).length > 0;
+};
+
+var hasMultipleStringifier = function (def) {
+  return getStringifierMembers(def).length > 1;
+};
+
+var getStringifierMember = function (def) {
+  return getStringifierMembers(def)[0];
+};
+
+var isValidAttributeStringifier = function (def) {
+  var s = getStringifierMember(def);
+  if (s.type === 'attribute' && idlType2CxxType(s.idlType) === 'std::string' ) {
+    return true;
+  }
+  return false;
+};
+
+var isValidOperationStringifier = function (def) {
+  var s = getStringifierMember(def);
+  if (s.type === 'operation') {
+    if (s.idlType && idlType2CxxType(s.idlType) === 'std::string') {
+      return true;
+    }
+    if (!s.idlType && !s.name && !s.arguments) {
+      return true;
+    }
+  }
+  return false;
+};
+
+
+}}

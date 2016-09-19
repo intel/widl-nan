@@ -1,6 +1,7 @@
 {{#def.propertyReturnType}}
+{{#def.members}}
 
-{{~ it.members :p:i }}
+{{~ getAllPropertyMembers(it) :p:i }}
 
 {{
 var staticStr = '';
@@ -13,8 +14,6 @@ if (! p.static && isInterface(p.idlType, it.refTypeMap)) {
 }
 }}
 
-{{? p.type === 'attribute' }}
   {{=staticStr}}{{=mutableStr}}{{=idlType2CxxPropertyPrivateDataMemberType(p.idlType, it.refTypeMap)}} {{=p.name}}_;
-{{?}}
 
 {{~}}

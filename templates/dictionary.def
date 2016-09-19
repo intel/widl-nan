@@ -1,3 +1,5 @@
+{{#def.members}}
+
 {{
 
 var isDictionary = function (idlType, refTypeMap) {
@@ -26,7 +28,7 @@ var extractAllReferenceDictionaryType = function(def, refTypeMap) {
     }
   }
 
-  def.members.forEach(member => {
+  getAllMembersExceptStringifierMethod(def).forEach(member => {
     processType(member);
     if (member.type === 'operation') {
       member.arguments.forEach(arg => {

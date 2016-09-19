@@ -1,9 +1,8 @@
 {{#def.propertyReturnType}}
+{{#def.members}}
 
-{{~ it.members :p:i }}
+{{~ getStaticPropertyMembers(it) :p:i }}
 
-{{? p.type === 'attribute' && p.static }}
 {{=idlType2CxxPropertyPrivateDataMemberType(p.idlType, it.refTypeMap)}} {{=it.name}}::{{=p.name}}_;
-{{?}}
 
 {{~}}

@@ -8,6 +8,7 @@
 {{#def.callback}}
 {{#def.overload}}
 {{#def.array}}
+{{#def.members}}
 
 {{
 var callback = extractAllCallbackMethod(it);
@@ -16,8 +17,7 @@ var hasCallback = callback.methods.length > 0;
 
 
 
-{{~ it.members :p:i }}
-{{? p.type === 'operation' }}
+{{~ getAllMethodMembers(it) :p:i }}
 
 {{
   var unwrapStr = 'auto myself = ObjectWrap::Unwrap<' + className + '>(info.Holder());';
@@ -161,8 +161,6 @@ var argStr = args.join(', ');
     // TODO: handle no-match by modifying template nanCxxImplMethod.def
   }
 }
-
-{{?}}
 
 {{?}}
 

@@ -1,18 +1,17 @@
 {{#def.returnType}}
 {{#def.argument}}
 {{#def.callback}}
+{{#def.members}}
 
 {{
   var callback = extractAllCallbackMethod(it);
 }}
 
-{{~ it.members :p:i }}
-{{? p.type === 'operation' }}
+{{~ getAllMethodMembers(it) :p:i }}
 
 {{=idlType2CxxReturnType(p.idlType, it.refTypeMap)}} {{=it.name}}::{{=p.name}}({{=generateImplParameterList(p, it.refTypeMap)}}) {
 {{=getCallbackHelperAssignmentString(p, '  ')}}
   // TODO(widl-nan): fill your code here
 }
 
-{{?}}
 {{~}}
