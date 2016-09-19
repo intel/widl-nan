@@ -22,6 +22,12 @@ dictionary PaintOptions {
   OtherOptions others;
 };
 
+dictionary PolygonDrawOption {
+  Point[]  polygon;
+  double[] transformMatrix;
+  DOMString? color = "black";
+};
+
 [
 Constructor
 ]
@@ -29,4 +35,6 @@ interface Painter {
   void drawText(DOMString text, PaintOptions options);  
   attribute PaintOptions options;
   PaintOptions getFactoryOptions();
+
+  void drawPolygon(PolygonDrawOption polygon);
 };

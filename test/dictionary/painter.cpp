@@ -46,3 +46,7 @@ PaintOptions Painter::getFactoryOptions() {
   // Temp: just reusing options property
   return get_options();
 }
+
+void Painter::drawPolygon(const PolygonDrawOption& polygon) {
+  // TODO(widl-nan): fill your code here
+}

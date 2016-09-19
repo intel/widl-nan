@@ -96,11 +96,15 @@ var extraMacroType = convertIDLType2ExtractMacro(p.idlType, it.refTypeMap);
 
   bool has_{{=memberName}}() const {return IsMemberPresent("{{=memberName}}"); }
 
-{{? p.type === 'field' && isNonStringPrimitiveType(p.idlType) }}
+{{? p.type === 'field' && isNonStringPrimitiveType(p.idlType) && !isArray(p.idlType) }}
   {{=memberType}} get_{{=memberName}}() const {return EXTRACT_v8_{{=extraMacroType}}(GetMember("{{=memberName}}")); }
   void set_{{=memberName}}(const {{=memberType}}& value) {SetMemberT("{{=memberName}}", value); }
 
 {{?? p.type === 'field' && isString(p.idlType) }}
+  {{=memberType}} get_{{=memberName}}() const {return EXTRACT_v8_{{=extraMacroType}}(GetMember("{{=memberName}}")); }
+  void set_{{=memberName}}(const {{=memberType}}& value) {SetMember("{{=memberName}}", value); }
+
+{{?? p.type === 'field' && isArray(p.idlType) }}
   {{=memberType}} get_{{=memberName}}() const {return EXTRACT_v8_{{=extraMacroType}}(GetMember("{{=memberName}}")); }
   void set_{{=memberName}}(const {{=memberType}}& value) {SetMember("{{=memberName}}", value); }
 

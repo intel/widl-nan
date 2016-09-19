@@ -12,6 +12,7 @@
 
 #include "gen/generator_helper.h"
 #include "gen/paint_options.h"
+#include "gen/polygon_draw_option.h"
 
 class Painter {
  public:
@@ -29,6 +30,8 @@ class Painter {
   void drawText(const std::string& text, const PaintOptions& options);
 
   PaintOptions getFactoryOptions();
+
+  void drawPolygon(const PolygonDrawOption& polygon);
 
   void SetJavaScriptThis(v8::Local<v8::Object> obj) {
     // Ignore this if you don't need it
