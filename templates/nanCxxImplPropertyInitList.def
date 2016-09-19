@@ -1,5 +1,7 @@
-{{~ it.members :p:i }}
-{{? p.type === 'attribute' && p.static === false }}
+{{#def.members}}
+
+{{~ getNonStaticPropertyMembers(it) :p:i }}
+
 {{
 var readAccessStr = p.readonly ? 'v8::ReadOnly' : 'v8::None';
 }}
@@ -9,4 +11,4 @@ var readAccessStr = p.readonly ? 'v8::ReadOnly' : 'v8::None';
       v8::Local<v8::Value>(),
       v8::DEFAULT,
       static_cast<v8::PropertyAttribute>({{=readAccessStr}}));
-{{?}}{{~}}
+{{~}}

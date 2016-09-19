@@ -1,7 +1,8 @@
 {{#def.interface}}
+{{#def.members}}
 
-{{~ it.members :p:i }}
-{{? p.type === 'attribute' && !p.static && isInterface(p.idlType, it.refTypeMap) }}
+{{~ getNonStaticPropertyMembers(it) :p:i }}
+{{? isInterface(p.idlType, it.refTypeMap) }}
   {{=p.name}}_.reset();
 {{?}}
 {{~}}

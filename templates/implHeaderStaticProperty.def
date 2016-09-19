@@ -1,5 +1,6 @@
-{{~ it.members :p:i }}
-{{? p.type === 'attribute' && p.static === true }}
+{{#def.members}}
+
+{{~ getStaticPropertyMembers(it) :p:i }}
 
 {{#def.idlType}}
 {{
@@ -24,5 +25,4 @@ if (isInterface(p.idlType, it.refTypeMap)) {
 
 {{?}}
 
-{{?}}
 {{~}}

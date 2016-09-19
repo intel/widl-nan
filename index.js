@@ -38,7 +38,7 @@ const _parseIDL = function(idlText) {
 const _preprocessOverload = function(def) {
   var map = {};
   def.members.forEach((member, idx) => {
-    if (member.type === 'operation') {
+    if (member.type === 'operation' && !member.stringifier) {
       var existing = map[member.name];
       if (existing) {
         existing.push({name: member.name, index: idx});

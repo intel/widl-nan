@@ -5,6 +5,7 @@
 {{#def.className}}
 {{#def.idlType}}
 {{#def.interface}}
+{{#def.toString}}
 
 {{ var guardName = classNameToGuardName(it.name); }}
 
@@ -99,6 +100,20 @@ class {{=it.name}} {
   {{=it.name}}& operator = (const {{=it.name}}& rhs);
 
  public:
+
+{{? hasStringifier(it) }}
+{{? hasMultipleStringifier(it) }}
+  // Multiple `stringifier` found in Web IDL definition
+  // TODO: define the desired behavior in your source code
+  std::string ToString() const;
+{{?? isValidAttributeStringifier(it) }}
+  // Note: stringifier will use get_{{=getStringifierMember(it).name}}() function
+{{?? isValidOperationStringifier(it) }}
+  std::string ToString() const;
+{{?}}
+{{?}}
+
+
 {{#def.implHeaderProperty}}
 {{#def.implHeaderStaticProperty}}
 

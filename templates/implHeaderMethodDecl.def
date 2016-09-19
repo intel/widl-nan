@@ -1,5 +1,6 @@
-{{~ it.members :p:i }}
-{{? p.type === 'operation' }}
+{{#def.members}}
+
+{{~ getAllMethodMembers(it) :p:i }}
 
 {{#def.returnType}}
 {{#def.argument}}
@@ -13,5 +14,4 @@ if (p.static === true) {
 
   {{=staticPrefix}}{{=idlType2CxxReturnType(p.idlType, it.refTypeMap)}} {{=p.name}}({{=generateImplParameterList(p, it.refTypeMap)}});
 
-{{?}}
 {{~}}

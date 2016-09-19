@@ -1,4 +1,5 @@
 {{#def.idlType}}
+{{#def.members}}
 
 {{
 
@@ -12,8 +13,8 @@ var extractAllCallbackMethod = function (def) {
     callbacksArray: [],
     methods: []
   };
-  def.members.forEach(method => {
-    if (method.type === 'operation') {
+  getAllMethodMembers(def).forEach(method => {
+    if (method.arguments) {
       method.arguments.forEach(arg => {
         if (! isPrimitiveType(arg.idlType)) {
           var type = arg.idlType.idlType;

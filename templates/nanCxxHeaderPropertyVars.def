@@ -1,13 +1,14 @@
 {{#def.interface}}
+{{#def.members}}
 
-{{~ it.members :p:i }}
+{{~ getAllPropertyMembers(it) :p:i }}
 {{
 var staticStr = '';
 if (p.static) {
   staticStr = 'static ';
 }
 }}
-{{? p.type === 'attribute' && isInterface(p.idlType, it.refTypeMap) }}
+{{? isInterface(p.idlType, it.refTypeMap) }}
   {{=staticStr}}std::unique_ptr<Nan::Persistent<v8::Object>> {{=p.name}}_;
 {{?}}
 {{~}}

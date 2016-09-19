@@ -1,0 +1,104 @@
+{{
+
+var getAllPropertyMembers = function(classDef) {
+  var arr = [];
+  classDef.members.forEach(m => {
+    if (m.type === 'attribute' /*&& !m.stringifier*/) {
+      arr.push(m);
+    }
+  });
+  return arr;
+};
+
+var getStaticPropertyMembers = function(classDef) {
+  var arr = [];
+  classDef.members.forEach(m => {
+    if (m.type === 'attribute' && m.static /*&& !m.stringifier*/) {
+      arr.push(m);
+    }
+  });
+  return arr;
+};
+
+var getNonStaticPropertyMembers = function(classDef) {
+  var arr = [];
+  classDef.members.forEach(m => {
+    if (m.type === 'attribute' && !m.static /*&& !m.stringifier*/) {
+      arr.push(m);
+    }
+  });
+  return arr;
+};
+
+var getAllMethodMembers = function(classDef) {
+  var arr = [];
+  classDef.members.forEach(m => {
+    if (m.type === 'operation' && !m.stringifier) {
+      arr.push(m);
+    }
+  });
+  return arr;
+};
+
+var getStaticMethodMembers = function(classDef) {
+  var arr = [];
+  classDef.members.forEach(m => {
+    if (m.type === 'operation' && m.static && !m.stringifier) {
+      arr.push(m);
+    }
+  });
+  return arr;
+};
+
+var getNonStaticMethodMembers = function(classDef) {
+  var arr = [];
+  classDef.members.forEach(m => {
+    if (m.type === 'operation' && !m.static && !m.stringifier) {
+      arr.push(m);
+    }
+  });
+  return arr;
+};
+
+var getStringifierMembers = function(classDef) {
+  var arr = [];
+  classDef.members.forEach(m => {
+    if (m.stringifier) {
+      arr.push(m);
+    }
+  });
+  return arr;
+};
+
+var getNonStringifierMembers = function(classDef) {
+  var arr = [];
+  classDef.members.forEach(m => {
+    if (!m.stringifier) {
+      arr.push(m);
+    }
+  });
+  return arr;
+};
+
+var getAllMembersExceptStringifierMethod = function(classDef) {
+  var arr = [];
+  classDef.members.forEach(m => {
+    if (m.type === 'operation' && m.stringifier) {
+    } else {
+      arr.push(m);
+    }
+  });
+  return arr;
+};
+
+var getAllConstMembers = function(classDef) {
+  var arr = [];
+  classDef.members.forEach(m => {
+    if (m.type === 'const') {
+      arr.push(m);
+    }
+  });
+  return arr;
+};
+
+}}

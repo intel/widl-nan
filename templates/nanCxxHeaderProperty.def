@@ -1,8 +1,9 @@
-{{~ it.members :p:i }}
-{{? p.type === 'attribute' }}  static NAN_GETTER({{=p.name}}Getter);
+{{#def.members}}
+
+{{~ getAllPropertyMembers(it) :p:i }}
+  static NAN_GETTER({{=p.name}}Getter);
 
 {{? ! p.readonly }}  static NAN_SETTER({{=p.name}}Setter);
 {{?}}
 
-{{?}}
 {{~}}

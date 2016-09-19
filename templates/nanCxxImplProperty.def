@@ -9,9 +9,9 @@
 {{#def.buildValidEnumValuesList}}
 {{#def.extractV8Value}}
 {{#def.array}}
+{{#def.members}}
 
-{{~ it.members :p:i }}
-{{? p.type === 'attribute' }}
+{{~ getAllPropertyMembers(it) :p:i }}
 
 {{
   var str = getToLocalCheckedString(p.idlType, it.refTypeMap);
@@ -98,5 +98,4 @@ NAN_SETTER({{=className}}::{{=p.name}}Setter) {
 }
 {{?}}
 
-{{?}}
 {{~}}

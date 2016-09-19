@@ -4,6 +4,7 @@
 {{#def.argument}}
 {{#def.className}}
 {{#def.extractConstructors}}
+{{#def.toString}}
 
 {{
 var className = it.name;
@@ -41,3 +42,17 @@ var constructors = extractConstructors(it);
 }
 
 {{#def.implCppMethod}}
+
+{{? hasStringifier(it) }}
+{{? hasMultipleStringifier(it) }}
+// Multiple `stringifier` found in Web IDL definition
+// TODO: define the desired behavior in your source code
+std::string {{=className}}::ToString() const {
+}
+{{?? isValidAttributeStringifier(it) }}
+  // Note: stringifier will use get_{{=getStringifierMember(it).name}}() function
+{{?? isValidOperationStringifier(it) }}
+std::string {{=className}}::ToString() const {
+}
+{{?}}
+{{?}}

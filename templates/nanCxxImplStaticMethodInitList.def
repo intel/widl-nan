@@ -1,5 +1,6 @@
-{{~ it.members :p:i }}
-{{? p.type === 'operation' }}
+{{#def.members}}
+
+{{~ getStaticMethodMembers(it) :p:i }}
 
 {{#def.overload}}
 
@@ -7,8 +8,8 @@
   var generateMethod = isFirstMethodInOverloadList(it, p, i);
 }}
 
-{{? generateMethod && p.static === true }}
+{{? generateMethod }}
   Nan::SetMethod(function, "{{=p.name}}", {{=p.name}});
 {{?}}
 
-{{?}}{{~}}
+{{~}}

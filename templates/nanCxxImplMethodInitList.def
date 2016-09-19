@@ -1,14 +1,14 @@
-{{~ it.members :p:i }}
-{{? p.type === 'operation' }}
-
+{{#def.members}}
 {{#def.overload}}
+
+{{~ getNonStaticMethodMembers(it) :p:i }}
 
 {{
   var generateMethod = isFirstMethodInOverloadList(it, p, i);
 }}
 
-{{? generateMethod && p.static === false }}
+{{? generateMethod }}
   Nan::SetPrototypeMethod(tpl, "{{=p.name}}", {{=p.name}});
 {{?}}
 
-{{?}}{{~}}
+{{~}}

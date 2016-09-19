@@ -2,6 +2,7 @@
 {{#def.interface}}
 {{#def.dictionary}}
 {{#def.impl}}
+{{#def.toString}}
 
 {{
   var headerFileName = classNameToFileName(it.name);
@@ -62,6 +63,10 @@ void Nan{{=it.name}}::Init(v8::Local<v8::Object> exports) {
   v8::Local<v8::FunctionTemplate> tpl = Nan::New<v8::FunctionTemplate>(New);
   tpl->SetClassName(Nan::New("{{=it.name}}").ToLocalChecked());
   tpl->InstanceTemplate()->SetInternalFieldCount({{?useImpl}}1{{??true}}0{{?}});
+
+{{? hasStringifier(it) }}
+  Nan::SetPrototypeMethod(tpl, "toString", ToString);
+{{?}}
 
 {{#def.nanCxxImplMethodInitList}}
 
@@ -140,3 +145,5 @@ NAN_METHOD(Nan{{=it.name}}::New) {
 {{#def.nanCxxImplProperty}}
 
 {{#def.nanCxxImplMethod}}
+
+{{#def.nanCxxImplToStringMethod}}
