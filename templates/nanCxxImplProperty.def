@@ -46,7 +46,9 @@ NAN_GETTER({{=className}}::{{=p.name}}Getter) {
   } else {
     // TODO: modify nanCxxImplProperty.def to handle this case
   }
-{{?? isInterface(p.idlType, it.refTypeMap)}}
+
+
+{{?? isInterface(p.idlType, it.refTypeMap) && !isArray(p.idlType)}}
 {{ var retType = p.idlType.idlType; }}
   if (! {{=myself}}{{=p.name}}_) {
     {{=myself}}{{=p.name}}_.reset(new Nan::Persistent<v8::Object>(Nan{{=retType}}::NewInstance()));
@@ -86,7 +88,7 @@ NAN_SETTER({{=className}}::{{=p.name}}Setter) {
   } else {
     // TODO: modify nanCxxImplProperty.def to handle this case
   }
-{{?? isInterface(p.idlType, it.refTypeMap)}}
+{{?? isInterface(p.idlType, it.refTypeMap) && !isArray(p.idlType)}}
   // Extract data from the JavaScript object
   // First, convert to impl {{=p.idlType.idlType}} pointer
   auto impl_value = *(ObjectWrap::Unwrap<Nan{{=p.idlType.idlType}}>(v8_value)->{{=generateGetImplMethodName(p.idlType.idlType)}}());

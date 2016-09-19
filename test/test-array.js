@@ -11,7 +11,7 @@ var compile = require('../lib/compile.js').compile;
 var path = require('path');
 
 var Canvas = null;
-
+var point = null;
 describe('widl-nan Unit Test - sequence<T> as Array', function() {
   it('Generating binding C++ code', function() {
     return compile('test/array/array.widl', 'test/array/gen');
@@ -30,6 +30,7 @@ describe('widl-nan Unit Test - sequence<T> as Array', function() {
         // eslint-disable-next-line camelcase
         {bindings: 'widlNanAddon', module_root: addonDir});
     Canvas = addon.Canvas;
+    point = addon.point;
     assert.equal(typeof Canvas, 'function');
   });
 
@@ -48,6 +49,22 @@ describe('widl-nan Unit Test - sequence<T> as Array', function() {
     assert.equal(x.codecs[1], 'png');
     assert.equal(x.codecs[2], 'tif');
     assert.equal(x.codecs[3], 'gif');
+
+    var p1 = new point();
+    var p2 = new point();
+    p1.x = 1;
+    p1.y = 2;
+    p2.x = 2;
+    p2.y = 3;
+    x.points = [];
+    x.points.push(p1);
+    x.points.push(p2);
+
+    assert.equal(x.points.length,2);
+    assert.equal(x.points[0].x, 1);
+    assert.equal(x.points[0].y, 2);
+    assert.equal(x.points[1].x, 2);
+    assert.equal(x.points[1].y, 3);
 
     done();
   });
