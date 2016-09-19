@@ -11,6 +11,10 @@ if (isInterface(p.idlType, it.refTypeMap)) {
   addrStr = '&';
   ptrStr = '*';
 }
+if (isArray(p.idlType, it.refTypeMap)) {
+  addrStr = '';
+  ptrStr = '';
+}
 }}
 
   {{=propertyType}}{{=ptrStr}} get_{{=p.name}}() const {

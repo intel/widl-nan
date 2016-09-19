@@ -7,7 +7,9 @@
       "sources": [
         "addon.cpp",
         "gen/nan__canvas.cpp",
+        "gen/nan__point.cpp",
         "canvas.cpp",
+        "point.cpp"
       ],
       "include_dirs": [
         "<!(node -e \"require('nan')\")",

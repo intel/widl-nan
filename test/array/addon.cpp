@@ -3,9 +3,11 @@
 // found in the LICENSE file.
 
 #include "gen/nan__canvas.h"
+#include "gen/nan__point.h"
 
 void initModule(v8::Local<v8::Object> exports) {
   NanCanvas::Init(exports);
+  Nanpoint::Init(exports);
 }
 
 NODE_MODULE(testAttributes, initModule);

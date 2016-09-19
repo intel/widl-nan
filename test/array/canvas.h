@@ -14,6 +14,8 @@
 #include "gen/generator_helper.h"
 #include "gen/array_helper.h"
 
+#include "point.h"
+
 class Canvas {
  public:
   Canvas();
@@ -40,6 +42,14 @@ class Canvas {
     this->codecs_ = new_value;
   }
 
+  ArrayHelper get_points() const {
+    return this->points_;
+  }
+
+  void set_points(const ArrayHelper& new_value) {
+    this->points_ = new_value;
+  }
+
   ArrayHelper getSupportedImageCodecs();
 
   void drawPolygon(const ArrayHelper& coordinates);
@@ -54,6 +64,7 @@ class Canvas {
  private:
   ArrayHelperStorage coordinates_;
   ArrayHelperStorage codecs_;
+  mutable ArrayHelperStorage points_;
   std::vector<double> array_;
 };
 

@@ -5,10 +5,18 @@
 [
 Constructor
 ]
+interface point {
+    attribute long x;
+    attribute long y;
+};
+
+[
+Constructor
+]
 interface Canvas {
   attribute double[] coordinates;
   attribute DOMString[] codecs;
-
+  attribute point[] points;
   sequence<DOMString> getSupportedImageCodecs();
 
   void drawPolygon(sequence<double> coordinates);
