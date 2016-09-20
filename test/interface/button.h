@@ -12,6 +12,7 @@
 #include "gen/array_helper.h"
 
 #include "dimensions.h"
+#include "point.h"
 
 class Button {
  public:
@@ -26,6 +27,13 @@ class Button {
 
   void set_dimensions(const Dimensions& new_value) {
     this->dimensions_ = new_value;
+  }
+
+  Point* get_nowhere() const {
+    return nullptr;
+  }
+
+  void set_nowhere(const Point&) {
   }
 
   bool isMouseOver();

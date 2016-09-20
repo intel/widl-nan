@@ -13,11 +13,10 @@
 {{
 var callback = extractAllCallbackMethod(it);
 var hasCallback = callback.methods.length > 0;
+var allMethodMembers = getAllMethodMembers(it);
 }}
 
-
-
-{{~ getAllMethodMembers(it) :p:i }}
+{{~ allMethodMembers :p:i }}
 
 {{
   var unwrapStr = 'auto myself = ObjectWrap::Unwrap<' + className + '>(info.Holder());';
@@ -34,7 +33,7 @@ var hasCallback = callback.methods.length > 0;
   var methodName = p.name;
   var methodOverloadList = [];
   overloadList.forEach(o => {
-    methodOverloadList.push(it.members[o.index]);
+    methodOverloadList.push(allMethodMembers[o.index]);
   });
 }}
 
