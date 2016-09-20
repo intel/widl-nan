@@ -15,6 +15,7 @@ exception NoPointerDevice { };
 
 [Constructor]
 interface Button {
+  readonly attribute Point? nowhere;
   attribute Dimensions dimensions;
 
   // An operation that takes no arguments and returns a boolean.

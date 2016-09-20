@@ -54,6 +54,13 @@ describe('widl-nan Unit Test - interface', function() {
     assert.equal(typeof Point, 'function');
   });
 
+  it('object property is undefined', done => {
+    var b = new Button();
+    assert(!b.nowhere);
+    assert.equal(typeof b.nowhere, 'undefined');
+    done();
+  });
+
   it('Passing an object to a method', done => {
     var b = new Button();
 

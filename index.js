@@ -37,16 +37,23 @@ const _parseIDL = function(idlText) {
 
 const _preprocessOverload = function(def) {
   var map = {};
-  def.members.forEach((member, idx) => {
-    if (member.type === 'operation' && !member.stringifier) {
-      var existing = map[member.name];
-      if (existing) {
-        existing.push({name: member.name, index: idx});
-      } else {
-        map[member.name] = [{name: member.name, index: idx}];
-      }
-    }
-  });
+  var arr = [];
+
+  def.members.forEach(member => {
+    if (!member.stringifier && member.type === 'operation') {
+      arr.push(member);
+    }  // if (real operation)
+  });  // After this array is built
+
+  arr.forEach((member, idx) => {
+    var existing = map[member.name];
+    if (existing) {
+      existing.push({name: member.name, index: idx});
+    } else {
+      map[member.name] = [{name: member.name, index: idx}];
+    }  // if-else (existing)
+  });  // map is built
+
   def.operationMap = map;
 };
 

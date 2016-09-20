@@ -55,8 +55,12 @@ NAN_GETTER({{=className}}::{{=p.name}}Getter) {
   }
   v8::Local<v8::Object> obj = Nan::New(*{{=myself}}{{=p.name}}_);
   auto obj_ptr = ObjectWrap::Unwrap<Nan{{=retType}}>(obj);
-  obj_ptr->Borrow{{=retType}}Impl(impl_val);
-  info.GetReturnValue().Set(obj);
+  if (impl_val) {
+    obj_ptr->Borrow{{=retType}}Impl(impl_val);
+    info.GetReturnValue().Set(obj);
+  } else {
+    info.GetReturnValue().Set(Nan::Undefined());
+  }
 {{?? isDictionary(p.idlType, it.refTypeMap)}}
   info.GetReturnValue().Set(static_cast<v8::Local<v8::Object>>(impl_val));
 {{?? isArray(p.idlType) }}
