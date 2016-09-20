@@ -149,6 +149,7 @@ class ArrayHelperStorage {
 
   ArrayHelperStorage& operator = (const ArrayHelper& rhs) {
     FromArrayHelper(rhs);
+    return *this;
   }
 
   void FreeArray() {
