@@ -11,13 +11,13 @@
 #include "gen/generator_helper.h"
 #include "gen/array_helper.h"
 
-class point {
+class Point {
  public:
-  point();
+  Point();
 
-  ~point();
+  ~Point();
 
-  point& operator = (const point& rhs);
+  Point& operator = (const Point& rhs);
 
  public:
   int32_t get_x() const {
@@ -45,6 +45,7 @@ class point {
   int32_t x_;
 
   int32_t y_;
+  friend class Canvas;
 };
 
 #endif  // _POINT_H_

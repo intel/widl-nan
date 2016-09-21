@@ -6,8 +6,8 @@
 #include "gen/nan__point.h"
 
 void initModule(v8::Local<v8::Object> exports) {
+  NanPoint::Init(exports);
   NanCanvas::Init(exports);
-  Nanpoint::Init(exports);
 }
 
 NODE_MODULE(testAttributes, initModule);

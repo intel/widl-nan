@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 #include "canvas.h"
+#include "gen/nan__point.h"
 
 Canvas::Canvas() {
   ArrayHelper helper;
@@ -30,6 +31,19 @@ ArrayHelper Canvas::getSupportedImageCodecs() {
   helper.Set(2, "tif");
   helper.Set(3, "gif");
 
+  return helper;
+}
+
+ArrayHelper Canvas::getInternalPoints() {
+  ArrayHelper helper;
+  std::vector<Point*> vec;
+  vec.push_back(new Point);
+  vec.push_back(new Point);
+  vec[0]->x_ = 1;
+  vec[0]->y_ = 1;
+  vec[1]->x_ = 2;
+  vec[1]->y_ = 2;
+  helper.FromArrayOfImplT<NanPoint>(vec.begin(), vec.end());
   return helper;
 }
 

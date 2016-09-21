@@ -120,7 +120,16 @@ class ArrayHelper {
     }
   }
 
- private:
+  template <typename NanT, typename IterType>
+  void FromArrayOfImplT(IterType first, IterType last) {
+    v8_array_ = v8::Array::New(v8::Isolate::GetCurrent());
+    for ( uint32_t i = 0 ; first != last; ++ first ) {
+      auto nanObj = NanT::NewInstance(*first);
+      this->Set(i++, nanObj);
+    }
+  }
+
+private:
   mutable v8::Local<v8::Array> v8_array_;
 };
 
