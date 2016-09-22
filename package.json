@@ -4,7 +4,7 @@
   "description": "Auto generate native C++ addon source code by parsing Web IDL definition",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "node scripts/run-test.js"
   },
   "keywords": [
     "c++",
@@ -42,6 +42,7 @@
     "webidl2": "^2.0.11"
   },
   "devDependencies": {
+    "colors": "^1.1.2",
     "eslint": "^3.1.1",
     "eslint-config-google": "^0.6.0",
     "eslint-config-standard": "^5.3.5",
