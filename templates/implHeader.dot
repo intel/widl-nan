@@ -95,6 +95,8 @@ class {{=it.name}} {
   {{=it.name}}();
 {{?}}
 
+  {{=it.name}}(const {{=it.name}}& rhs);
+
   ~{{=it.name}}();
 
   {{=it.name}}& operator = (const {{=it.name}}& rhs);

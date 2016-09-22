@@ -11,6 +11,7 @@
 #include <string>
 
 #include "gen/generator_helper.h"
+#include "gen/array_helper.h"
 
 class MyClass {
  public:
@@ -19,6 +20,8 @@ class MyClass {
   explicit MyClass(const int32_t& radius);
 
   explicit MyClass(const std::string& url, const int32_t& radius);
+
+  MyClass(const MyClass& rhs);
 
   ~MyClass();
 
@@ -41,6 +44,14 @@ class MyClass {
     this->url_ = new_value;
   }
 
+  ArrayHelper get_data() const {
+    return this->data_;
+  }
+
+  void set_data(const ArrayHelper& new_value) {
+    this->data_ = new_value;
+  }
+
   void SetJavaScriptThis(v8::Local<v8::Object> obj) {
     // Ignore this if you don't need it
     // Typical usage: emit an event on `obj`
@@ -50,6 +61,8 @@ class MyClass {
   int32_t radius_;
 
   std::string url_;
+
+  ArrayHelperStorage data_;
 };
 
 #endif  // __MY_CLASS_H_

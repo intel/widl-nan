@@ -30,6 +30,11 @@ var constructors = extractConstructors(it);
 }
 {{?}}
 
+{{=className}}::{{=className}}(const {{=className}}& rhs) {
+  // TODO(widl-nan): copy from rhs if you want this behavior
+  // Or mark ctor = delete in {{=headerFileName}}.h
+}
+
 {{=className}}::~{{=className}}() {
   // TODO(widl-nan): do cleanup if necessary
 }
