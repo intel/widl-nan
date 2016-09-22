@@ -27,6 +27,9 @@ class {{=nanClassName}} : public Nan::ObjectWrap {
  public:
   static void Init(v8::Local<v8::Object> exports);
   static v8::Local<v8::Object> NewInstance(int argc = 0, v8::Local<v8::Value> argv[] = nullptr);
+{{? useImpl}}
+  static v8::Local<v8::Object> NewInstance({{=implClassName}}* implPtr, bool ownPtr=true);
+{{?}}
 
 {{? hasStringifier(it) }}
 {{? hasMultipleStringifier(it) }}

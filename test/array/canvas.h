@@ -52,6 +52,8 @@ class Canvas {
 
   ArrayHelper getSupportedImageCodecs();
 
+  ArrayHelper getInternalPoints();
+
   void drawPolygon(const ArrayHelper& coordinates);
 
   ArrayHelper getLastDrawnPolygon();
