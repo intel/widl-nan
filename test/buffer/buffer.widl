@@ -4,6 +4,7 @@
 
 [Constructor]
 interface Buffer {
+  attribute ArrayBuffer data;
   ArrayBuffer getArrayBuffer();
 
   DOMString buffer2String(ArrayBuffer buffer);

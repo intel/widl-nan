@@ -12,12 +12,12 @@ Buffer::Buffer() {
 Buffer::~Buffer() {
 }
 
-ArrayBuffer Buffer::getArrayBuffer() {
+ArrayBuffer Buffer::getArrayBuffer() const {
   const char* text = "hello world!";
 
   uint32_t size = strlen(text);
   // Use malloc to allocate memory for node array buffer.
-  char* buf = (char*)malloc(size);
+  char* buf = reinterpret_cast<char*>(malloc(size));
   memcpy(buf, text, size);
 
   ArrayBuffer arrayBuffer;

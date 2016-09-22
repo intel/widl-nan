@@ -18,11 +18,21 @@ class Buffer {
   ~Buffer();
 
  public:
-  ArrayBuffer getArrayBuffer();
+  ArrayBuffer getArrayBuffer() const;
+
+  ArrayBuffer get_data() const {
+    return getArrayBuffer();
+  }
+
+  void set_data(const ArrayBuffer& new_value) {
+  }
 
   std::string buffer2String(const ArrayBuffer& arrayBuffer) {
     return std::string(arrayBuffer.data, arrayBuffer.size);
   }
+
+ private:
+  ArrayBuffer data_;
 };
 
 #endif  // _BUFFER_H_
