@@ -10,6 +10,7 @@ Constructor(DOMString url, long radius)
 interface MyClass {
   attribute long radius;
   attribute DOMString url;
+  attribute double[] data;
 };
 
 interface NoConstructorClass {

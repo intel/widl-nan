@@ -19,6 +19,13 @@ MyClass::MyClass(const std::string& url, const int32_t& radius)
       radius_(radius) {
 }
 
+MyClass::MyClass(const MyClass& rhs) {
+  // TODO(widl-nan): copy from rhs if you want this behavior
+  url_ = rhs.url_;
+  radius_ = rhs.radius_;
+  // data_ = ...
+}
+
 MyClass::~MyClass() {
 }
 
