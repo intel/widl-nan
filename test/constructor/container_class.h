@@ -14,6 +14,8 @@
 
 #include "my_class.h"
 
+#include "no_constructor_class.h"
+
 class ContainerClass {
  public:
   ContainerClass();
@@ -34,6 +36,8 @@ class ContainerClass {
   double get_diameter() const {
     return this->diameter_;
   }
+
+  NoConstructorClass* createNoConstructorClassObject();
 
   void SetJavaScriptThis(v8::Local<v8::Object> obj) {
     // Ignore this if you don't need it

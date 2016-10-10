@@ -14,6 +14,7 @@ interface MyClass {
 };
 
 interface NoConstructorClass {
+  attribute long counter;
 };
 
 [
@@ -24,4 +25,6 @@ Constructor(double diameter, MyClass obj)
 interface ContainerClass {
   readonly attribute MyClass embedded;
   readonly attribute double diameter;
+
+  NoConstructorClass createNoConstructorClassObject();
 };

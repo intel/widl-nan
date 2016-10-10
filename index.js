@@ -303,6 +303,8 @@ const widl2NanGenerator = function() {
                         _packEmptyLines(dots.helperHeaderThreadEvent({}))));
     all.push(_writeFile(path.join(dirName, 'thread-event-helper.cpp'),
                         _packEmptyLines(dots.helperHeaderThreadEventCpp({}))));
+    all.push(_writeFile(path.join(dirName, 'widlnan_internal_raii_helper.h'),
+                        _packEmptyLines(dots.helperHeaderRAII({}))));
     all.push(_writeFile(path.join(dirNameSkeleton, 'addon.cpp'),
                         _packEmptyLines(dots.addonCpp(this))));
     all.push(_writeFile(path.join(dirNameSkeleton, 'binding.gyp'),

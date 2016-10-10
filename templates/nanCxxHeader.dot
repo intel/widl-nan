@@ -55,6 +55,8 @@ class {{=nanClassName}} : public Nan::ObjectWrap {
 
   static Nan::Persistent<v8::Function> constructor;
 
+  static bool internal_ctor_call_once_;  // Calling JavaScript new in C++
+
 {{? useImpl}}
  private:
   {{=implClassName}}* impl_;

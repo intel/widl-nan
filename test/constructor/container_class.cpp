@@ -28,3 +28,8 @@ ContainerClass& ContainerClass::operator = (const ContainerClass& rhs) {
   }
   return *this;
 }
+
+NoConstructorClass* ContainerClass::createNoConstructorClassObject() {
+  return new NoConstructorClass();
+}
+

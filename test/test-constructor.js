@@ -80,4 +80,13 @@ describe('widl-nan Unit Test - Constructor', function() {
     assert.equal(y.embedded.radius, 3128);
     done();
   });
+
+  it('Test object of a no constructor class', done => {
+    var x = new ContainerClass();
+    var obj = x.createNoConstructorClassObject();
+    obj.counter = 12355;
+    assert.equal(obj.counter, 12355);
+
+    done();
+  });
 });
