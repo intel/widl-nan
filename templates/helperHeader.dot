@@ -5,6 +5,8 @@
 #include <memory>
 #include <limits>
 
+#include "widlnan_internal_raii_helper.h"
+
 #define EXTRACT_v8_String(x) EXTRACT_v8_string(x)
 #define EXTRACT_v8_float(x) EXTRACT_v8_double(x)
 

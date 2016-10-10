@@ -29,6 +29,8 @@
 
 Nan::Persistent<v8::Function> Nan{{=it.name}}::constructor;
 
+bool Nan{{=it.name}}::internal_ctor_call_once_;  // Calling JavaScript new in C++
+
 {{#def.nanCxxImplPropertyVarsDef}}
 
 {{? useImpl}}
@@ -86,11 +88,7 @@ void Nan{{=it.name}}::Init(v8::Local<v8::Object> exports) {
 
 v8::Local<v8::Object> Nan{{=it.name}}::NewInstance(int argc, v8::Local<v8::Value> argv[])
 {
-  static v8::Local<v8::Value> emptyArgv[0] = {};
-
-  if (argc == 0) {
-    argv = emptyArgv;
-  }
+  NewInstanceInternalFlagGuard guard(Nan{{=it.name}}::internal_ctor_call_once_);
 
   v8::Local<v8::Function> cons = Nan::New<v8::Function>(Nan{{=it.name}}::constructor);
   v8::Local<v8::Context> context = v8::Isolate::GetCurrent()->GetCurrentContext();
@@ -101,13 +99,12 @@ v8::Local<v8::Object> Nan{{=it.name}}::NewInstance(int argc, v8::Local<v8::Value
 {{? useImpl}}
 v8::Local<v8::Object> Nan{{=it.name}}::NewInstance({{=it.name}}* implPtr, bool ownPtr)
 {
-  static v8::Local<v8::Value> emptyArgv[0] = {};
-  static int argc0 = 0;
+  NewInstanceInternalFlagGuard guard(Nan{{=it.name}}::internal_ctor_call_once_);
 
   v8::Local<v8::Function> cons = Nan::New<v8::Function>(Nan{{=it.name}}::constructor);
   v8::Local<v8::Context> context = v8::Isolate::GetCurrent()->GetCurrentContext();
 
-  v8::Local<v8::Object> ret = cons->NewInstance(context, argc0, emptyArgv).ToLocalChecked();
+  v8::Local<v8::Object> ret = cons->NewInstance(context, 0, nullptr).ToLocalChecked();
   auto wrapper = Nan::ObjectWrap::Unwrap<Nan{{=it.name}}>(ret);
   delete wrapper->impl_;
   wrapper->impl_ = implPtr;
@@ -139,23 +136,38 @@ NAN_METHOD(Nan{{=it.name}}::New) {
     }
 {{~}}
     else {
-      Nan::ThrowTypeError("Illegal constructor");
+      if ( internal_ctor_call_once_ ) {
+{{? useImpl}}
+        obj->impl_ = new {{=it.name}}();
+{{?}}
+        internal_ctor_call_once_ = false;
+      } else {
+        Nan::ThrowTypeError("Illegal constructor");
+      }
     }
 
     obj->Wrap(info.This());
     info.GetReturnValue().Set(info.This());
 
 {{?? true}}
-    Nan::ThrowTypeError("Illegal constructor");
+    if ( internal_ctor_call_once_ ) {
+      Nan{{=it.name}}* obj = new Nan{{=it.name}}();
+{{? useImpl}}
+      obj->impl_ = new {{=it.name}}();
+{{?}}
+      internal_ctor_call_once_ = false;
+      obj->Wrap(info.This());
+      info.GetReturnValue().Set(info.This());
+    } else {
+      Nan::ThrowTypeError("Illegal constructor");
+    }
 {{?}}
 
   } else {
     // Invoked as plain function `Nan{{=it.name}}()`, turn into construct call.
-    const int argc = 0;
-    v8::Local<v8::Value> argv[argc] = {};
     v8::Local<v8::Function> cons = Nan::New<v8::Function>(constructor);
     v8::Local<v8::Context> context = isolate->GetCurrentContext();
-    v8::Local<v8::Object> instance = cons->NewInstance(context, argc, argv).ToLocalChecked();
+    v8::Local<v8::Object> instance = cons->NewInstance(context).ToLocalChecked();
     info.GetReturnValue().Set(instance);
   }
 }

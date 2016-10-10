@@ -9,6 +9,7 @@
       "sources": [
         "addon.cpp",
         "container_class.cpp",
+        "no_constructor_class.cpp",
         "gen/nan__container_class.cpp",
         "gen/nan__my_class.cpp",
         "gen/nan__no_constructor_class.cpp",

@@ -1,0 +1,13 @@
+#ifndef _WIDLNAN_INTERNAL_RAII_HELPER_H_
+#define _WIDLNAN_INTERNAL_RAII_HELPER_H_
+
+class NewInstanceInternalFlagGuard {
+public:
+  explicit NewInstanceInternalFlagGuard(bool &flag) : flag_(flag) { flag_ = true; }
+  ~NewInstanceInternalFlagGuard() { flag_ = false; }
+
+ private:
+  bool & flag_;
+};
+
+#endif // _WIDLNAN_INTERNAL_RAII_HELPER_H_
