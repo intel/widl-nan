@@ -12,8 +12,10 @@
         "no_constructor_class.cpp",
         "gen/nan__container_class.cpp",
         "gen/nan__my_class.cpp",
+        "gen/nan__my_class2.cpp",
         "gen/nan__no_constructor_class.cpp",
         "my_class.cpp",
+        "my_class2.cpp",
       ],
       "include_dirs": [
         "<!(node -e \"require('nan')\")",
