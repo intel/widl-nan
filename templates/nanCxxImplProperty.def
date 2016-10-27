@@ -66,9 +66,18 @@ NAN_GETTER({{=className}}::{{=p.name}}Getter) {
 {{?? isArray(p.idlType) }}
   info.GetReturnValue().Set(static_cast<v8::Local<v8::Array>>(impl_val));
 {{?? p.idlType.idlType === 'ArrayBuffer' }}
-  v8::Local<v8::Object> value;
-  if (Nan::NewBuffer(impl_val.data, impl_val.size).ToLocal(&value)) {
-    info.GetReturnValue().Set(value);
+  if (! {{=myself}}{{=p.name}}_) {
+    v8::Local<v8::Object> value;
+    if(Nan::NewBuffer(impl_val.data, impl_val.size).ToLocal(&value)) {
+      {{=myself}}{{=p.name}}_.reset(new Nan::Persistent<v8::Object>(value));
+    }
+  }
+
+  if ({{=myself}}{{=p.name}}_) {
+    v8::Local<v8::Object> obj = Nan::New(*{{=myself}}{{=p.name}}_);
+    info.GetReturnValue().Set(obj);
+  } else {
+    info.GetReturnValue().Set(Nan::Undefined());
   }
 {{?? true}}
   info.GetReturnValue().Set(Nan::New(impl_val){{=str}});
