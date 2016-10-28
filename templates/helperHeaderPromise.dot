@@ -76,4 +76,102 @@ class PromiseHelper {
   Nan::Persistent<v8::Promise::Resolver> js_resolver_;
 };
 
+//
+// Brief:
+// If you want your promise gets resolved/rejected
+//  after a certain work is done in a worker thread,
+//  then this helper is the one you want.
+//
+//   1. JavaScript function foo() calls C++ function Foo()
+//   2. Foo() returns a v8::Promise #P to JavaScript
+//   3. Foo() starts a worker thread #T, do some C++ (time consuming) stuff
+//   4. After #T is done
+//       #P gets resolved if work in #T succeeded
+//       #P gets rejected if work in #T failed
+//   5. C++ resources gets released
+//   6. The JavaScript thenable of #P will be called
+//   7. All done, all clean
+//
+// Usage:
+// 1. Inherits this helper
+// 2. Create the derived helper in your promise-returning C++ function (done in main thread)
+// 3. Call CreatePromise, set return value
+// 4. Do some work defined by DoWork() in a worker thread (uv thread pool).
+//      Returns `true` if everything is fine, otherwise return `false`
+// 5. After work is done, the following will be done in main thread
+//      If true, promise gets resolved by the value from derived::GetResolved()
+//      If false, promise gets rejected by the value from derived::GetRejected() -- default to `string 'Unknown error'`
+// 6. And then derived::OnWorkDone() is called (also in main thread). The default behavior: `delete this`
+//
+class PromiseWorkQueueHelper {
+ public:
+  PromiseWorkQueueHelper() {
+    Reset();
+  }
+
+  virtual ~PromiseWorkQueueHelper() {
+    delete promise_;
+    Reset();
+  }
+
+  v8::Local<v8::Promise> CreatePromise() {
+    promise_ = new PromiseHelper();
+    auto ret = promise_->CreatePromise();
+    work_.data = this;
+    uv_queue_work(uv_default_loop(), &work_, WorkCallback, AfterWorkCallback);
+    return ret;
+  }
+
+  void CreatePromiseAndSetFunctionReturnValue(Nan::NAN_METHOD_ARGS_TYPE info) {
+    auto promise = CreatePromise();
+    info.GetReturnValue().Set(promise);
+  }
+
+ private:
+  static void WorkCallback(uv_work_t* req) {
+    PromiseWorkQueueHelper* me = reinterpret_cast<PromiseWorkQueueHelper*>(req->data);
+    me->success_ = me->DoWork();
+  }
+
+  static void AfterWorkCallback(uv_work_t* req, int status) {
+    Nan::HandleScope scope;
+    PromiseWorkQueueHelper* me = reinterpret_cast<PromiseWorkQueueHelper*>(req->data);
+    if (me->success_) {
+      me->promise_->ResolvePromise(me->GetResolved());
+    } else {
+      me->promise_->RejectPromise(me->GetRejected());
+    }
+    delete me->promise_;
+    me->Reset();
+    me->OnWorkDone();
+  }
+
+  void Reset() {
+    promise_ = nullptr;
+    success_ = false;
+  }
+
+ protected:
+  // Called in thread pool
+  virtual bool DoWork() = 0;
+
+  // Called in main thread
+  virtual v8::Local<v8::Value> GetResolved() = 0;
+
+  // Called in main thread
+  virtual v8::Local<v8::Value> GetRejected() {
+    return Nan::New("Unknown error").ToLocalChecked();
+  }
+
+  // Called in main thread
+  virtual void OnWorkDone() {
+    delete this;
+  }
+
+ private:
+  PromiseHelper* promise_;
+  uv_work_t work_;
+  bool success_;
+};
+
 #endif  // _PROMISE_HELPER_H_
