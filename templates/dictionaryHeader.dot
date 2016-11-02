@@ -100,7 +100,7 @@ var extraMacroType = convertIDLType2ExtractMacro(p.idlType, it.refTypeMap);
   {{=memberType}} get_{{=memberName}}() const {return EXTRACT_v8_{{=extraMacroType}}(GetMember("{{=memberName}}")); }
   void set_{{=memberName}}(const {{=memberType}}& value) {SetMemberT("{{=memberName}}", value); }
 
-{{?? p.type === 'field' && isString(p.idlType) }}
+{{?? p.type === 'field' && isString(p.idlType) && !isArray(p.idlType)}}
   {{=memberType}} get_{{=memberName}}() const {return EXTRACT_v8_{{=extraMacroType}}(GetMember("{{=memberName}}")); }
   void set_{{=memberName}}(const {{=memberType}}& value) {SetMember("{{=memberName}}", value); }
 
@@ -147,6 +147,143 @@ var extraMacroType = convertIDLType2ExtractMacro(p.idlType, it.refTypeMap);
 
 {{~}}
 
+
+};
+
+
+{{
+var internalPrefix = 'Dictionary';
+var internalDictionaryClassName = internalPrefix + dictionaryClassName;
+}}
+//
+// The pure C++ equivalent class of JavaScript dictionary {{=dictionaryClassName}}
+//  There is no v8::xxx involved (thread friendly)
+//
+//  Warning: JavaScript array member(s) in dictionary is not supported yet
+//
+class {{=internalDictionaryClassName}} {
+ public:
+  {{=internalDictionaryClassName}} () {
+    Reset();
+  }
+
+  {{=internalDictionaryClassName}} (const {{=dictionaryClassName}}& dic) {
+    ImportFrom(dic);
+  }
+
+  {{=internalDictionaryClassName}} (const {{=internalDictionaryClassName}}& rhs) {
+    CopyFrom(rhs);
+  }
+
+  {{=internalDictionaryClassName}}& operator = (const {{=internalDictionaryClassName}}& rhs) {
+    CopyFrom(rhs);
+    return *this;
+  }
+
+  void Reset() {
+{{~it.members :p:i}}
+{{var memberName = 'member_' + p.name; var hasMemberName = 'has_' + memberName; }}
+    {{=hasMemberName}} = false;
+{{~}}
+  }
+
+  void CopyFrom(const {{=internalDictionaryClassName}}& rhs) {
+    if (this != &rhs) {
+{{~it.members :p:i}}
+{{
+var memberName = 'member_' + p.name; var hasMemberName = 'has_' + memberName;
+var memberType = idlType2CxxType(p.idlType, it.refTypeMap);
+}}
+      {{=hasMemberName}} = rhs.{{=hasMemberName}};
+      if (rhs.{{=hasMemberName}}) {
+{{? p.type === 'field' && isArray(p.idlType) }}
+        // TODO: Copy rhs.{{=memberName}};
+{{?? true}}
+        {{=memberName}} = rhs.{{=memberName}}; {{?}}
+      }
+{{~}}
+    }
+  }
+
+  void ImportFrom (const {{=dictionaryClassName}}& dic) {
+    Reset();
+
+{{~it.members :p:i}}
+{{
+var memberName = 'member_' + p.name; var hasMemberName = 'has_' + memberName;
+var rawMembername = p.name;
+var memberType = idlType2CxxType(p.idlType, it.refTypeMap);
+}}
+    {{=hasMemberName}} = dic.has_{{=rawMembername}}();
+    if ({{=hasMemberName}}) {
+{{? p.type === 'field' && isArray(p.idlType) }}
+      // TODO: Copy dic.get_{{=rawMembername}}();
+{{?? p.type === 'field' && (isDictionary(p.idlType, it.refTypeMap))}}
+{{var dictionaryType = p.idlType.idlType;}}
+      {{=memberName}} = dic.get_{{=rawMembername}}();
+{{?? true}}
+      {{=memberName}} = dic.get_{{=rawMembername}}();{{?}}
+    }
+{{~}}
+
+  }
+
+  void ExportTo ({{=dictionaryClassName}}& dic) const {
+{{~it.members :p:i}}
+{{
+var memberName = 'member_' + p.name; var hasMemberName = 'has_' + memberName;
+var rawMembername = p.name;
+var memberType = idlType2CxxType(p.idlType, it.refTypeMap);
+}}
+    if ({{=hasMemberName}}) {
+{{? p.type === 'field' && isArray(p.idlType) }}
+      // TODO: Copy dic.get_{{=rawMembername}}();
+{{?? p.type === 'field' && (isDictionary(p.idlType, it.refTypeMap))}}
+{{var dictionaryType = p.idlType.idlType;}}
+      dic.set_{{=rawMembername}}({{=memberName}}.Exported());
+{{?? true}}
+      dic.set_{{=rawMembername}}({{=memberName}});{{?}}
+    } else {
+      dic.DeleteMember("{{=rawMembername}}");
+    }
+{{~}}
+  }
+
+  {{=dictionaryClassName}} Exported() const {
+    {{=dictionaryClassName}} dic;
+    ExportTo(dic);
+    return dic;
+  }
+
+
+ public:
+
+{{~it.members :p:i}}
+{{
+var memberName = 'member_' + p.name; var hasMemberName = 'has_' + memberName;
+var memberType = idlType2CxxType(p.idlType, it.refTypeMap);
+}}
+  bool {{=hasMemberName}};
+
+{{? p.type === 'field' && isNonStringPrimitiveType(p.idlType) && !isArray(p.idlType) }}
+  {{=memberType}} {{=memberName}};
+{{?? p.type === 'field' && isString(p.idlType) && !isArray(p.idlType)}}
+  {{=memberType}} {{=memberName}};
+{{?? p.type === 'field' && isArray(p.idlType) }}
+  // TODO: Fina a way to support this.
+  //       Note: there is no 1:1 equivalent C++ type of JavaScript array yet
+  //{{=memberType}}[] {{=memberName}};
+{{?? p.type === 'field' && isInterface(p.idlType, it.refTypeMap)}}
+{{var interfaceType = p.idlType.idlType;}}
+  {{=interfaceType}} {{=memberName}};
+{{?? p.type === 'field' && (isDictionary(p.idlType, it.refTypeMap))}}
+{{var dictionaryType = p.idlType.idlType;}}
+  {{=internalPrefix}}{{=dictionaryType}} {{=memberName}};
+{{?? p.type === 'field' && (isEnumType(p.idlType, it.refTypeMap)) }}
+  std::string {{=memberName}};
+{{?}}
+
+{{~}}
 
 };
 
