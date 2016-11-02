@@ -41,7 +41,7 @@ var allMethodMembers = getAllMethodMembers(it);
 
 NAN_METHOD({{=className}}::{{=methodName}}) {
 
-{{=unwrapStr}}
+  {{=unwrapStr}}
 
   info.GetReturnValue().Set(Nan::Undefined());
 
