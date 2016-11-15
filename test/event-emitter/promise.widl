@@ -12,5 +12,5 @@ interface Meal {
   void initialize();
 
   Promise<String> cook(String chefName);
-
+  Promise<void> stop();
 };

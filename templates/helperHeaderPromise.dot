@@ -69,7 +69,7 @@ class PromiseHelper {
   }
 
   bool IsPromiseCreated() {
-    return js_resolver_.IsEmpty();
+    return !js_resolver_.IsEmpty();
   }
 
  private:

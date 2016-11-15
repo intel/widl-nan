@@ -27,7 +27,7 @@ class ThreadEventHelper {
   v8::Local<v8::Promise> StartThread();
   void PauseThread();
   void ResumeThread();
-  void StopThread();
+  v8::Local<v8::Promise> StopThread();
 
  protected:
   class EventEmitter {
@@ -67,9 +67,12 @@ class ThreadEventHelper {
   inline PromiseHelper& GetThreadStartPromiseHelper() {
     return thread_start_promise_;
   }
-
+  inline PromiseHelper& GetThreadStopPromiseHelper() {
+    return thread_stop_promise_;
+  }
  private:
   PromiseHelper thread_start_promise_;
+  PromiseHelper thread_stop_promise_;
 
   bool thread_cont_working_;
   Nan::Persistent<v8::Object> js_this_;
@@ -81,6 +84,7 @@ class ThreadEventHelper {
   bool thread_singleloop_flag_;
   bool thread_started_flag_;
   bool thread_failed_flag_;
+  bool thread_stopped_flag_;
 };
 
 #endif  // _THREAD_EVENT_HELPER_H_

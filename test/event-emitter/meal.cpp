@@ -19,7 +19,7 @@ bool CookHelper::ThreadStarter() {
 }
 
 // Running in worker thread, to deal with the pipeline loop
-bool CookHelper::ThreadWorker(long long numOfLoops) {
+bool CookHelper::ThreadWorker(long long numOfLoops) { //NOLINT
   std::stringstream ss;
   ss << "loop: #" << numOfLoops;
   state_ = ss.str();
@@ -56,4 +56,8 @@ void Meal::initialize() {
 
 v8::Handle<v8::Promise> Meal::cook(const std::string& chefName) {
   return helper_->StartThread();
+}
+
+v8::Handle<v8::Promise> Meal::stop() {
+  return helper_->StopThread();
 }
