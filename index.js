@@ -14,7 +14,7 @@ const enumGenerator = require('./lib/cpp-enum.js');
 
 const dot = require('dot');
 dot.templateSettings.strip = false; // Do not remove spaces & linebreaks
-dot.verbose = process.env.WIDL_NAN_VERBOSE || false;
+dot.log = process.env.WIDL_NAN_VERBOSE || false;
 const dots = dot.process({path: path.join(__dirname, 'templates')});
 
 const _writeFile = function(name, text) {
