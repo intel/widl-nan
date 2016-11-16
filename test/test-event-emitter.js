@@ -63,6 +63,19 @@ describe('widl-nan Unit Test - IDL EventEmitter', function() {
     });
   });
 
+  it('Return type of stop() is a Promise', done => {
+    var x = new Meal();
+    x.initialize('rice', 0.5);
+    x.cook('tim');
+    return new Promise((resolve, reject) => {
+      x.stop().then(() => {
+        resolve();
+      }).catch(e => {
+        reject(e);
+      });
+    });
+  });
+
   it('Event can be emitted', () => {
     var x = new Meal();
     x.initialize('rice', 0.5);

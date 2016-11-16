@@ -13,6 +13,7 @@ void ThreadEventHelper::Reset() {
   thread_cont_working_ = true;
   thread_started_flag_ = false;
   thread_failed_flag_ = false;
+  thread_stopped_flag_ = false;
 }
 
 v8::Local<v8::Promise> ThreadEventHelper::StartThread() {
@@ -31,12 +32,10 @@ void ThreadEventHelper::ResumeThread() {
   // TODO(widl-nan): resume thread
 }
 
-void ThreadEventHelper::StopThread() {
+v8::Local<v8::Promise> ThreadEventHelper::StopThread() {
   thread_cont_working_ = false;
-  uv_thread_join(&thread_);
-  uv_close(reinterpret_cast<uv_handle_t*>(&async_), NULL);
-  ResetJavaScriptThis();
-  Reset();
+  auto promise = GetThreadStopPromiseHelper().CreatePromise();
+  return promise;
 }
 
 void ThreadEventHelper::AsyncProc(uv_async_t *handle) {
@@ -58,6 +57,15 @@ void ThreadEventHelper::AsyncProc(uv_async_t *handle) {
   if (me->thread_singleloop_flag_) {
     me->thread_singleloop_flag_ = false;
     me->OnSingleLoopFinished(EventEmitter(&me->js_this_));
+  }
+
+  if(me->thread_stopped_flag_) {
+    uv_close(reinterpret_cast<uv_handle_t*>(&me->async_), NULL);
+    me->ResetJavaScriptThis();
+    me->Reset();
+   if(me->GetThreadStopPromiseHelper().IsPromiseCreated()) {
+      me->GetThreadStopPromiseHelper().ResolvePromise();
+    }
   }
 }
 
@@ -99,6 +107,7 @@ void ThreadEventHelper::ThreadProc(void* arg) {
     me->thread_failed_flag_ = true;
     uv_async_send(&me->async_);
   }
-
+  me->thread_stopped_flag_ = true;
+  uv_async_send(&me->async_);
   me->ThreadCleaner();
 }

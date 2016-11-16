@@ -22,7 +22,7 @@ class CookHelper : public ThreadEventHelper {
   bool ThreadStarter() override;
   // Running in worker thread, to deal with the pipeline loop
   // Return true to continue loop
-  bool ThreadWorker(long long numOfLoops) override;
+  bool ThreadWorker(long long numOfLoops) override; //NOLINT
   // Running in worker thread, to clean things up
   void ThreadCleaner() override;
   // Running in main thread
@@ -45,6 +45,8 @@ class Meal {
   void initialize();
 
   v8::Handle<v8::Promise> cook(const std::string& chefName);
+
+  v8::Handle<v8::Promise> stop();
 
   void SetJavaScriptThis(v8::Local<v8::Object> JavaScriptThis) {
     helper_->SetJavaScriptThis(JavaScriptThis);
