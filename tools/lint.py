@@ -227,7 +227,15 @@ def do_py_lint(changeset, options):
 def do_js_lint(changeset, options):
   print '\n_____ do JavaScript lint'
 
-  node_bin_dir = os.path.join(ROOT_DIR, 'node_modules', '.bin')
+  node_bin_dirs = [
+      # This dir is used when developing widl-nan itself.
+      os.path.join(ROOT_DIR, 'node_modules', '.bin'),
+      # This dir is for moudules that call this script directly.
+      # The eslint and jshint need to be sepecified as devDependencies
+      # in its own package.json
+      os.path.join(ROOT_DIR, '..', '.bin')
+  ]
+
   error_count = 0
 
   for jsfile in changeset:
@@ -240,11 +248,14 @@ def do_js_lint(changeset, options):
         print("%s %s" % (linter, jsfile))
 
       try:
-        cmd = os.path.join(node_bin_dir, linter)
-        output = GetCommandOutput(['node'] + [cmd, jsfile]).strip()
-        if len(output) > 0:
-          print output
-          error_count += 1
+        for p in node_bin_dirs:
+          cmd = os.path.join(p, linter)
+          if not os.path.isfile(cmd):
+            continue
+          output = GetCommandOutput(['node'] + [cmd, jsfile]).strip()
+          if len(output) > 0:
+            print output
+            error_count += 1
       except Exception, e:
         print e
         error_count += 1
