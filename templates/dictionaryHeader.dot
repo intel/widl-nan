@@ -199,6 +199,7 @@ var memberType = idlType2CxxType(p.idlType, it.refTypeMap);
 {{? p.type === 'field' && isArray(p.idlType) }}
         // TODO: Copy rhs.{{=memberName}};
 {{?? true}}
+        {{=hasMemberName}} = rhs.{{=hasMemberName}};
         {{=memberName}} = rhs.{{=memberName}}; {{?}}
       }
 {{~}}
