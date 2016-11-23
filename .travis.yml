@@ -15,12 +15,6 @@ addons:
     packages:
       - g++-4.8
 before_install:
-  - export PATH=$HOME/.local/bin:$PATH
-  - rm -rf ~/.nvm
-  - git clone https://github.com/creationix/nvm.git ~/.nvm
-  - source ~/.nvm/nvm.sh
-  - nvm install "$TRAVIS_NODE_VERSION"
-  - npm install -g node-gyp
   - git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git && export PATH=$PATH:$(pwd)/depot_tools
   - if [[ $TRAVIS_OS_NAME == "linux" ]]; then export CXX=g++-4.8; fi
 before_script:
