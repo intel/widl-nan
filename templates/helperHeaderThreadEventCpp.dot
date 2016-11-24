@@ -46,12 +46,16 @@ void ThreadEventHelper::AsyncProc(uv_async_t *handle) {
   if (me->thread_started_flag_) {
     me->thread_started_flag_ = false;
     me->GetThreadStartPromiseHelper().ResolvePromise();
+    // Workaround for forcing the promise to be actually resolved.
+    v8::Isolate::GetCurrent()->RunMicrotasks();
   }
 
   if (me->thread_failed_flag_) {
     me->thread_failed_flag_ = false;
     auto msg = std::string("Worker thread fail");
     me->GetThreadStartPromiseHelper().RejectPromise(msg);
+    // Workaround for forcing the promise to be actually rejectd.
+    v8::Isolate::GetCurrent()->RunMicrotasks();
   }
 
   if (me->thread_singleloop_flag_) {
@@ -65,6 +69,8 @@ void ThreadEventHelper::AsyncProc(uv_async_t *handle) {
     me->Reset();
    if(me->GetThreadStopPromiseHelper().IsPromiseCreated()) {
       me->GetThreadStopPromiseHelper().ResolvePromise();
+      // Workaround for forcing the promise to be actually resolved.
+      v8::Isolate::GetCurrent()->RunMicrotasks();
     }
   }
 }
