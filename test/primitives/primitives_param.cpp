@@ -5,9 +5,16 @@
 #include "primitives_param.h"
 
 PrimitivesParam::PrimitivesParam() {
+  // TODO(widl-nan): init your members
+}
+
+PrimitivesParam::PrimitivesParam(const PrimitivesParam& rhs) {
+  // TODO(widl-nan): copy from rhs if you want this behavior
+  // Or mark ctor = delete in primitives_param.h
 }
 
 PrimitivesParam::~PrimitivesParam() {
+  // TODO(widl-nan): do cleanup if necessary
 }
 
 PrimitivesParam& PrimitivesParam::operator =
@@ -58,3 +65,11 @@ const double& d, const double& uf, const double& ud) {
     vUnrestrictDouble_ = ud;
 }
 
+int64_t PrimitivesParam::addLongLong(const int64_t& a, const int64_t& b) {
+  return a + b;
+}
+
+uint64_t PrimitivesParam::addUnsignedLongLong(
+    const uint64_t& a, const uint64_t& b) {
+  return a + b;
+}

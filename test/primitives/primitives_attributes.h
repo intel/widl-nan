@@ -18,10 +18,13 @@
 #include <string>
 
 #include "gen/generator_helper.h"
+#include "gen/array_helper.h"
 
 class PrimitivesAttributes {
  public:
   PrimitivesAttributes();
+
+  PrimitivesAttributes(const PrimitivesAttributes& rhs);
 
   ~PrimitivesAttributes();
 
@@ -116,6 +119,27 @@ class PrimitivesAttributes {
     this->vUnrestrictDouble_ = new_value;
   }
 
+  int64_t get_vLongLong() const {
+    return this->vLongLong_;
+  }
+
+  void set_vLongLong(const int64_t& new_value) {
+    this->vLongLong_ = new_value;
+  }
+
+  uint64_t get_vUnsignedLongLong() const {
+    return this->vUnsignedLongLong_;
+  }
+
+  void set_vUnsignedLongLong(const uint64_t& new_value) {
+    this->vUnsignedLongLong_ = new_value;
+  }
+
+  void SetJavaScriptThis(v8::Local<v8::Object> obj) {
+    // Ignore this if you don't need it
+    // Typical usage: emit an event on `obj`
+  }
+
  private:
   int8_t vByte_;
 
@@ -138,6 +162,10 @@ class PrimitivesAttributes {
   double vDouble_;
 
   double vUnrestrictDouble_;
+
+  int64_t vLongLong_;
+
+  uint64_t vUnsignedLongLong_;
 };
 
 #endif  // _PRIMITIVESATTRIBUTES_H_

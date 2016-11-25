@@ -146,6 +146,10 @@ var argStr = args.join(', ');
 {{?? isArray(method.idlType) }}
     auto value = myself->impl_->{{=methodName}}({{=argStr}});
     info.GetReturnValue().Set(static_cast<v8::Local<v8::Array>>(value));
+{{?? method.idlType.idlType === 'long long' || method.idlType.idlType === 'unsigned long long' }}
+    // Primitive types (int, double ...)
+    auto value = {{=functionCallPrefix}}{{=methodName}}({{=argStr}});
+    info.GetReturnValue().Set(Nan::New<v8::Number>(value));
 {{?? true }}
     // Primitive types (int, double ...)
     auto value = {{=functionCallPrefix}}{{=methodName}}({{=argStr}});

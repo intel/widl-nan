@@ -79,6 +79,8 @@ NAN_GETTER({{=className}}::{{=p.name}}Getter) {
   } else {
     info.GetReturnValue().Set(Nan::Undefined());
   }
+{{?? p.idlType.idlType === 'long long' || p.idlType.idlType === 'unsigned long long' }}
+  info.GetReturnValue().Set(Nan::New<v8::Number>(impl_val){{=str}});
 {{?? true}}
   info.GetReturnValue().Set(Nan::New(impl_val){{=str}});
 {{?}}
