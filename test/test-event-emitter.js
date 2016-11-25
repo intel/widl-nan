@@ -70,6 +70,7 @@ describe('widl-nan Unit Test - IDL EventEmitter', function() {
     return new Promise((resolve, reject) => {
       x.stop().then(() => {
         resolve();
+        done();
       }).catch(e => {
         reject(e);
       });
