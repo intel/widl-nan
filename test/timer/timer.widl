@@ -1,0 +1,10 @@
+[
+Constructor
+]
+interface TimerTester {
+  attribute long taskCounter;
+
+  Promise<void> startDelayedTask(long timeout);
+
+  void startRegularTask(long timeout, long repeatTimes);
+};
