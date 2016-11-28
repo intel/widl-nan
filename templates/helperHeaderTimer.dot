@@ -1,0 +1,134 @@
+#ifndef _WIDLNAN_TIMER_HELPER_H_
+#define _WIDLNAN_TIMER_HELPER_H_
+
+#include "promise-helper.h"
+
+class WIDLNANTimerHelper {
+ public:
+  typedef void (*callback_t)(uv_timer_t*);
+
+ public:
+  explicit WIDLNANTimerHelper(uv_loop_t* loop = uv_default_loop()) {
+    handle_ = nullptr;
+    loop_ = loop;
+    pending_stop_req_ = false;
+  }
+
+  ~WIDLNANTimerHelper() {
+    if (pending_stop_req_) {
+      Stop();
+    }
+  }
+
+  void Start(callback_t callback, uint64_t timeout, uint64_t repeat) {
+    handle_ = new uv_timer_t;
+    handle_->data = data_;
+    uv_timer_init(loop_, handle_);
+    uv_timer_start(handle_, callback, timeout, repeat);
+    pending_stop_req_ = true;
+  }
+
+  void Stop() {
+    pending_stop_req_ = false;
+    uv_timer_stop(handle_);
+    uv_close(reinterpret_cast<uv_handle_t*>(handle_),
+        [](uv_handle_t* handle) -> void {delete handle;});
+  }
+
+  void SetData(void* data) {
+    data_ = data;
+  }
+
+ private:
+  uv_loop_t*    loop_;
+  uv_timer_t*   handle_;
+  void*         data_;
+  bool          pending_stop_req_;
+};
+
+class WIDLNANTimer {
+ public:
+  WIDLNANTimer() {
+    counter_ = 0;
+  }
+
+  virtual ~WIDLNANTimer() {}
+
+  void SetTimeout(uint64_t timeout) {
+    counter_ = 0;
+    helper_.SetData(this);
+    helper_.Start(TimerCallbackProc, timeout, 0);
+  }
+
+  void SetInterval(uint64_t timeout, uint64_t repeatTimeout) {
+    counter_ = 0;
+    helper_.SetData(this);
+    helper_.Start(TimerCallbackProc, timeout, repeatTimeout);
+  }
+
+  // Return true to continue working
+  // Return false to stop working
+  virtual bool TimerCallback(uint64_t countdown) = 0;
+
+ private:
+  static void TimerCallbackProc(uv_timer_t* handle) {
+    WIDLNANTimer* me = reinterpret_cast<WIDLNANTimer*>(handle->data);
+
+    bool continue_working = me->TimerCallback(me->counter_);
+
+    if (continue_working) {
+      ++ me->counter_;
+    } else {
+      me->helper_.Stop();
+      delete me;
+    }
+  }
+
+ private:
+  WIDLNANTimerHelper helper_;
+  uint64_t counter_;
+};
+
+class WIDLNANPromiseTimer : private WIDLNANTimer {
+ public:
+  WIDLNANPromiseTimer() {
+    promise_ = nullptr;
+  }
+
+  virtual ~WIDLNANPromiseTimer() {
+    delete promise_;
+  }
+
+  v8::Local<v8::Promise> SetTimeout(uint64_t timeout) {
+    promise_ = new PromiseHelper();
+    auto p = promise_->CreatePromise();
+    WIDLNANTimer::SetTimeout(timeout);
+    return p;
+  }
+
+  virtual bool TimerCallback(uint64_t countdown) {
+    Nan::HandleScope scope;
+    if (PromiseTimerCallback()) {
+      promise_->ResolvePromise(GetResolved());
+    } else {
+      promise_->RejectPromise(GetRejected());
+    }
+    v8::Isolate::GetCurrent()->RunMicrotasks();
+    return false;
+  }
+
+  virtual bool PromiseTimerCallback() = 0;
+
+  virtual v8::Local<v8::Value> GetResolved() {
+    return Nan::Undefined();
+  };
+
+  virtual v8::Local<v8::Value> GetRejected() {
+    return Nan::Undefined();
+  };
+
+ private:
+  PromiseHelper* promise_;
+};
+
+#endif // _WIDLNAN_TIMER_HELPER_H_
