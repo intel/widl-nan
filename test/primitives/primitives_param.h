@@ -18,10 +18,13 @@
 #include <string>
 
 #include "gen/generator_helper.h"
+#include "gen/array_helper.h"
 
 class PrimitivesParam {
  public:
   PrimitivesParam();
+
+  PrimitivesParam(const PrimitivesParam& rhs);
 
   ~PrimitivesParam();
 
@@ -84,6 +87,10 @@ class PrimitivesParam {
 
   void setvalue(const bool& flag, const double& f, const double& d,
   const double& uf, const double& ud);
+
+  int64_t addLongLong(const int64_t& a, const int64_t& b);
+
+  uint64_t addUnsignedLongLong(const uint64_t& a, const uint64_t& b);
 
  private:
   bool vBoolean_;

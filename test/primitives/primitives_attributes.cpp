@@ -10,7 +10,9 @@ PrimitivesAttributes::PrimitivesAttributes()
        vShort_(-32768),
        vUnsignedShort_(65535),
        vLong_(-200000),
-       vUnsignedLong_(200000) {
+       vUnsignedLong_(200000),
+       vLongLong_(0xffffffffffff),
+       vUnsignedLongLong_(0xffffffffffff) {
 }
 
 PrimitivesAttributes::~PrimitivesAttributes() {

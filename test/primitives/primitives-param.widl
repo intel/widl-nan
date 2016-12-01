@@ -20,5 +20,7 @@ interface PrimitivesParam {
    unsigned long addUnsignedLong(unsigned long a, unsigned long b);
    DOMString show(DOMString str);
    void setvalue(boolean flag,float f,double d,unrestricted float uf,unrestricted double ud);
+   long long addLongLong(long long a, long long b);
+   unsigned long long addUnsignedLongLong(unsigned long long a, unsigned long long b);
 };
 

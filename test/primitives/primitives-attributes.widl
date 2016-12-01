@@ -17,4 +17,6 @@ interface PrimitivesAttributes {
   attribute unrestricted float vUnrestrictFloat;
   attribute double vDouble;
   attribute unrestricted double vUnrestrictDouble;
+  attribute long long vLongLong;
+  attribute unsigned long long vUnsignedLongLong;
 };
