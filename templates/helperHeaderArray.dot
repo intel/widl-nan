@@ -34,7 +34,7 @@ class ArrayHelper {
   void CopyFrom(v8::Local<v8::Array> source) {
     v8_array_ = v8::Array::New(v8::Isolate::GetCurrent(), source->Length());
     for (uint32_t i = 0 ; i < source->Length() ; ++i) {
-      v8_array_->Set(i, source->CloneElementAt(i));
+      v8_array_->Set(i, source->Get(i));
     }
   }
 
@@ -46,7 +46,6 @@ class ArrayHelper {
   }
 
   uint32_t Length() const { return v8_array_->Length(); }
-  v8::Local<v8::Value> CloneElementAt(uint32_t index) const { return v8_array_->CloneElementAt(index); }
 
   void Set(uint32_t index, const std::string& elem) { v8_array_->Set(index, Nan::New(elem.c_str()).ToLocalChecked()); }
   void Set(uint32_t index, const char* elem) { v8_array_->Set(index, Nan::New(elem).ToLocalChecked()); }
