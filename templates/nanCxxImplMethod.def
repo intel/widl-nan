@@ -144,8 +144,11 @@ var argStr = args.join(', ');
     auto value = {{=functionCallPrefix}}{{=methodName}}({{=argStr}});
     info.GetReturnValue().Set(static_cast<v8::Local<v8::Object>>(value));
 {{?? isArray(method.idlType) }}
-    auto value = myself->impl_->{{=methodName}}({{=argStr}});
+    auto value = {{=functionCallPrefix}}{{=methodName}}({{=argStr}});
     info.GetReturnValue().Set(static_cast<v8::Local<v8::Array>>(value));
+{{?? isTypedArray(method.idlType) }}
+    auto value = {{=functionCallPrefix}}{{=methodName}}({{=argStr}});
+    info.GetReturnValue().Set(value.GetTypedArray());
 {{?? true }}
     // Primitive types (int, double ...)
     auto value = {{=functionCallPrefix}}{{=methodName}}({{=argStr}});

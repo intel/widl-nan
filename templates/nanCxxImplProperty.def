@@ -65,6 +65,8 @@ NAN_GETTER({{=className}}::{{=p.name}}Getter) {
   info.GetReturnValue().Set(static_cast<v8::Local<v8::Object>>(impl_val));
 {{?? isArray(p.idlType) }}
   info.GetReturnValue().Set(static_cast<v8::Local<v8::Array>>(impl_val));
+{{?? isTypedArray(p.idlType) }}
+  info.GetReturnValue().Set(impl_val.GetTypedArray());
 {{?? p.idlType.idlType === 'ArrayBuffer' }}
   if (! {{=myself}}{{=p.name}}_) {
     v8::Local<v8::Object> value;

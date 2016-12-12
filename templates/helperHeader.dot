@@ -247,4 +247,104 @@ class CallbackHelperBase {
   Nan::Persistent<v8::Object> v8_this_;
 };
 
+template <class T>
+class TypedArrayHelper {
+ public:
+  typedef T typed_array_t;
+
+  TypedArrayHelper() {
+    Set(nullptr, 0, 0, true);
+  }
+
+  TypedArrayHelper(void* data, uint32_t offset, uint32_t length, bool external = true) {
+    Set(data, offset, length, external);
+  }
+
+  TypedArrayHelper(const TypedArrayHelper& rhs) {
+    CopyFrom(rhs);
+  }
+
+  ~TypedArrayHelper() {}
+
+  TypedArrayHelper& operator = (const TypedArrayHelper& rhs) {
+    CopyFrom(rhs);
+    return *this;
+  }
+
+  bool getExternalBufferMode() const {
+    return external_buffer_;
+  }
+
+  void setExternalBufferMode(bool external) {
+    external_buffer_ = external;
+  }
+
+  v8::Local<v8::Value> GetTypedArray() const {
+    auto mode = external_buffer_ ?
+        v8::ArrayBufferCreationMode::kExternalized :
+        v8::ArrayBufferCreationMode::kInternalized;
+
+    auto array_buffer = v8::ArrayBuffer::New(
+        v8::Isolate::GetCurrent(), data_, length_, mode);
+
+    return typed_array_t::New(array_buffer, offset_, length_);
+  }
+
+  operator v8::Local<v8::Value> () const {
+    return GetTypedArray();
+  }
+
+  bool operator == (const TypedArrayHelper& rhs) {
+    if (this != &rhs) {
+      return data_ == rhs.data_ &&
+          offset_ == rhs.offset_ &&
+          length_ == rhs.length_ &&
+          external_buffer_ == rhs.external_buffer_;
+    }
+    return true;
+  }
+
+  void Set(void* data, uint32_t offset, uint32_t length, bool external = true) {
+    data_ = data;
+    offset_ = offset;
+    length_ = length;
+    external_buffer_ = external;
+  }
+
+  void* GetData() { return data_; }
+  uint32_t GetOffset() { return offset_; }
+  uint32_t GetLength() { return length_; }
+  bool IsExternalBuffer() { return external_buffer_; }
+
+ private:
+  void CopyFrom(const TypedArrayHelper& rhs) {
+    if (this != &rhs) {
+      data_ = rhs.data_;
+      offset_ = rhs.offset_;
+      length_ = rhs.length_;
+      external_buffer_ = rhs.external_buffer_;
+    }
+  }
+
+ private:
+  void* data_;
+  uint32_t offset_;
+  uint32_t length_;
+  bool external_buffer_;
+};
+
+typedef TypedArrayHelper<v8::Int8Array> Int8ArrayHelper;
+typedef TypedArrayHelper<v8::Uint8Array> Uint8ArrayHelper;
+typedef TypedArrayHelper<v8::Uint8ClampedArray> Uint8ClampedArrayHelper;
+
+typedef TypedArrayHelper<v8::Int16Array> Int16ArrayHelper;
+typedef TypedArrayHelper<v8::Uint16Array> Uint16ArrayHelper;
+
+typedef TypedArrayHelper<v8::Int32Array> Int32ArrayHelper;
+typedef TypedArrayHelper<v8::Uint32Array> Uint32ArrayHelper;
+
+typedef TypedArrayHelper<v8::Float32Array> Float32ArrayHelper;
+typedef TypedArrayHelper<v8::Float64Array> Float64ArrayHelper;
+
+
 #endif // _GENERATOR_HELPER_H_

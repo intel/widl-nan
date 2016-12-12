@@ -27,6 +27,8 @@ var idlType2CxxType = function (idlType, refTypeMap) {
   var type = idlType.idlType;
   if (isArray(idlType)) {
     type = 'v8::Local<v8::Array>';
+  } else if (isTypedArray(idlType)) {
+    type = idlType.idlType + 'Helper';
   } else if (type === 'String' || type === 'DOMString') {
     type = 'std::string';
   } else if (type === 'boolean') {
