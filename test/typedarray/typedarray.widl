@@ -1,0 +1,25 @@
+[
+Constructor
+]
+interface FakeImage {
+  readonly attribute Uint8Array rawBuffer;
+  readonly attribute unsigned long length;
+
+  void setData(unsigned long offset, byte data);
+  byte getData(unsigned long offset);
+
+  Int8Array asInt8Array();
+  Uint8Array asUint8Array();
+  Uint8ClampedArray asUint8ClampedArray();
+
+  Int16Array asInt16Array();
+  Uint16Array asUint16Array();
+
+  Int32Array asInt32Array();
+  Uint32Array asUint32Array();
+
+  Float32Array asFloat32Array();
+  Float64Array asFloat64Array();
+
+  static Float32Array getStaticArray();
+};

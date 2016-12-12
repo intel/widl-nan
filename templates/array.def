@@ -4,4 +4,21 @@ var isArray = function (idlType) {
   return (idlType && idlType.array === 1) || (idlType && typeof idlType.idlType === 'object' && (idlType.sequence || idlType.generic === 'sequence'));
 };
 
+var isTypedArray = function (idlType) {
+  if (idlType) {
+    if (idlType.idlType === 'Int8Array' ||
+        idlType.idlType === 'Uint8Array' ||
+        idlType.idlType === 'Uint8ClampedArray' ||
+        idlType.idlType === 'Int16Array' ||
+        idlType.idlType === 'Uint16Array' ||
+        idlType.idlType === 'Int32Array' ||
+        idlType.idlType === 'Uint32Array' ||
+        idlType.idlType === 'Float32Array' ||
+        idlType.idlType === 'Float64Array') {
+      return true;
+  	}
+  }
+  return false;
+};
+
 }}
