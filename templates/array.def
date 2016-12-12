@@ -16,7 +16,7 @@ var isTypedArray = function (idlType) {
         idlType.idlType === 'Float32Array' ||
         idlType.idlType === 'Float64Array') {
       return true;
-  	}
+    }
   }
   return false;
 };
