@@ -22,4 +22,14 @@ interface FakeImage {
   Float64Array asFloat64Array();
 
   static Float32Array getStaticArray();
+
+  void setInt8Array(Int8ArrayHelper array);
+  void setUint8Array(Uint8ArrayHelper array);
+  void setUint8ClampedArray(Uint8ClampedArrayHelper array);
+  void setInt16Array(Int16ArrayHelper array);
+  void setUint16Array(Uint16ArrayHelper array);
+  void setInt32Array(Int32ArrayHelper array);
+  void setUint32Array(Uint32ArrayHelper array);
+  void setFloat32Array(Float32ArrayHelper array);
+  void setFloat64Array(Float64ArrayHelper array);
 };

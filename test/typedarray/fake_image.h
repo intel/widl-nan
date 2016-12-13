@@ -54,6 +54,24 @@ class FakeImage {
 
   static Float32ArrayHelper getStaticArray();
 
+  void setInt8Array(const Int8ArrayHelper& array);
+
+  void setUint8Array(const Uint8ArrayHelper& array);
+
+  void setUint8ClampedArray(const Uint8ClampedArrayHelper& array);
+
+  void setInt16Array(const Int16ArrayHelper& array);
+
+  void setUint16Array(const Uint16ArrayHelper& array);
+
+  void setInt32Array(const Int32ArrayHelper& array);
+
+  void setUint32Array(const Uint32ArrayHelper& array);
+
+  void setFloat32Array(const Float32ArrayHelper& array);
+
+  void setFloat64Array(const Float64ArrayHelper& array);
+
   void SetJavaScriptThis(v8::Local<v8::Object> obj) {
     // Ignore this if you don't need it
     // Typical usage: emit an event on `obj`

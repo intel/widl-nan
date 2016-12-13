@@ -311,10 +311,10 @@ class TypedArrayHelper {
     external_buffer_ = external;
   }
 
-  void* GetData() { return data_; }
-  uint32_t GetOffset() { return offset_; }
-  uint32_t GetLength() { return length_; }
-  bool IsExternalBuffer() { return external_buffer_; }
+  void* GetData() const { return data_; }
+  uint32_t GetOffset() const { return offset_; }
+  uint32_t GetLength() const { return length_; }
+  bool IsExternalBuffer() const { return external_buffer_; }
 
  private:
   void CopyFrom(const TypedArrayHelper& rhs) {
@@ -346,5 +346,58 @@ typedef TypedArrayHelper<v8::Uint32Array> Uint32ArrayHelper;
 typedef TypedArrayHelper<v8::Float32Array> Float32ArrayHelper;
 typedef TypedArrayHelper<v8::Float64Array> Float64ArrayHelper;
 
+inline Int8ArrayHelper EXTRACT_v8_Int8ArrayHelper(v8::Local<v8::Value> value) {
+  auto array = v8::TypedArray::Cast(*value);
+  auto buffer = array->Buffer();
+  return Int8ArrayHelper(buffer->GetContents().Data(), array->ByteOffset(), array->ByteLength());
+}
+
+inline Uint8ArrayHelper EXTRACT_v8_Uint8ArrayHelper(v8::Local<v8::Value> value) {
+  auto array = v8::TypedArray::Cast(*value);
+  auto buffer = array->Buffer();
+  return Uint8ArrayHelper(buffer->GetContents().Data(), array->ByteOffset(), array->ByteLength());
+}
+
+inline Uint8ClampedArrayHelper EXTRACT_v8_Uint8ClampedArrayHelper(v8::Local<v8::Value> value) {
+  auto array = v8::TypedArray::Cast(*value);
+  auto buffer = array->Buffer();
+  return Uint8ClampedArrayHelper(buffer->GetContents().Data(), array->ByteOffset(), array->ByteLength());
+}
+
+inline Int16ArrayHelper EXTRACT_v8_Int16ArrayHelper(v8::Local<v8::Value> value) {
+  auto array = v8::TypedArray::Cast(*value);
+  auto buffer = array->Buffer();
+  return Int16ArrayHelper(buffer->GetContents().Data(), array->ByteOffset(), array->ByteLength());
+}
+
+inline Uint16ArrayHelper EXTRACT_v8_Uint16ArrayHelper(v8::Local<v8::Value> value) {
+  auto array = v8::TypedArray::Cast(*value);
+  auto buffer = array->Buffer();
+  return Uint16ArrayHelper(buffer->GetContents().Data(), array->ByteOffset(), array->ByteLength());
+}
+
+inline Int32ArrayHelper EXTRACT_v8_Int32ArrayHelper(v8::Local<v8::Value> value) {
+  auto array = v8::TypedArray::Cast(*value);
+  auto buffer = array->Buffer();
+  return Int32ArrayHelper(buffer->GetContents().Data(), array->ByteOffset(), array->ByteLength());
+}
+
+inline Uint32ArrayHelper EXTRACT_v8_Uint32ArrayHelper(v8::Local<v8::Value> value) {
+  auto array = v8::TypedArray::Cast(*value);
+  auto buffer = array->Buffer();
+  return Uint32ArrayHelper(buffer->GetContents().Data(), array->ByteOffset(), array->ByteLength());
+}
+
+inline Float32ArrayHelper EXTRACT_v8_Float32ArrayHelper(v8::Local<v8::Value> value) {
+  auto array = v8::TypedArray::Cast(*value);
+  auto buffer = array->Buffer();
+  return Float32ArrayHelper(buffer->GetContents().Data(), array->ByteOffset(), array->ByteLength());
+}
+
+inline Float64ArrayHelper EXTRACT_v8_Float64ArrayHelper(v8::Local<v8::Value> value) {
+  auto array = v8::TypedArray::Cast(*value);
+  auto buffer = array->Buffer();
+  return Float64ArrayHelper(buffer->GetContents().Data(), array->ByteOffset(), array->ByteLength());
+}
 
 #endif // _GENERATOR_HELPER_H_
