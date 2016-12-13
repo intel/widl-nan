@@ -21,7 +21,9 @@ class Buffer {
   ArrayBufferHelper getArrayBuffer() const;
 
   ArrayBufferHelper get_data() const {
-    return ArrayBufferHelper((void*)data_.c_str(), data_.length());
+    return ArrayBufferHelper(
+        const_cast<void*>(reinterpret_cast<const void*>(data_.c_str())),
+        data_.length());
   }
 
   void set_data(const ArrayBufferHelper& buffer) {
