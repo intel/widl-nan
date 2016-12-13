@@ -8,7 +8,7 @@ if (p.static) {
   staticStr = 'static ';
 }
 }}
-{{? isInterface(p.idlType, it.refTypeMap) || (p.idlType.idlType == 'ArrayBuffer') }}
+{{? isInterface(p.idlType, it.refTypeMap) }}
   {{=staticStr}}std::unique_ptr<Nan::Persistent<v8::Object>> {{=p.name}}_;
 {{?}}
 {{~}}

@@ -63,7 +63,7 @@ class ArrayHelper {
   double GetDouble(uint32_t index) const  { return EXTRACT_v8_double(v8_array_->Get(index)); }
   std::string GetString(uint32_t index) const { return EXTRACT_v8_string(v8_array_->Get(index)); }
   v8::Local<v8::Value> GetValue(uint32_t index) const;
-  ArrayBuffer GetArrayBuffer(uint32_t index) const  { return EXTRACT_v8_ArrayBuffer(v8_array_->Get(index)); }
+  ArrayBufferHelper GetArrayBuffer(uint32_t index) const  { return EXTRACT_v8_ArrayBuffer(v8_array_->Get(index)); }
   v8::Local<v8::Object> GetObject(uint32_t index) const  { return EXTRACT_v8_object(v8_array_->Get(index)); }
   v8::Local<v8::Array> GetArray(uint32_t index) const { return EXTRACT_v8_array(v8_array_->Get(index)); }
   v8::Local<v8::Function> GetFunction(uint32_t index) const { return EXTRACT_v8_function(v8_array_->Get(index)); }

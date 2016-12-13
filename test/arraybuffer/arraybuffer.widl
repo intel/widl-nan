@@ -8,4 +8,6 @@ interface Buffer {
   ArrayBuffer getArrayBuffer();
 
   DOMString buffer2String(ArrayBuffer buffer);
+
+  static ArrayBuffer getCommonData();
 };

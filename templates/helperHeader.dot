@@ -11,9 +11,63 @@
 #define EXTRACT_v8_String(x) EXTRACT_v8_string(x)
 #define EXTRACT_v8_float(x) EXTRACT_v8_double(x)
 
-struct ArrayBuffer {
-  char* data;
-  uint32_t size;
+class ArrayBufferHelper {
+ public:
+  ArrayBufferHelper(void* data, uint32_t length) {
+    Set(data, length);
+  }
+
+  ArrayBufferHelper(const ArrayBufferHelper& rhs) {
+    CopyFrom(rhs);
+  }
+
+  ~ArrayBufferHelper() {}
+
+  ArrayBufferHelper& operator = (const ArrayBufferHelper& rhs) {
+    CopyFrom(rhs);
+    return *this;
+  }
+
+  void Set(void* data, uint32_t length, bool external = true) {
+    data_ = data;
+    length_ = length;
+    external_buffer_ = external;
+  }
+
+  v8::Local<v8::ArrayBuffer> GetArrayBuffer() const {
+    auto mode = external_buffer_ ?
+        v8::ArrayBufferCreationMode::kExternalized :
+        v8::ArrayBufferCreationMode::kInternalized;
+
+    return v8::ArrayBuffer::New(
+        v8::Isolate::GetCurrent(), data_, length_, mode);
+  }
+
+  bool operator == (const ArrayBufferHelper& rhs) {
+    if (this != &rhs) {
+      return data_ == rhs.data_ &&
+          length_ == rhs.length_ &&
+          external_buffer_ == rhs.external_buffer_;
+    }
+    return true;
+  }
+
+  void* GetData() const { return data_; }
+  uint32_t GetLength() const { return length_; }
+  bool IsExternalBuffer() const { return external_buffer_; }
+
+ private:
+  void CopyFrom(const ArrayBufferHelper& rhs) {
+    if (this != &rhs) {
+      data_ = rhs.data_;
+      length_ = rhs.length_;
+      external_buffer_ = rhs.external_buffer_;
+    }
+  }
+
+  void* data_;
+  uint32_t length_;
+  bool external_buffer_;
 };
 
 inline v8::Local<v8::Array> EXTRACT_v8_array(v8::Local<v8::Value> value) {
@@ -163,16 +217,14 @@ inline v8::Local<v8::Function> EXTRACT_v8_function(v8::Local<v8::Value> value, i
   return v8::Local<v8::Function>::Cast(value);
 }
 
-inline ArrayBuffer EXTRACT_v8_ArrayBuffer(v8::Local<v8::Value> value) {
+inline ArrayBufferHelper EXTRACT_v8_ArrayBuffer(v8::Local<v8::Value> value) {
   if (value->IsObject()) {
   } else {
     // throw ...
   }
 
-  ArrayBuffer arrayBuffer;
-  arrayBuffer.data = node::Buffer::Data(value->ToObject());
-  arrayBuffer.size = node::Buffer::Length(value->ToObject());
-  return arrayBuffer;
+  v8::ArrayBuffer* buffer = v8::ArrayBuffer::Cast(*value);
+  return ArrayBufferHelper(buffer->GetContents().Data(), buffer->GetContents().ByteLength());
 }
 
 // Helper: to deal with const members in interface of *.idl file

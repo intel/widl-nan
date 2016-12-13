@@ -128,10 +128,8 @@ var argStr = args.join(', ');
     info.GetReturnValue().Set(Nan::New(value).ToLocalChecked());
 {{?? method.idlType.idlType === 'ArrayBuffer' }}
     // Return type is ArrayBuffer
-    ArrayBuffer arrayBuffer = {{=functionCallPrefix}}{{=methodName}}({{=argStr}});
-    v8::Local<v8::Object> value;
-    if (Nan::NewBuffer(arrayBuffer.data, arrayBuffer.size).ToLocal(&value))
-      info.GetReturnValue().Set(value);
+    auto arrayBuffer = {{=functionCallPrefix}}{{=methodName}}({{=argStr}});
+    info.GetReturnValue().Set(arrayBuffer.GetArrayBuffer());
 {{?? isInterface(method.idlType, it.refTypeMap)}}
     // Return type is an interface object
     auto implObj = {{=functionCallPrefix}}{{=methodName}}({{=argStr}});
