@@ -12,6 +12,19 @@ var path = require('path');
 
 var FakeImage = null;
 
+function bufToString(array) {
+  return String.fromCharCode.apply(null, array);
+}
+
+function stringToArrayBuffer(str) {
+  var buf = new ArrayBuffer(str.length);
+  var bufView = new Uint8Array(buf);
+  for (var i = 0, strLen = str.length; i < strLen; ++i) {
+    bufView[i] = str.charCodeAt(i);
+  }
+  return buf;
+}
+
 describe('widl-nan Unit Test - sequence<T> as Array', function() {
   it('Generating binding C++ code', function() {
     return compile('test/typedarray/typedarray.widl', 'test/typedarray/gen');
@@ -81,6 +94,16 @@ describe('widl-nan Unit Test - sequence<T> as Array', function() {
 
     obj.setData(874, 233);
     assert.equal(array[874], 233);
+    done();
+  });
+
+  it('Test TypedArray as parameter', done => {
+    var str = 'the quick brown fox jumps over the lazy dog!';
+    var arrayBuf = stringToArrayBuffer(str);
+    var view = new Uint8Array(arrayBuf);
+    var obj = new FakeImage();
+    obj.setUint8Array(view);
+    assert.equal(bufToString(obj.asUint8Array()), str);
     done();
   });
 });

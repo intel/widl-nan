@@ -76,3 +76,42 @@ Float64ArrayHelper FakeImage::asFloat64Array() {
 Float32ArrayHelper FakeImage::getStaticArray() {
   return Float32ArrayHelper(nullptr, 0, 0);
 }
+
+void FakeImage::setInt8Array(const Int8ArrayHelper& array) {
+  // TODO(widl-nan): fill your code here
+}
+
+void FakeImage::setUint8Array(const Uint8ArrayHelper& array) {
+  length_ = array.GetLength();
+  memcpy(data_, array.GetData(), array.GetLength());
+}
+
+void FakeImage::setUint8ClampedArray(const Uint8ClampedArrayHelper& array) {
+  // TODO(widl-nan): fill your code here
+}
+
+void FakeImage::setInt16Array(const Int16ArrayHelper& array) {
+  // TODO(widl-nan): fill your code here
+}
+
+void FakeImage::setUint16Array(const Uint16ArrayHelper& array) {
+  // TODO(widl-nan): fill your code here
+}
+
+void FakeImage::setInt32Array(const Int32ArrayHelper& array) {
+  // TODO(widl-nan): fill your code here
+}
+
+void FakeImage::setUint32Array(const Uint32ArrayHelper& array) {
+  // TODO(widl-nan): fill your code here
+}
+
+void FakeImage::setFloat32Array(const Float32ArrayHelper& array) {
+  // TODO(widl-nan): fill your code here
+}
+
+void FakeImage::setFloat64Array(const Float64ArrayHelper& array) {
+  // TODO(widl-nan): fill your code here
+}
+
+
