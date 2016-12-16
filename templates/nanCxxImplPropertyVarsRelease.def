@@ -2,7 +2,7 @@
 {{#def.members}}
 
 {{~ getNonStaticPropertyMembers(it) :p:i }}
-{{? isInterface(p.idlType, it.refTypeMap) || (p.idlType.idlType === 'ArrayBuffer')}}
+{{? isInterface(p.idlType, it.refTypeMap) }}
   {{=p.name}}_.reset();
 {{?}}
 {{~}}
