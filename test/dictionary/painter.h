@@ -33,6 +33,8 @@ class Painter {
 
   void drawPolygon(const PolygonDrawOption& polygon);
 
+  PolygonDrawOption getLastPolygonDrawOption();
+
   void SetJavaScriptThis(v8::Local<v8::Object> obj) {
     // Ignore this if you don't need it
     // Typical usage: emit an event on `obj`
@@ -44,6 +46,8 @@ class Painter {
   std::string options_color_;
   std::string options_subscript_;
   int16_t options_flags_;
+
+  DictionaryPolygonDrawOption polygon_draw_option_;
 };
 
 #endif  // __PAINTER_H_
