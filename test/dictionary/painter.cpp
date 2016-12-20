@@ -48,5 +48,9 @@ PaintOptions Painter::getFactoryOptions() {
 }
 
 void Painter::drawPolygon(const PolygonDrawOption& polygon) {
-  // TODO(widl-nan): fill your code here
+  polygon_draw_option_.ImportFrom(polygon);
+}
+
+PolygonDrawOption Painter::getLastPolygonDrawOption() {
+  return polygon_draw_option_.Exported();
 }

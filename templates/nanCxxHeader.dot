@@ -39,6 +39,8 @@ class {{=nanClassName}} : public Nan::ObjectWrap {
 {{?}}
 
 {{? useImpl}}
+  {{=implClassName}}* GetImplPtr() { return impl_; }
+
   {{=implClassName}}* {{=generateGetImplMethodName(implClassName)}}() { return impl_; }
   const {{=implClassName}}* {{=generateGetImplMethodName(implClassName)}}() const { return impl_; }
   void {{=generateSetImplMethodName(implClassName)}}({{=implClassName}}* newObj) { delete impl_; impl_ = newObj; owns_impl_ = true; }

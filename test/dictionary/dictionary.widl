@@ -37,4 +37,6 @@ interface Painter {
   PaintOptions getFactoryOptions();
 
   void drawPolygon(PolygonDrawOption polygon);
+
+  PolygonDrawOption getLastPolygonDrawOption();
 };

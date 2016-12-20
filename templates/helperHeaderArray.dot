@@ -52,6 +52,11 @@ class ArrayHelper {
   void Set(uint32_t index, v8::Local<v8::Value> elem) { v8_array_->Set(index, elem); }
   template <typename T> void SetT(uint32_t index, const T& elem) {v8_array_->Set(index, Nan::New(elem)); }
 
+  template <class NanT, class ImplT>
+  void SetInterfaceImplT(uint32_t i, ImplT* ptr) {
+    Set(i, NanT::NewInstance(ptr));
+  }
+
   bool GetBoolean(uint32_t index) const  { return EXTRACT_v8_bool(v8_array_->Get(index)); }
   int8_t  GetInt8_t(uint32_t index) const  { return EXTRACT_v8_int8_t(v8_array_->Get(index)); }
   int16_t GetInt16_t(uint32_t index) const  { return EXTRACT_v8_int16_t(v8_array_->Get(index)); }
@@ -62,11 +67,18 @@ class ArrayHelper {
   float GetFloat(uint32_t index) const  { return EXTRACT_v8_double(v8_array_->Get(index)); }
   double GetDouble(uint32_t index) const  { return EXTRACT_v8_double(v8_array_->Get(index)); }
   std::string GetString(uint32_t index) const { return EXTRACT_v8_string(v8_array_->Get(index)); }
-  v8::Local<v8::Value> GetValue(uint32_t index) const;
+  v8::Local<v8::Value> GetValue(uint32_t index) const { return v8_array_->Get(index); }
   ArrayBuffer GetArrayBuffer(uint32_t index) const  { return EXTRACT_v8_ArrayBuffer(v8_array_->Get(index)); }
   v8::Local<v8::Object> GetObject(uint32_t index) const  { return EXTRACT_v8_object(v8_array_->Get(index)); }
   v8::Local<v8::Array> GetArray(uint32_t index) const { return EXTRACT_v8_array(v8_array_->Get(index)); }
   v8::Local<v8::Function> GetFunction(uint32_t index) const { return EXTRACT_v8_function(v8_array_->Get(index)); }
+
+  template <class NanT, class ImplT>
+  ImplT* GetInterfaceImplT(uint32_t i) const {
+    auto obj = GetObject(i);
+    NanT* ptr = Nan::ObjectWrap::Unwrap<NanT>(obj);
+    return ptr->GetImplPtr();
+  }
 
   static ArrayHelper Clone(const ArrayHelper& rhs) {
     ArrayHelper tmp;

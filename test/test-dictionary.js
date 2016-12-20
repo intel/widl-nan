@@ -85,4 +85,34 @@ describe('widl-nan Unit Test - IDL dictionary', function() {
 
     done();
   });
+
+  it('Test Array member in Dictionary', done => {
+    var painter = new Painter();
+    painter.drawPolygon({transformMatrix: [1.0, 2.0, 3.5, 4.75]});
+    var dic = painter.getLastPolygonDrawOption();
+    assert.equal(dic.transformMatrix[0], 1.0);
+    assert.equal(dic.transformMatrix[1], 2.0);
+    assert.equal(dic.transformMatrix[2], 3.5);
+    assert.equal(dic.transformMatrix[3], 4.75);
+
+    painter.drawPolygon({
+      transformMatrix: [8.0, 7.0, 9.5, 12.75],
+      polygon: [new Point(1, 2), new Point(3, 75), new Point(89, 64)],
+      color: 'yellow'
+    });
+    dic = painter.getLastPolygonDrawOption();
+    assert.equal(dic.transformMatrix[0], 8.0);
+    assert.equal(dic.transformMatrix[1], 7.0);
+    assert.equal(dic.transformMatrix[2], 9.5);
+    assert.equal(dic.transformMatrix[3], 12.75);
+    assert.equal(dic.color, 'yellow');
+    assert.equal(dic.polygon[0].x, 1);
+    assert.equal(dic.polygon[0].x, 1);
+    assert.equal(dic.polygon[1].x, 3);
+    assert.equal(dic.polygon[1].y, 75);
+    assert.equal(dic.polygon[2].x, 89);
+    assert.equal(dic.polygon[2].y, 64);
+
+    done();
+  });
 });

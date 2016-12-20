@@ -49,6 +49,8 @@ var allForeignDictionaryTypes = extractAllReferenceDictionaryTypeForDictionary(i
 #include "gen/nan__{{=classNameToFileName(p)}}.h"
 {{~}}
 
+#include "gen/array_helper.h"
+
 {{~allForeignDictionaryTypes :p:i}}
 #include "gen/{{=classNameToFileName(p)}}.h"
 {{~}}
@@ -159,19 +161,22 @@ var internalDictionaryClassName = internalPrefix + dictionaryClassName;
 // The pure C++ equivalent class of JavaScript dictionary {{=dictionaryClassName}}
 //  There is no v8::xxx involved (thread friendly)
 //
-//  Warning: JavaScript array member(s) in dictionary is not supported yet
+//  Warning: JavaScript array data member(s) are only partially supported
 //
 class {{=internalDictionaryClassName}} {
  public:
   {{=internalDictionaryClassName}} () {
+    _ResetPointers();
     Reset();
   }
 
   {{=internalDictionaryClassName}} (const {{=dictionaryClassName}}& dic) {
+    _ResetPointers();
     ImportFrom(dic);
   }
 
   {{=internalDictionaryClassName}} (const {{=internalDictionaryClassName}}& rhs) {
+    _ResetPointers();
     CopyFrom(rhs);
   }
 
@@ -180,10 +185,24 @@ class {{=internalDictionaryClassName}} {
     return *this;
   }
 
+  ~{{=internalDictionaryClassName}} () {
+{{~it.members :p:i}}
+{{var memberName = 'member_' + p.name; var hasMemberName = 'has_' + memberName; }}
+{{? p.type === 'field' && isArray(p.idlType) }}
+    delete {{=memberName}};
+{{?}}
+{{~}}
+  }
+
   void Reset() {
 {{~it.members :p:i}}
 {{var memberName = 'member_' + p.name; var hasMemberName = 'has_' + memberName; }}
     {{=hasMemberName}} = false;
+{{? p.type === 'field' && isArray(p.idlType) }}
+    delete {{=memberName}};
+    {{=memberName}} = nullptr;
+    {{=memberName}}_size_ = 0;
+{{?}}
 {{~}}
   }
 
@@ -194,12 +213,21 @@ class {{=internalDictionaryClassName}} {
 {{
 var memberName = 'member_' + p.name; var hasMemberName = 'has_' + memberName;
 var memberType = idlType2CxxType(p.idlType, it.refTypeMap);
+var classImplType = p.idlType.idlType;
 }}
       if (rhs.{{=hasMemberName}}) {
-{{? p.type === 'field' && isArray(p.idlType) }}
-        // TODO: Copy rhs.{{=memberName}};
-{{?? true}}
         {{=hasMemberName}} = rhs.{{=hasMemberName}};
+{{? p.type === 'field' && isArray(p.idlType) }}
+        delete {{=memberName}};
+        {{=memberName}} = nullptr;
+        {{=memberName}}_size_ = rhs.{{=memberName}}_size_;
+        if ({{=memberName}}_size_) {
+          {{=memberName}} = new {{=classImplType}} [{{=memberName}}_size_];
+          for (size_t i = 0; i < {{=memberName}}_size_; ++i) {
+            {{=memberName}}[i] = rhs.{{=memberName}}[i];
+          }
+        }
+{{?? true}}
         {{=memberName}} = rhs.{{=memberName}}; {{?}}
       }
 {{~}}
@@ -212,11 +240,20 @@ var memberType = idlType2CxxType(p.idlType, it.refTypeMap);
 {{
 var memberName = 'member_' + p.name; var hasMemberName = 'has_' + memberName;
 var memberType = idlType2CxxType(p.idlType, it.refTypeMap);
+var classImplType = p.idlType.idlType;
 }}
       {{=hasMemberName}} = rhs.{{=hasMemberName}};
       if (rhs.{{=hasMemberName}}) {
 {{? p.type === 'field' && isArray(p.idlType) }}
-        // TODO: Copy rhs.{{=memberName}};
+        delete {{=memberName}};
+        {{=memberName}} = nullptr;
+        {{=memberName}}_size_ = rhs.{{=memberName}}_size_;
+        if ({{=memberName}}_size_) {
+          {{=memberName}} = new {{=classImplType}} [{{=memberName}}_size_];
+          for (size_t i = 0; i < {{=memberName}}_size_; ++i) {
+            {{=memberName}}[i] = rhs.{{=memberName}}[i];
+          }
+        }
 {{?? true}}
         {{=memberName}} = rhs.{{=memberName}}; {{?}}
       }
@@ -232,11 +269,28 @@ var memberType = idlType2CxxType(p.idlType, it.refTypeMap);
 var memberName = 'member_' + p.name; var hasMemberName = 'has_' + memberName;
 var rawMembername = p.name;
 var memberType = idlType2CxxType(p.idlType, it.refTypeMap);
+var classImplType = p.idlType.idlType;
+var hackType = {idlType: p.idlType.idlType};
+var extraMacroType = convertIDLType2ExtractMacro(hackType, it.refTypeMap);
 }}
     {{=hasMemberName}} = dic.has_{{=rawMembername}}();
     if ({{=hasMemberName}}) {
 {{? p.type === 'field' && isArray(p.idlType) }}
-      // TODO: Copy dic.get_{{=rawMembername}}();
+      ArrayHelper array(dic.get_{{=rawMembername}}());
+      {{=memberName}}_size_ = array.Length();
+      delete {{=memberName}};
+      {{=memberName}} = new {{=classImplType}}[{{=memberName}}_size_];
+      for (size_t i = 0; i < {{=memberName}}_size_; ++i) {
+        {{? isPrimitiveType(p.idlType) }}
+        {{=memberName}}[i] = EXTRACT_v8_{{=extraMacroType}}(array.GetValue(i));
+        {{?? isInterface(p.idlType, it.refTypeMap) }}
+        {{=memberName}}[i] = *array.GetInterfaceImplT<Nan{{=classImplType}}, {{=classImplType}}>(i);
+        {{?? true}}
+        // TODO: import member {{=memberName}} with type {{p.idlType.idlType}}
+        {{?}}
+      }
+
+
 {{?? p.type === 'field' && (isDictionary(p.idlType, it.refTypeMap))}}
 {{var dictionaryType = p.idlType.idlType;}}
       {{=memberName}} = dic.get_{{=rawMembername}}();
@@ -253,10 +307,21 @@ var memberType = idlType2CxxType(p.idlType, it.refTypeMap);
 var memberName = 'member_' + p.name; var hasMemberName = 'has_' + memberName;
 var rawMembername = p.name;
 var memberType = idlType2CxxType(p.idlType, it.refTypeMap);
+var classImplType = p.idlType.idlType;
 }}
     if ({{=hasMemberName}}) {
 {{? p.type === 'field' && isArray(p.idlType) }}
-      // TODO: Copy dic.get_{{=rawMembername}}();
+      ArrayHelper array;
+      for (size_t i = 0; i < {{=memberName}}_size_; ++i) {
+        {{? isPrimitiveType(p.idlType) }}
+        array.SetT<{{=classImplType}}>(i, {{=memberName}}[i]);
+        {{?? isInterface(p.idlType, it.refTypeMap) }}
+        array.SetInterfaceImplT<Nan{{=classImplType}}, {{=classImplType}}>(i, new {{=classImplType}}({{=memberName}}[i]));
+        {{?? true }}
+        // TODO: export member {{=memberName}} with type {{p.idlType.idlType}}
+        {{?}}
+      }
+      dic.set_{{=rawMembername}}(array);
 {{?? p.type === 'field' && (isDictionary(p.idlType, it.refTypeMap))}}
 {{var dictionaryType = p.idlType.idlType;}}
       dic.set_{{=rawMembername}}({{=memberName}}.Exported());
@@ -289,9 +354,10 @@ var memberType = idlType2CxxType(p.idlType, it.refTypeMap);
 {{?? p.type === 'field' && isString(p.idlType) && !isArray(p.idlType)}}
   {{=memberType}} {{=memberName}};
 {{?? p.type === 'field' && isArray(p.idlType) }}
-  // TODO: Fina a way to support this.
-  //       Note: there is no 1:1 equivalent C++ type of JavaScript array yet
-  //{{=memberType}}[] {{=memberName}};
+  // Note: we assume all elements in this array are of the same type
+  //       because we don't want to define a <variant> type as element
+  {{=p.idlType.idlType}}* {{=memberName}};
+  size_t {{=memberName}}_size_;
 {{?? p.type === 'field' && isInterface(p.idlType, it.refTypeMap)}}
 {{var interfaceType = p.idlType.idlType;}}
   {{=interfaceType}} {{=memberName}};
@@ -303,6 +369,17 @@ var memberType = idlType2CxxType(p.idlType, it.refTypeMap);
 {{?}}
 
 {{~}}
+
+ private:
+  void _ResetPointers() {
+{{~it.members :p:i}}
+{{var memberName = 'member_' + p.name; var hasMemberName = 'has_' + memberName; }}
+{{? p.type === 'field' && isArray(p.idlType) }}
+    {{=memberName}} = nullptr;
+    {{=memberName}}_size_ = 0;
+{{?}}
+{{~}}
+  }
 
 };
 
