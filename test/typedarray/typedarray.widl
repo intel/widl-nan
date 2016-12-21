@@ -5,6 +5,9 @@ interface FakeImage {
   readonly attribute Uint8Array rawBuffer;
   readonly attribute unsigned long length;
 
+  attribute Int16Array shortArray;
+  attribute Int32Array longArray;
+
   void setData(unsigned long offset, byte data);
   byte getData(unsigned long offset);
 

@@ -50,6 +50,18 @@ describe('widl-nan Unit Test - sequence<T> as Array', function() {
     var obj = new FakeImage();
     assert(obj.rawBuffer instanceof Uint8Array);
     assert.equal(obj.rawBuffer.length, obj.length);
+    assert.equal(obj.shortArray.length, 512);
+    assert.equal(obj.longArray.length, 256);
+
+    var str = '0123456789AB';
+    var arrayBuf = stringToArrayBuffer(str);
+    var view1 = new Uint32Array(arrayBuf);
+    obj.longArray = view1;
+    assert.equal(obj.longArray.length, view1.length);
+    var view2 = new Uint16Array(arrayBuf);
+    obj.shortArray = view2;
+    assert.equal(obj.shortArray.length, view2.length);
+
     done();
   });
 

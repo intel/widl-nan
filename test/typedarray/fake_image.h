@@ -30,6 +30,26 @@ class FakeImage {
     return this->length_;
   }
 
+  Int16ArrayHelper get_shortArray() const {
+    return this->shortArray_;
+  }
+
+  void set_shortArray(const Int16ArrayHelper& new_value) {
+    DeepCopyFromTypedArrayHelper(new_value,
+        shortArray_store_, 512);
+    shortArray_.Set(shortArray_store_, 0, new_value.GetLength());
+  }
+
+  Int32ArrayHelper get_longArray() const {
+    return this->longArray_;
+  }
+
+  void set_longArray(const Int32ArrayHelper& new_value) {
+    DeepCopyFromTypedArrayHelper(new_value,
+        longArray_store_, 256);
+    longArray_.Set(longArray_store_, 0, new_value.GetLength());
+  }
+
   void setData(const uint32_t& offset, const uint8_t& data);
 
   int8_t getData(const uint32_t& offset);
@@ -78,10 +98,21 @@ class FakeImage {
   }
 
  private:
+  void Setup();
+  void InitBuffer();
+  void CopyFrom(const FakeImage& rhs);
+
+ private:
   Uint8ArrayHelper rawBuffer_;
 
   uint32_t length_;
   char* data_;
+
+  Int16ArrayHelper shortArray_;
+  int16_t shortArray_store_[512];
+
+  Int32ArrayHelper longArray_;
+  int32_t longArray_store_[256];
 };
 
 #endif  // _FAKE_IMAGE_H_
