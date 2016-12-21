@@ -3,16 +3,13 @@
 #include "fake_image.h"
 
 FakeImage::FakeImage() {
-  length_ = 1024;
-  data_ = new char[length_];
-  for (int i = 0 ; i < length_ ; ++i) {
-    data_[i] = 0;
-  }
-
-  rawBuffer_.Set(data_, 0, 1024);
+  InitBuffer();
+  Setup();
 }
 
 FakeImage::FakeImage(const FakeImage& rhs) {
+  InitBuffer();
+  CopyFrom(rhs);
 }
 
 FakeImage::~FakeImage() {
@@ -20,8 +17,7 @@ FakeImage::~FakeImage() {
 }
 
 FakeImage& FakeImage::operator = (const FakeImage& rhs) {
-  // if (&rhs != this) {
-  // }
+  CopyFrom(rhs);
   return *this;
 }
 
@@ -114,4 +110,32 @@ void FakeImage::setFloat64Array(const Float64ArrayHelper& array) {
   // TODO(widl-nan): fill your code here
 }
 
+void FakeImage::InitBuffer() {
+  length_ = 1024;
+  data_ = new char[length_];
+  for (int i = 0 ; i < length_ ; ++i) {
+    data_[i] = 0;
+  }
 
+  rawBuffer_.Set(data_, 0, 1024);
+}
+
+void FakeImage::Setup() {
+  SetupTypedArrayHelper(&shortArray_,
+      shortArray_store_,
+      512);
+  SetupTypedArrayHelper(&longArray_,
+      longArray_store_,
+      256);
+}
+
+void FakeImage::CopyFrom(const FakeImage& rhs) {
+  if (this != &rhs) {
+    Setup();
+    DeepCopyFromTypedArrayHelper(rhs.shortArray_,
+        shortArray_store_, 512);
+    DeepCopyFromTypedArrayHelper(rhs.longArray_,
+        longArray_store_, 256);
+    // TODO(never): copy data_ & length_;
+  }
+}
