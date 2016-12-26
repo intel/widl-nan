@@ -189,7 +189,7 @@ class {{=internalDictionaryClassName}} {
 {{~it.members :p:i}}
 {{var memberName = 'member_' + p.name; var hasMemberName = 'has_' + memberName; }}
 {{? p.type === 'field' && isArray(p.idlType) }}
-    delete {{=memberName}};
+    delete[] {{=memberName}};
 {{?}}
 {{~}}
   }
@@ -199,7 +199,7 @@ class {{=internalDictionaryClassName}} {
 {{var memberName = 'member_' + p.name; var hasMemberName = 'has_' + memberName; }}
     {{=hasMemberName}} = false;
 {{? p.type === 'field' && isArray(p.idlType) }}
-    delete {{=memberName}};
+    delete[] {{=memberName}};
     {{=memberName}} = nullptr;
     {{=memberName}}_size_ = 0;
 {{?}}
@@ -218,7 +218,7 @@ var classImplType = p.idlType.idlType;
       if (rhs.{{=hasMemberName}}) {
         {{=hasMemberName}} = rhs.{{=hasMemberName}};
 {{? p.type === 'field' && isArray(p.idlType) }}
-        delete {{=memberName}};
+        delete[] {{=memberName}};
         {{=memberName}} = nullptr;
         {{=memberName}}_size_ = rhs.{{=memberName}}_size_;
         if ({{=memberName}}_size_) {
@@ -245,7 +245,7 @@ var classImplType = p.idlType.idlType;
       {{=hasMemberName}} = rhs.{{=hasMemberName}};
       if (rhs.{{=hasMemberName}}) {
 {{? p.type === 'field' && isArray(p.idlType) }}
-        delete {{=memberName}};
+        delete[] {{=memberName}};
         {{=memberName}} = nullptr;
         {{=memberName}}_size_ = rhs.{{=memberName}}_size_;
         if ({{=memberName}}_size_) {
@@ -278,16 +278,19 @@ var extraMacroType = convertIDLType2ExtractMacro(hackType, it.refTypeMap);
 {{? p.type === 'field' && isArray(p.idlType) }}
       ArrayHelper array(dic.get_{{=rawMembername}}());
       {{=memberName}}_size_ = array.Length();
-      delete {{=memberName}};
-      {{=memberName}} = new {{=classImplType}}[{{=memberName}}_size_];
-      for (size_t i = 0; i < {{=memberName}}_size_; ++i) {
-        {{? isPrimitiveType(p.idlType) }}
-        {{=memberName}}[i] = EXTRACT_v8_{{=extraMacroType}}(array.GetValue(i));
-        {{?? isInterface(p.idlType, it.refTypeMap) }}
-        {{=memberName}}[i] = *array.GetInterfaceImplT<Nan{{=classImplType}}, {{=classImplType}}>(i);
-        {{?? true}}
-        // TODO: import member {{=memberName}} with type {{p.idlType.idlType}}
-        {{?}}
+      delete[] {{=memberName}};
+      {{=memberName}} = nullptr;
+      if ({{=memberName}}_size_) {
+        {{=memberName}} = new {{=classImplType}}[{{=memberName}}_size_];
+        for (size_t i = 0; i < {{=memberName}}_size_; ++i) {
+          {{? isPrimitiveType(p.idlType) }}
+          {{=memberName}}[i] = EXTRACT_v8_{{=extraMacroType}}(array.GetValue(i));
+          {{?? isInterface(p.idlType, it.refTypeMap) }}
+          {{=memberName}}[i] = *array.GetInterfaceImplT<Nan{{=classImplType}}, {{=classImplType}}>(i);
+          {{?? true}}
+          // TODO: import member {{=memberName}} with type {{p.idlType.idlType}}
+          {{?}}
+        }
       }
 
 

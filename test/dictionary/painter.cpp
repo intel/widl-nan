@@ -48,7 +48,10 @@ PaintOptions Painter::getFactoryOptions() {
 }
 
 void Painter::drawPolygon(const PolygonDrawOption& polygon) {
-  polygon_draw_option_.ImportFrom(polygon);
+  // Do this to cover more functions in test
+  DictionaryPolygonDrawOption t;
+  t.ImportFrom(polygon);
+  polygon_draw_option_ = t;
 }
 
 PolygonDrawOption Painter::getLastPolygonDrawOption() {
