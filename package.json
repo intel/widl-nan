@@ -1,6 +1,6 @@
 {
   "name": "widl-nan",
-  "version": "0.1.18",
+  "version": "0.1.19",
   "description": "Auto generate native C++ addon source code by parsing Web IDL definition",
   "main": "index.js",
   "scripts": {
