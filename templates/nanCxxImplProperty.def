@@ -56,6 +56,10 @@ NAN_GETTER({{=className}}::{{=p.name}}Getter) {
   v8::Local<v8::Object> obj = Nan::New(*{{=myself}}{{=p.name}}_);
   auto obj_ptr = ObjectWrap::Unwrap<Nan{{=retType}}>(obj);
   if (impl_val) {
+    auto old_ptr = obj_ptr->Get{{=retType}}Impl();
+    if ( old_ptr != impl_val) {
+      delete old_ptr;
+    }
     obj_ptr->Borrow{{=retType}}Impl(impl_val);
     info.GetReturnValue().Set(obj);
   } else {

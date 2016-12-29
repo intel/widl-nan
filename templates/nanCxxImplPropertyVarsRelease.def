@@ -3,6 +3,7 @@
 
 {{~ getNonStaticPropertyMembers(it) :p:i }}
 {{? isInterface(p.idlType, it.refTypeMap) || (p.idlType.idlType === 'ArrayBuffer')}}
-  {{=p.name}}_.reset();
+  {{=p.name}}_->Reset(); // Explicitly reset persistent reference, dtor won't always do Reset()
+  {{=p.name}}_.reset(); // Destroy persistent object
 {{?}}
 {{~}}
