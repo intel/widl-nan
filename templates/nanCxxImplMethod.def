@@ -136,9 +136,13 @@ var argStr = args.join(', ');
     // Return type is an interface object
     auto implObj = {{=functionCallPrefix}}{{=methodName}}({{=argStr}});
 {{ var retType = method.idlType.idlType; }}
-    auto value = Nan{{=retType}}::NewInstance();
-    ObjectWrap::Unwrap<Nan{{=retType}}>(value)->Set{{=retType}}Impl(implObj);
-    info.GetReturnValue().Set(value);
+    if (!implObj) {
+      info.GetReturnValue().Set(Nan::Undefined());
+    } else {
+      auto value = Nan{{=retType}}::NewInstance();
+      ObjectWrap::Unwrap<Nan{{=retType}}>(value)->Set{{=retType}}Impl(implObj);
+      info.GetReturnValue().Set(value);
+    }
 {{?? isDictionary(method.idlType, it.refTypeMap)}}
     // Return type is a dictionary object
     auto value = {{=functionCallPrefix}}{{=methodName}}({{=argStr}});

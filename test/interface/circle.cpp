@@ -19,3 +19,7 @@ Point* Circle::triangulate(const Circle& c1,
   pt->set_y(18.75);
   return pt;
 }
+
+Point* Circle::emptyReturn() {
+  return nullptr;
+}
