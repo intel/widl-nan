@@ -87,4 +87,11 @@ describe('widl-nan Unit Test - interface', function() {
     assert.equal(point.y, 18.75);   // Mock value, see circle.cpp
     done();
   });
+
+  it('Method returning undefined if impl method return nullptr', done => {
+    var c = new Circle();
+    var point = c.emptyReturn();
+    assert.equal(point, undefined); // Returned undefined
+    done();
+  });
 });

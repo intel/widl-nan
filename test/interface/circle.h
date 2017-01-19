@@ -44,6 +44,8 @@ class Circle {
 
   Point* triangulate(const Circle& c1, const Circle& c2, const Circle& c3);
 
+  Point* emptyReturn();
+
  private:
   float cx_;
   float cy_;

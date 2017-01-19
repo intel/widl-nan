@@ -18,4 +18,5 @@ interface Circle {
   attribute float radius;
 
   Point triangulate(Circle c1, Circle c2, Circle c3);
+  Point emptyReturn();
 };
