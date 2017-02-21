@@ -4,6 +4,7 @@
 {{#def.dictionary}}
 {{#def.interface}}
 {{#def.enum}}
+{{#def.buildValidEnumValuesList}}
 
 {{
 var dictionaryClassName = it.name;
@@ -87,6 +88,82 @@ var requiredMembersStr = '{' + requiredMembers.join(', ') + '}';
     return true;
   }
 
+  bool CheckType(std::string* error) const {
+    if (!RequiredMemberCheck(v8obj_)) {
+      if (error)
+        *error = "{{=dictionaryClassName}} missing required member";
+      return false;
+    }
+{{~it.members :p:i}}
+{{
+var memberNameTmp = p.name;
+var memberTypeTmp = idlType2CxxType(p.idlType, it.refTypeMap);
+}}
+    if (IsMemberPresent("{{=memberNameTmp}}")) {
+      auto value = GetMember("{{=memberNameTmp}}");
+{{? p.type === 'field' && isBoolean(p.idlType) && !isArray(p.idlType) }}
+      if (!value->IsBoolean()) {
+        if (error)
+          *error = "{{=memberNameTmp}} should be a boolean";
+        return false;
+      }
+{{?? p.type === 'field' && isPrimitiveNumberType(p.idlType)}}
+      if (!value->IsNumber()) {
+        if (error)
+          *error = "{{=memberNameTmp}} should be Number";
+        return false;
+      }
+{{?? p.type === 'field' && isString(p.idlType) && !isArray(p.idlType) }}
+      if (!value->IsString()) {
+        if (error)
+          *error = "{{=memberNameTmp}} should be a string";
+        return false;
+      }
+{{?? p.type === 'field' && isArray(p.idlType) }}
+      if (!value->IsArray()) {
+        if (error)
+          *error = "{{=memberNameTmp}} should be an Array";
+        return false;
+      }
+{{?? p.type === 'field' && isInterface(p.idlType, it.refTypeMap)}}
+      if (!value->IsObject()) {
+        if (error)
+          *error = "{{=memberNameTmp}} should be an object";
+        return false;
+      }
+{{?? p.type === 'field' && (isDictionary(p.idlType, it.refTypeMap))}}
+{{var dictionaryTypeTmp = p.idlType.idlType;}}
+      if (!value->IsObject()) {
+        if (error)
+          *error = "{{=memberNameTmp}} should be an dictionary";
+        return false;
+      }
+      {{=dictionaryTypeTmp}} option_value = value->ToObject();
+      if (!option_value.CheckType(error))
+        return false;
+{{?? p.type === 'field' && (isEnumType(p.idlType, it.refTypeMap)) }}
+      if (!value->IsString()) {
+        if (error)
+          *error = "{{=memberNameTmp}} should be a valid enum string";
+        return false;
+      }
+{{
+var enumDefTmp = getEnumDef(p.idlType, it.refTypeMap);
+var enumNameTmp = enumDefTmp.name;
+}}
+      std::string string_value = EXTRACT_v8_string(value);
+      // Valid enum values for enum, original IDL type: {{=enumNameTmp}}
+      const char* VALID_ENUM_{{=(enumNameTmp.toUpperCase())}}_INFO[] = { {{=buildValidEnumValuesList(enumDefTmp)}} };
+      if (!IsEnumValueValid(string_value, VALID_ENUM_{{=(enumNameTmp.toUpperCase())}}_INFO)) {
+        if (error)
+          *error = "{{=memberNameTmp}} is not a valid enum value";
+        return false;
+      }
+{{?}}
+    }
+{{~}}
+    return true;
+  }
 
 {{~it.members :p:i}}
 

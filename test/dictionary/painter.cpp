@@ -42,6 +42,10 @@ void Painter::drawText(const std::string& text, const PaintOptions& options) {
   switch_ = options.get_others().get_switch();
 }
 
+bool Painter::checkOptions(const PaintOptions& options) {
+  return options.CheckType(nullptr);
+}
+
 PaintOptions Painter::getFactoryOptions() {
   // Temp: just reusing options property
   return get_options();

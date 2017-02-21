@@ -32,7 +32,8 @@ dictionary PolygonDrawOption {
 Constructor
 ]
 interface Painter {
-  void drawText(DOMString text, PaintOptions options);  
+  void drawText(DOMString text, PaintOptions options);
+  bool checkOptions(PaintOptions options);
   attribute PaintOptions options;
   PaintOptions getFactoryOptions();
 

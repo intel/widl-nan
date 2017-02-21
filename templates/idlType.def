@@ -23,6 +23,10 @@ var isPrimitiveType = function (idlType) {
       || type === 'String';
 };
 
+var isBoolean = function (idlType) {
+  return idlType.idlType === 'boolean';
+};
+
 var idlType2CxxType = function (idlType, refTypeMap) {
   var type = idlType.idlType;
   if (isArray(idlType)) {
@@ -74,6 +78,10 @@ var isString = function (idlType, refTypeMap) {
 
 var isNonStringPrimitiveType = function (idlType, refTypeMap) {
   return isPrimitiveType(idlType) && !isString(idlType);
+};
+
+var isPrimitiveNumberType = function (idlType, refTypeMap) {
+  return isPrimitiveType(idlType) && !isString(idlType) && !isBoolean(idlType);
 };
 
 var idlType2V8Type = function (idlType, refTypeMap, callback) {

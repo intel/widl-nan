@@ -29,6 +29,8 @@ class Painter {
 
   void drawText(const std::string& text, const PaintOptions& options);
 
+  bool checkOptions(const PaintOptions& options);
+
   PaintOptions getFactoryOptions();
 
   void drawPolygon(const PolygonDrawOption& polygon);

@@ -115,4 +115,25 @@ describe('widl-nan Unit Test - IDL dictionary', function() {
 
     done();
   });
+
+  it('Check PaintOptions element value type', done => {
+    var x = new Painter();
+    var validOption = {
+      offset: new Point(10, 20),
+      color: 'red',
+      flags: 1860,
+      others: {switch: true}
+    };
+    var invalidOption = {
+      offset: new Point(10, 20),
+      color: 123,
+      flags: 'flags',
+      others: {switch: true}
+    };
+    var isValid = x.checkOptions(validOption);
+    assert.equal(isValid, true);
+    isValid = x.checkOptions(invalidOption);
+    assert.equal(isValid, false);
+    done();
+  });
 });
