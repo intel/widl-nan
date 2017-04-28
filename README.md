@@ -41,6 +41,9 @@ A comprehensive commit message will help reviewer to understand what your PR is 
 
 To close a related issue, we highly suggest to use [Closing issues via commit messages](https://help.github.com/articles/closing-issues-via-commit-messages/) format, for eg: Fixes.
 
+# Security
+If you would like to report a security issue, or have other security related questions, please email [the team](mailto:otc.prc.web.runtime.and.technology.team@intel.com).
+
 # License
 
 The MIT License (MIT)
