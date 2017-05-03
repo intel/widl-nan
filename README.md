@@ -2,22 +2,16 @@
 
 # Purpose
 
-This toolchain transcompiles [W3C Web IDL](https://www.w3.org/TR/WebIDL/) and [Version 2](https://heycam.github.io/webidl/) to the [NAN](https://github.com/nodejs/nan) C++ code. This tool improve efficiency of [Node.js Addon](https://nodejs.org/api/addons.html) developing, allows developers focus on spec definition and actual implementation codes.
+This toolchain transcompiles [W3C Web IDL](https://heycam.github.io/webidl/) to the [NAN](https://github.com/nodejs/nan) C++ code. This tool improve efficiency of [Node.js Addon](https://nodejs.org/api/addons.html) developing, allows developers focus on spec definition and actual implementation codes.
 
 This bindings code is highly repetitive, primarily passing values (arguments and return values) between V8 and native and doing various conversions and checks (e.g., type checking), hence it is mostly machine-generated.
 
-# Quick Start
-### Init workspace
-```
-npm init
-```
-### Install widl-nan
+# Install
 ```
 npm install --save ssh://git@github.com/01org/widl-nan.git
 ```
-### Compile WIDL files using widl-nan
-All supported command-line options of widl-nan can be listed in the help information by ```-h``` argument.
 
+All supported command-line options of widl-nan can be listed in the help information by ```-h``` argument.
 ```
 ./node_modules/.bin/widl-nan -h
   Usage: widl-nan [optinos] [widl] [widl...]
@@ -32,46 +26,13 @@ All supported command-line options of widl-nan can be listed in the help informa
     -o, --override    Allow override impl files unconditionally
 ```
 
-You can generate the initial NAN interfaces and C++ implementation for these interfaces by the instruction below.
+Given Web IDL files, you can generate the initial NAN interfaces and C++ implementation for these interfaces by the instruction below.
 
 ```
 ./node_modules/.bin/widl-nan <widl_file_1> <widl_file_2> ...
 ```
-
-### Leverage the C++ implementaion
-All generated files lay in a new folder called ```gen``` in current directory. NAN wrappers locate directly in the ```gen``` folder, while the C++ implementations locate in a subfolder called ```dont-build```.
-
-You can of cause work on native implementations from scratch, but these C++ implementations are good basis of counterpart classes' and members' definition to the NAN interfaces. They can help you a lot, and we recommend to start work based on them.
-
-What's more, we have a command-line option ```-i``` helping to put all C++ implementations, the entry file ```addon.cpp``` and the build file ```binding.gyp``` to the right place to make it a template Node.js addon project. 
-
-```
-./node_modules/.bin/widl-nan -i
-```
-
-### Build the addon
-Given WIDL files, after running two commands mentioned above, you can got a buildable Node.js addon project. The project can be build by following instruction.
-
-```
-node-gyp rebuild
-```
-Now with the excutable addon, you can test it and all the defined interfaces should show up. With this basic project, you can modify files to add your own logics.
-
-[Note] The tool can generate WIDL files to NAN wrappers and C++ implementations, but it has no ability to identify the code you have modified or added. So if WIDL files changed, and you ran steps above again in the same directory, all the files with same path and name will be replaced.
-
-# Supported WIDL features.
-This project leveraged [webidl2](https://www.npmjs.com/package/webidl2) tool to parse WIDL files. So all supported WIDL features listed below in this project are all compliant with [webidl2](https://www.npmjs.com/package/webidl2/).
-- Array, both the ```sequence<TypeName>``` and the normal array ```TypeName[]```, but we recommend to use sequence.
-- Attributes, readonly and writable attributes are all supported, inheritant attributes has not been supported yet.
-- Buffer, ArrayBuffer and typed array are all supported.
-- Callback and Promise are all supported.
-- Dictionary, Interface, constructor, enum, const and static member are all supported.
-- Overloaded methods and optional arguments are all supported, but method-overload is recommended. 
-- Primitive types are supported except ``` long long```.
-- Stringifier is supported.
-- Event emitter has not been supported directly, JavaScript Wrapper can be used to achive the goal, please refer [this example](https://github.com/otcshare/node-realsense/blob/master/src/slam/index.js#L13).
-
-For more detail or samples, please check the examples under https://github.com/01org/widl-nan/tree/master/test, basically each supported feature has a test case.
+# Getting Started
+Please refer to [Getting Started](./getting_started.md) for details.
 
 # Contribution
 
