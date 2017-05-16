@@ -2,17 +2,13 @@
 // Use of this source code is governed by a MIT-style license that can be
 // found in the LICENSE file.
 
-[
-Constructor
-]
+[Constructor]
 interface Point {
     attribute long x;
     attribute long y;
 };
 
-[
-Constructor
-]
+[Constructor]
 interface Canvas {
   attribute double[] coordinates;
   attribute DOMString[] codecs;

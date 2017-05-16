@@ -16,9 +16,7 @@ dictionary NodeAttr {
   ComputingDeviceType type;
 };
 
-[
-Constructor
-]
+[Constructor]
 interface ComputingDeviceNetwork {
   readonly attribute DOMString name;
   readonly attribute double quantity;

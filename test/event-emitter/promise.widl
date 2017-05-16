@@ -3,9 +3,7 @@
 // found in the LICENSE file.
 //
 
-[
-Constructor
-]
+[Constructor]
 interface Meal {
   readonly attribute boolean isRawMeal;
 

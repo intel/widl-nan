@@ -1,6 +1,4 @@
-[
-Constructor
-]
+[Constructor]
 interface TimerTester {
   attribute long taskCounter;
 

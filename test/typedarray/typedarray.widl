@@ -1,6 +1,4 @@
-[
-Constructor
-]
+[Constructor]
 interface FakeImage {
   readonly attribute Uint8Array rawBuffer;
   readonly attribute unsigned long length;

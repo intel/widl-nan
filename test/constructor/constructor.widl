@@ -5,8 +5,7 @@
 [
 Constructor,
 Constructor(long radius),
-Constructor(DOMString url, long radius)
-]
+Constructor(DOMString url, long radius)]
 interface MyClass {
   attribute long radius;
   attribute DOMString url;
@@ -20,8 +19,7 @@ interface NoConstructorClass {
 [
 Constructor,
 Constructor(MyClass obj),
-Constructor(double diameter, MyClass obj)
-]
+Constructor(double diameter, MyClass obj)]
 interface ContainerClass {
   readonly attribute MyClass embedded;
   readonly attribute double diameter;
