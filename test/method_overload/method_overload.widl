@@ -13,9 +13,7 @@
 // };
 
 // Node params were removed because there is no `Node` type in Node.js :)
-[
-Constructor
-]
+[Constructor]
 interface B {
   /* f1 */ DOMString f(DOMString w);
   /* f2 */ DOMString f(long w, float x);

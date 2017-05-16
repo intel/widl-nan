@@ -8,9 +8,7 @@
 callback AsyncOperationCallback = void (DOMString status);
 callback AnotherOperationCallback = void (DOMString type, double value);
 
-[
-Constructor
-]
+[Constructor]
 interface AsyncOperations {
   void performOperation(AsyncOperationCallback whenFinished);
   void performAnotherOperation(AnotherOperationCallback whenStarted);

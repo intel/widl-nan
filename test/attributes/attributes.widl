@@ -8,8 +8,7 @@
 [
 Constructor,
 Constructor(DOMString name),
-Constructor(DOMString name, unsigned short age)
-]
+Constructor(DOMString name, unsigned short age)]
 interface Animal {
 
   // A simple attribute that can be set to any string value.

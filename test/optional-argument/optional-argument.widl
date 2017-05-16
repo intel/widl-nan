@@ -5,9 +5,7 @@
 // Extracted from https://www.w3.org/TR/WebIDL/#dfn-optional-argument-default-value
 // W3C Candidate Recommendation 19 April 2012
 
-[
-Constructor
-]
+[Constructor]
 interface ColorCreator {
   DOMString createColor(float r, float g, float b, optional float alpha);
   DOMString createColor2(float r, float g, float b, optional float alpha = 0.75);

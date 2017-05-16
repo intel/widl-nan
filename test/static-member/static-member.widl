@@ -4,8 +4,7 @@
 
 [
 Constructor,
-Constructor(long x, long y)
-]
+Constructor(long x, long y)]
 interface Point {
   attribute long x;
   attribute long y;
@@ -14,8 +13,7 @@ interface Point {
 [
 Constructor,
 Constructor(Point pt1, Point pt2),
-Constructor(long x1, long y1, long x2, long y2)
-]
+Constructor(long x1, long y1, long x2, long y2)]
 interface Line {
   attribute Point startPt;
   attribute Point endPt;
