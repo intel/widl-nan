@@ -136,14 +136,7 @@ NAN_METHOD(Nan{{=it.name}}::New) {
     }
 {{~}}
     else {
-      if ( internal_ctor_call_once_ ) {
-{{? useImpl}}
-        obj->impl_ = new {{=it.name}}();
-{{?}}
-        internal_ctor_call_once_ = false;
-      } else {
         Nan::ThrowTypeError("Illegal constructor");
-      }
     }
 
     obj->Wrap(info.This());

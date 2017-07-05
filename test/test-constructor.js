@@ -11,6 +11,7 @@ var compile = require('../lib/compile.js').compile;
 var path = require('path');
 
 var MyClass = null;
+var MyClass2 = null;
 var NoConstructorClass = null;
 var ContainerClass = null;
 
@@ -32,6 +33,7 @@ describe('widl-nan Unit Test - Constructor', function() {
         // eslint-disable-next-line camelcase
         {bindings: 'widlNanAddon', module_root: addonDir});
     MyClass = addon.MyClass;
+    MyClass2 = addon.MyClass2;
     assert.equal(typeof MyClass, 'function');
 
     NoConstructorClass = addon.NoConstructorClass;
@@ -52,6 +54,12 @@ describe('widl-nan Unit Test - Constructor', function() {
     var x = new MyClass(64);
     assert.equal(x.url, '');
     assert.equal(x.radius, 64);
+    done();
+  });
+
+  it('Test only has one constructor with 1 parameter', done => {
+    var x = new MyClass2(100);
+    assert.equal(x.value, 100);
     done();
   });
 

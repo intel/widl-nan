@@ -4,10 +4,12 @@
 
 #include "gen/nan__container_class.h"
 #include "gen/nan__my_class.h"
+#include "gen/nan__my_class2.h"
 #include "gen/nan__no_constructor_class.h"
 
 void initModule(v8::Local<v8::Object> exports) {
   NanMyClass::Init(exports);
+  NanMyClass2::Init(exports);
 
   NanNoConstructorClass::Init(exports);
 

@@ -26,3 +26,10 @@ interface ContainerClass {
 
   NoConstructorClass createNoConstructorClassObject();
 };
+
+[
+Constructor(long val)
+]
+interface MyClass2 {
+    readonly attribute long value;
+};
